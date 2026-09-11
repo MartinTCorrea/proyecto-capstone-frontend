@@ -1,0 +1,303 @@
+// SGAOB — Prisma Schema
+// Sistema de Gestión de Árbitros y Oficiales de Básquetbol
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// -----------------------------------------------------------------------------
+// ENUMS
+// -----------------------------------------------------------------------------
+
+enum RoleName {
+  ADMIN_COMISION_TECNICA
+  ARBITRO
+  OFICIAL_MESA
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING_ROLE
+}
+
+enum DayType {
+  LABORAL
+  FIN_DE_SEMANA
+}
+
+enum TimeBlockCode {
+  HORARIO_1
+  HORARIO_2
+}
+
+enum AvailabilityBlock {
+  HORARIO_1
+  HORARIO_2
+  FULL
+  NO
+}
+
+enum MatchPlatform {
+  NBN23
+  SWISH
+}
+
+enum MatchTimeBlock {
+  HORARIO_1
+  HORARIO_2
+  AMBOS
+}
+
+enum MatchStatus {
+  SCHEDULED
+  SUSPENDED
+  RESCHEDULED
+  CANCELLED
+  COMPLETED
+}
+
+enum MatchRole {
+  ARBITRO_PRINCIPAL
+  ARBITRO_1
+  ARBITRO_2
+  OFICIAL_1
+  OFICIAL_2
+  OFICIAL_3
+}
+
+enum NominationStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
+}
+
+enum ResourceType {
+  DOCUMENTO
+  CREDENCIAL
+  COMUNICADO
+}
+
+enum ResourceVisibility {
+  PUBLIC
+  AUTHENTICATED
+  ADMIN
+}
+
+enum NotificationChannel {
+  EMAIL
+  IN_APP
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+// -----------------------------------------------------------------------------
+// MODELS
+// -----------------------------------------------------------------------------
+
+/// Usuario del sistema (RF01, RF02, RF03)
+/// Credenciales delegadas a Microsoft Entra External ID (CIAM)
+model User {
+  id               String      @id @default(uuid()) @db.Uuid
+  externalId       String      @unique @map("external_id")
+  email            String      @unique
+  firstName        String      @map("first_name")
+  lastName         String      @map("last_name")
+  phone            String?
+  status           UserStatus  @default(PENDING_ROLE)
+  dataConsent      Boolean     @default(false) @map("data_consent")
+  dataConsentDate  DateTime?   @map("data_consent_date")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+
+  // Relaciones
+  roles            UserRole[]
+  availabilities   Availability[]
+  nominations      Nomination[]
+  auditLogs        AuditLog[]
+  resourcesCreated Resource[]
+  notifications    Notification[]
+
+  @@map("users")
+}
+
+/// Rol asignable a usuarios (RF02, Anexo A.1)
+model Role {
+  id          String     @id @default(uuid()) @db.Uuid
+  name        RoleName   @unique
+  description String?
+  createdAt   DateTime   @default(now()) @map("created_at")
+
+  // Relaciones
+  users       UserRole[]
+
+  @@map("roles")
+}
+
+/// Tabla pivote para relación N:M Usuario <-> Roles
+model UserRole {
+  userId     String   @map("user_id") @db.Uuid
+  roleId     String   @map("role_id") @db.Uuid
+  assignedAt DateTime @default(now()) @map("assigned_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+/// Configuración parametrizable de bloques horarios (Anexo A.4)
+/// Define los límites horarios para días laborales y fines de semana
+model TimeBlockConfig {
+  id          String        @id @default(uuid()) @db.Uuid
+  dayType     DayType       @map("day_type")
+  blockCode   TimeBlockCode @map("block_code")
+  startTime   String        @map("start_time") // Formato "HH:mm"
+  endTime     String        @map("end_time")   // Formato "HH:mm"
+  description String?
+  isActive    Boolean       @default(true) @map("is_active")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  @@unique([dayType, blockCode])
+  @@map("time_block_configs")
+}
+
+/// Declaración de disponibilidad por fecha calendario específica (RF04, RF05, Anexo A.3, A.5)
+model Availability {
+  id        String            @id @default(uuid()) @db.Uuid
+  userId    String            @map("user_id") @db.Uuid
+  date      DateTime          @db.Date // Fecha específica YYYY-MM-DD
+  block     AvailabilityBlock
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@map("availabilities")
+}
+
+/// Partido sincronizado desde NBN23 o Swish (RF07, RF08, RF10)
+model Match {
+  id            String         @id @default(uuid()) @db.Uuid
+  externalId    String         @map("external_id")
+  platform      MatchPlatform
+  timeBlock     MatchTimeBlock @map("time_block")
+  tournament    String
+  category      String
+  homeTeam      String         @map("home_team")
+  awayTeam      String         @map("away_team")
+  venue         String
+  matchDateTime DateTime       @map("match_date_time")
+  status        MatchStatus    @default(SCHEDULED)
+  rawMetadata   Json?          @map("raw_metadata")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  // Relaciones
+  nominations   Nomination[]
+
+  @@unique([platform, externalId])
+  @@map("matches")
+}
+
+/// Nominación / Asignación de personal técnico a un partido (RF11-RF16, Anexo A.1, A.2)
+model Nomination {
+  id              String           @id @default(uuid()) @db.Uuid
+  matchId         String           @map("match_id") @db.Uuid
+  userId          String           @map("user_id") @db.Uuid
+  matchRole       MatchRole        @map("match_role")
+  status          NominationStatus @default(PENDING)
+  rejectionReason String?          @map("rejection_reason")
+  notifiedAt      DateTime?        @map("notified_at")
+  respondedAt     DateTime?        @map("responded_at")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+
+  match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Unicidad de slot: máx 1 árbitro principal, máx 1 árbitro 1, etc.
+  @@unique([matchId, matchRole])
+  // Unicidad de usuario por partido: no puede asumir 2 roles en el mismo partido
+  @@unique([matchId, userId])
+  @@map("nominations")
+}
+
+/// Recursos documentales, credenciales y comunicados (RF17, RF18, RF19, Anexo A.5)
+model Resource {
+  id          String             @id @default(uuid()) @db.Uuid
+  type        ResourceType
+  title       String
+  description String?
+  fileUrl     String?            @map("file_url")
+  content     String?            @db.Text
+  visibility  ResourceVisibility @default(AUTHENTICATED)
+  createdById String             @map("created_by_id") @db.Uuid
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@map("resources")
+}
+
+/// Configuración de conexiones con plataformas externas (RF07)
+model IntegrationConfig {
+  id                     String        @id @default(uuid()) @db.Uuid
+  platform               MatchPlatform @unique
+  apiUrl                 String        @map("api_url")
+  apiKeyEncrypted        String?       @map("api_key_encrypted")
+  webhookSecretEncrypted String?       @map("webhook_secret_encrypted")
+  isActive               Boolean       @default(true) @map("is_active")
+  lastSyncAt             DateTime?     @map("last_sync_at")
+  syncStatus             String?       @map("sync_status")
+  lastErrorMessage       String?       @map("last_error_message") @db.Text
+  updatedAt              DateTime      @updatedAt @map("updated_at")
+
+  @@map("integration_configs")
+}
+
+/// Registro de auditoría y trazabilidad para cambios críticos (Ambigüedad #4)
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String?  @map("user_id") @db.Uuid
+  action     String
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  details    Json?
+  ipAddress  String?  @map("ip_address")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
+
+/// Notificaciones para usuarios (RF14)
+model Notification {
+  id         String              @id @default(uuid()) @db.Uuid
+  userId     String              @map("user_id") @db.Uuid
+  title      String
+  message    String              @db.Text
+  channel    NotificationChannel
+  status     NotificationStatus  @default(PENDING)
+  retryCount Int                 @default(0) @map("retry_count")
+  sentAt     DateTime?           @map("sent_at")
+  readAt     DateTime?           @map("read_at")
+  createdAt  DateTime            @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}

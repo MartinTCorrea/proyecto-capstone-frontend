@@ -4,6 +4,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+import { PrismaModule } from './common/prisma/prisma.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -16,6 +18,7 @@ import { AppService } from './app.service';
         limit: parseInt(process.env.THROTTLE_LIMIT || '100', 10),
       },
     ]),
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
