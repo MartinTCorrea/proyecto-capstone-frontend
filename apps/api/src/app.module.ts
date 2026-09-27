@@ -10,6 +10,7 @@ import { AuditModule } from './common/audit/audit.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { AvailabilityModule } from './modules/availability/availability.module';
+import { MatchesModule } from './modules/matches/matches.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AvailabilityModule } from './modules/availability/availability.module';
     AuthModule,
     UsersModule,
     AvailabilityModule,
+    MatchesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

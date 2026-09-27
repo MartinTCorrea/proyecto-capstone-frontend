@@ -307,5 +307,132 @@ describe('AppController (e2e)', () => {
       expect(response.body.personnel.some((p: any) => p.email === 'arbitro.avail@sgaob.cl')).toBe(true);
     });
   });
+
+  describe('Matches & Integrations Endpoints (e2e, RF07-RF10)', () => {
+    let adminToken: string;
+    let arbitroToken: string;
+    let createdMatchId: string;
+    const matchDate = '2026-10-25T19:30:00.000Z';
+
+    beforeAll(async () => {
+      const adminRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'admin.matches.e2e@sgaob.cl',
+          firstName: 'Admin',
+          lastName: 'Partidos',
+          roles: ['ADMIN_COMISION_TECNICA'],
+        });
+      adminToken = adminRes.body.accessToken;
+
+      const arbitroRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'arbitro.matches.e2e@sgaob.cl',
+          firstName: 'Árbitro',
+          lastName: 'Partidos',
+          roles: ['ARBITRO'],
+        });
+      arbitroToken = arbitroRes.body.accessToken;
+    });
+
+    it('POST /api/matches - Debe rechazar creación manual si el usuario no es Comisión Técnica (403)', () => {
+      return request(app.getHttpServer())
+        .post('/api/matches')
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .send({
+          tournament: 'Copa Soprole',
+          category: 'Sub-18 Varones',
+          homeTeam: 'Colegio Los Leones',
+          awayTeam: 'Boston College',
+          venue: 'Gimnasio San Bernardo',
+          matchDateTime: matchDate,
+        })
+        .expect(403);
+    });
+
+    it('POST /api/matches - Comisión Técnica crea partido manual exitosamente (201, 100% Autónomo)', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/matches')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          tournament: 'Liga Nacional de Básquetbol 2026',
+          category: 'Adulto Varones',
+          homeTeam: 'Universidad Católica',
+          awayTeam: 'Colegio Los Leones',
+          venue: 'Estadio Palestino',
+          matchDateTime: matchDate,
+        })
+        .expect(201);
+
+      expect(response.body).toHaveProperty('id');
+      expect(response.body.platform).toBe('MANUAL');
+      expect(response.body).toHaveProperty('timeBlock');
+      expect(response.body.homeTeam).toBe('Universidad Católica');
+      expect(response.body.awayTeam).toBe('Colegio Los Leones');
+
+      createdMatchId = response.body.id;
+    });
+
+    it('GET /api/matches - Consulta cartelera con filtros y paginación (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/matches?tournament=Liga+Nacional&limit=10')
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty('data');
+      expect(response.body).toHaveProperty('meta');
+      expect(Array.isArray(response.body.data)).toBe(true);
+      expect(response.body.meta.total).toBeGreaterThanOrEqual(1);
+    });
+
+    it('GET /api/matches/:id - Obtiene detalle del partido por ID (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/api/matches/${createdMatchId}`)
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .expect(200);
+
+      expect(response.body.id).toBe(createdMatchId);
+      expect(response.body.homeTeam).toBe('Universidad Católica');
+    });
+
+    it('PATCH /api/matches/:id - Actualiza horario y estado a RESCHEDULED (200, RF10)', async () => {
+      const rescheduledDate = '2026-10-26T20:30:00.000Z';
+      const response = await request(app.getHttpServer())
+        .patch(`/api/matches/${createdMatchId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          matchDateTime: rescheduledDate,
+          venue: 'Gimnasio Club Providencia',
+        })
+        .expect(200);
+
+      expect(response.body.venue).toBe('Gimnasio Club Providencia');
+      expect(response.body.status).toBe('RESCHEDULED');
+    });
+
+    it('GET /api/matches/integrations/test - Prueba conectividad con sandbox de sincronización (200, RF07)', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/matches/integrations/test?platform=SWISH')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty('success', true);
+    });
+
+    it('POST /api/matches/sync - Dispara sincronización asíncrona bajo demanda (200, RF09)', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/matches/sync')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          platform: 'SWISH',
+          mock: true,
+        })
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body).toHaveProperty('jobId');
+    });
+  });
 });
 

@@ -46,6 +46,7 @@ enum AvailabilityBlock {
 enum MatchPlatform {
   NBN23
   SWISH
+  MANUAL
 }
 
 enum MatchTimeBlock {
