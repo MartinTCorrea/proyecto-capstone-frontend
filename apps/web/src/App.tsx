@@ -8,7 +8,7 @@ import { MainLayout } from './components/layout/MainLayout';
 import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { UnauthorizedPage } from './pages/UnauthorizedPage';
-import { UsersManagementPlaceholder } from './pages/UsersManagementPlaceholder';
+import { UsersManagementPage } from './pages/UsersManagementPage';
 import { AvailabilityPlaceholder } from './pages/AvailabilityPlaceholder';
 import { NominationsPlaceholder } from './pages/NominationsPlaceholder';
 
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
               path="usuarios"
               element={
                 <RoleGuard roles={[RoleName.ADMIN_COMISION_TECNICA]}>
-                  <UsersManagementPlaceholder />
+                  <UsersManagementPage />
                 </RoleGuard>
               }
             />
