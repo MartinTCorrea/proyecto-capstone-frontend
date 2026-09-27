@@ -9,6 +9,7 @@ import { MailModule } from './common/mail/mail.module';
 import { AuditModule } from './common/audit/audit.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { AvailabilityModule } from './modules/availability/availability.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UsersModule } from './modules/users/users.module';
     MailModule,
     AuthModule,
     UsersModule,
+    AvailabilityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

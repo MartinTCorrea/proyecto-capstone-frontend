@@ -204,5 +204,108 @@ describe('AppController (e2e)', () => {
       expect(response.body).toHaveProperty('dataConsentDate');
     });
   });
+
+  describe('Availability Endpoints (e2e)', () => {
+    let adminToken: string;
+    let arbitroToken: string;
+    const futureDate = '2035-10-20'; // Fecha futura lejana (Sábado)
+
+    beforeAll(async () => {
+      const adminRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'admin.avail@sgaob.cl',
+          firstName: 'Admin',
+          lastName: 'Disponibilidad',
+          roles: ['ADMIN_COMISION_TECNICA'],
+        });
+      adminToken = adminRes.body.accessToken;
+
+      const arbitroRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'arbitro.avail@sgaob.cl',
+          firstName: 'Mario',
+          lastName: 'Árbitro',
+          roles: ['ARBITRO'],
+        });
+      arbitroToken = arbitroRes.body.accessToken;
+    });
+
+    it('GET /api/availability/blocks - Debe retornar los bloques horarios parametrizados (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/availability/blocks')
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .expect(200);
+
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body.length).toBeGreaterThanOrEqual(4);
+      expect(response.body[0]).toHaveProperty('startTime');
+      expect(response.body[0]).toHaveProperty('endTime');
+      expect(response.body[0]).toHaveProperty('blockCode');
+    });
+
+    it('POST /api/availability/bulk - Debe rechazar fechas pasadas por plazo vencido (400, RF05)', () => {
+      return request(app.getHttpServer())
+        .post('/api/availability/bulk')
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .send({
+          availabilities: [
+            { date: '2021-05-10', block: 'FULL' },
+          ],
+        })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body.message).toContain('El plazo para declarar disponibilidad');
+        });
+    });
+
+    it('POST /api/availability/bulk - Debe registrar disponibilidad masiva para fechas futuras (200, RF04)', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/availability/bulk')
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .send({
+          availabilities: [
+            { date: futureDate, block: 'HORARIO_1' },
+          ],
+        })
+        .expect(200);
+
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body[0]).toHaveProperty('date', futureDate);
+      expect(response.body[0]).toHaveProperty('block', 'HORARIO_1');
+    });
+
+    it('GET /api/availability/my - Debe consultar la disponibilidad declarada por el usuario (200, RF06)', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/api/availability/my?startDate=${futureDate}&endDate=${futureDate}`)
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .expect(200);
+
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body.length).toBe(1);
+      expect(response.body[0].block).toBe('HORARIO_1');
+    });
+
+    it('GET /api/availability/summary - Debe denegar acceso a árbitros sin rol de administración (403)', () => {
+      return request(app.getHttpServer())
+        .get(`/api/availability/summary?date=${futureDate}`)
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .expect(403);
+    });
+
+    it('GET /api/availability/summary - Debe retornar consolidado de personal disponible al Admin (200, RF06)', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/api/availability/summary?date=${futureDate}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty('date', futureDate);
+      expect(response.body).toHaveProperty('counts');
+      expect(response.body).toHaveProperty('personnel');
+      expect(response.body.counts).toHaveProperty('HORARIO_1');
+      expect(response.body.personnel.some((p: any) => p.email === 'arbitro.avail@sgaob.cl')).toBe(true);
+    });
+  });
 });
 
