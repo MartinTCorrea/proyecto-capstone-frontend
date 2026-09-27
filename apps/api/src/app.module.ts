@@ -6,7 +6,9 @@ import { AppService } from './app.service';
 
 import { PrismaModule } from './common/prisma/prisma.module';
 import { MailModule } from './common/mail/mail.module';
+import { AuditModule } from './common/audit/audit.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -21,8 +23,10 @@ import { AuthModule } from './modules/auth/auth.module';
       },
     ]),
     PrismaModule,
+    AuditModule,
     MailModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

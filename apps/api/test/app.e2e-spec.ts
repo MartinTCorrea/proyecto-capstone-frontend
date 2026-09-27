@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 
@@ -13,6 +13,16 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     app.setGlobalPrefix('api');
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
+      }),
+    );
     await app.init();
   });
 
@@ -75,4 +85,124 @@ describe('AppController (e2e)', () => {
         });
     });
   });
+
+  describe('Users Endpoints (e2e)', () => {
+    let adminToken: string;
+    let arbitroToken: string;
+    let createdUserId: string;
+    const testEmail = `test.arbitro.${Date.now()}@sgaob.cl`;
+
+    beforeAll(async () => {
+      // Token para Admin Comisión Técnica
+      const adminRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'admin.e2e@sgaob.cl',
+          firstName: 'Admin',
+          lastName: 'E2E',
+          roles: ['ADMIN_COMISION_TECNICA'],
+        });
+      adminToken = adminRes.body.accessToken;
+
+      // Token para Árbitro regular
+      const arbitroRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'arbitro.regular@sgaob.cl',
+          firstName: 'Carlos',
+          lastName: 'Regular',
+          roles: ['ARBITRO'],
+        });
+      arbitroToken = arbitroRes.body.accessToken;
+    });
+
+    it('GET /api/users - Debe rechazar acceso a usuarios sin rol de administración (403)', () => {
+      return request(app.getHttpServer())
+        .get('/api/users')
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .expect(403);
+    });
+
+    it('POST /api/users - Debe permitir al Admin registrar un nuevo usuario (201)', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          email: testEmail,
+          firstName: 'Roberto',
+          lastName: 'Méndez',
+          phone: '+56912345678',
+          roles: ['ARBITRO'],
+        })
+        .expect(201);
+
+      expect(response.body).toHaveProperty('id');
+      expect(response.body.email).toBe(testEmail);
+      expect(response.body.roles).toContain('ARBITRO');
+      createdUserId = response.body.id;
+    });
+
+    it('POST /api/users - Debe rechazar correo duplicado con 409 Conflict', () => {
+      return request(app.getHttpServer())
+        .post('/api/users')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          email: testEmail,
+          firstName: 'Roberto',
+          lastName: 'Méndez',
+        })
+        .expect(409);
+    });
+
+    it('GET /api/users - Debe listar usuarios con paginación al Admin (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/users?page=1&limit=10')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty('data');
+      expect(response.body).toHaveProperty('meta');
+      expect(Array.isArray(response.body.data)).toBe(true);
+      expect(response.body.meta).toHaveProperty('total');
+      expect(response.body.meta.page).toBe(1);
+    });
+
+    it('GET /api/users/:id - Debe obtener detalle del usuario recién creado (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/api/users/${createdUserId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body.id).toBe(createdUserId);
+      expect(response.body.email).toBe(testEmail);
+    });
+
+    it('PATCH /api/users/:id/roles - Debe permitir asignar simultáneamente ARBITRO y OFICIAL_MESA (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .patch(`/api/users/${createdUserId}/roles`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          roles: ['ARBITRO', 'OFICIAL_MESA'],
+        })
+        .expect(200);
+
+      expect(response.body.roles).toContain('ARBITRO');
+      expect(response.body.roles).toContain('OFICIAL_MESA');
+      expect(response.body.roles).toHaveLength(2);
+    });
+
+    it('POST /api/users/consent - Debe registrar consentimiento de datos personales del usuario autenticado (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users/consent')
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .send({
+          consent: true,
+        })
+        .expect(200);
+
+      expect(response.body).toHaveProperty('success', true);
+      expect(response.body).toHaveProperty('dataConsentDate');
+    });
+  });
 });
+
