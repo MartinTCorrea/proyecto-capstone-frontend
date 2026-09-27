@@ -12,6 +12,7 @@ import {
   ArrowRight,
   Layers,
   Server,
+  Trophy,
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
@@ -190,6 +191,27 @@ export const DashboardPage: React.FC = () => {
               </div>
             </Link>
           )}
+
+          <Link
+            to="/partidos"
+            className="p-6 bg-white rounded-xl border border-slate-200 hover:border-amber-300 hover:shadow-md transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center text-amber-700 mb-4 group-hover:scale-105 transition-transform">
+                <Trophy className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 group-hover:text-amber-700 transition-colors">
+                Cartelera de Partidos (RF07–RF10)
+              </h3>
+              <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                Consulta partidos oficiales, gestiona reprogramaciones, estados y sincronización bajo demanda.
+              </p>
+            </div>
+            <div className="mt-4 flex items-center text-xs font-bold text-amber-700 group-hover:translate-x-1 transition-transform">
+              <span>Ir a la cartelera</span>
+              <ArrowRight className="w-3.5 h-3.5 ml-1" />
+            </div>
+          </Link>
 
           <Link
             to="/nominaciones"

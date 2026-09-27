@@ -10,6 +10,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { UnauthorizedPage } from './pages/UnauthorizedPage';
 import { UsersManagementPage } from './pages/UsersManagementPage';
 import { AvailabilityPage } from './pages/AvailabilityPage';
+import { MatchesPage } from './pages/MatchesPage';
 import { NominationsPlaceholder } from './pages/NominationsPlaceholder';
 
 export const App: React.FC = () => {
@@ -54,6 +55,22 @@ export const App: React.FC = () => {
                   ]}
                 >
                   <AvailabilityPage />
+                </RoleGuard>
+              }
+            />
+
+            {/* Cartelera de Partidos: para Árbitros, Oficiales de Mesa y Comisión Técnica */}
+            <Route
+              path="partidos"
+              element={
+                <RoleGuard
+                  roles={[
+                    RoleName.ARBITRO,
+                    RoleName.OFICIAL_MESA,
+                    RoleName.ADMIN_COMISION_TECNICA,
+                  ]}
+                >
+                  <MatchesPage />
                 </RoleGuard>
               }
             />

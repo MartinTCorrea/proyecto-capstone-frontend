@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { RoleName } from '@sgaob/shared';
 import { useAuth } from '../../hooks/useAuth';
-import { User, LogOut, Menu, X, Calendar, ClipboardList, Users } from 'lucide-react';
+import { User, LogOut, Menu, X, Calendar, ClipboardList, Users, Trophy } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, hasRole, logout } = useAuth();
@@ -86,6 +86,18 @@ export const Navbar: React.FC = () => {
                     <span>Disponibilidad</span>
                   </Link>
                 )}
+
+                <Link
+                  to="/partidos"
+                  className={`flex items-center space-x-1.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive('/partidos')
+                      ? 'bg-blue-50 text-blue-700 font-semibold'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  <Trophy className="w-4 h-4 text-amber-500" />
+                  <span>Partidos</span>
+                </Link>
 
                 <Link
                   to="/nominaciones"
@@ -196,6 +208,13 @@ export const Navbar: React.FC = () => {
               Disponibilidad
             </Link>
           )}
+          <Link
+            to="/partidos"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-3 py-2 rounded-md text-base font-medium text-amber-700 hover:bg-amber-50"
+          >
+            Partidos
+          </Link>
           <Link
             to="/nominaciones"
             onClick={() => setMobileMenuOpen(false)}
