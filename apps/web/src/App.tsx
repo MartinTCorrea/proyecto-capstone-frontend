@@ -1,29 +1,70 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { RoleName } from '@sgaob/shared';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { RoleGuard } from './components/auth/RoleGuard';
+import { MainLayout } from './components/layout/MainLayout';
+import { LoginPage } from './pages/LoginPage';
+import { DashboardPage } from './pages/DashboardPage';
+import { UnauthorizedPage } from './pages/UnauthorizedPage';
+import { UsersManagementPlaceholder } from './pages/UsersManagementPlaceholder';
+import { AvailabilityPlaceholder } from './pages/AvailabilityPlaceholder';
+import { NominationsPlaceholder } from './pages/NominationsPlaceholder';
 
 export const App: React.FC = () => {
   return (
-    <main style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <header>
-        <h1 style={{ color: '#1e3a8a', fontSize: '2rem', marginBottom: '0.5rem' }}>
-          SGAOB
-        </h1>
-        <p style={{ color: '#64748b', fontSize: '1.1rem' }}>
-          Sistema de Gestión de Árbitros y Oficiales de Básquetbol
-        </p>
-      </header>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* Ruta Pública de Login / Acceso Dev */}
+          <Route path="/login" element={<LoginPage />} />
 
-      <section style={{ marginTop: '2rem', background: '#ffffff', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ fontSize: '1.25rem', color: '#334155' }}>Estado del Entorno</h2>
-        <p>Monorepo inicializado con éxito. Workspaces activos:</p>
-        <ul>
-          <li><strong>apps/api</strong>: NestJS + TypeScript</li>
-          <li><strong>apps/web</strong>: React + TypeScript + Vite</li>
-          <li><strong>packages/shared</strong>: Contratos y enums compartidos</li>
-        </ul>
-      </section>
-    </main>
+          {/* Rutas Privadas dentro del Layout Principal */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <MainLayout />
+              </ProtectedRoute>
+            }
+          >
+            {/* Dashboard Principal */}
+            <Route index element={<DashboardPage />} />
+
+            {/* Gestión de Usuarios: solo para Comisión Técnica */}
+            <Route
+              path="usuarios"
+              element={
+                <RoleGuard roles={[RoleName.ADMIN_COMISION_TECNICA]}>
+                  <UsersManagementPlaceholder />
+                </RoleGuard>
+              }
+            />
+
+            {/* Disponibilidad: para Árbitros u Oficiales de Mesa */}
+            <Route
+              path="disponibilidad"
+              element={
+                <RoleGuard roles={[RoleName.ARBITRO, RoleName.OFICIAL_MESA]}>
+                  <AvailabilityPlaceholder />
+                </RoleGuard>
+              }
+            />
+
+            {/* Nominaciones */}
+            <Route path="nominaciones" element={<NominationsPlaceholder />} />
+
+            {/* Pantalla 403 Forbidden */}
+            <Route path="unauthorized" element={<UnauthorizedPage />} />
+          </Route>
+
+          {/* Fallback de redirección */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 };
 
 export default App;
-
