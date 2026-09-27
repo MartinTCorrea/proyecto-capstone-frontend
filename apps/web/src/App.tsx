@@ -9,7 +9,7 @@ import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { UnauthorizedPage } from './pages/UnauthorizedPage';
 import { UsersManagementPage } from './pages/UsersManagementPage';
-import { AvailabilityPlaceholder } from './pages/AvailabilityPlaceholder';
+import { AvailabilityPage } from './pages/AvailabilityPage';
 import { NominationsPlaceholder } from './pages/NominationsPlaceholder';
 
 export const App: React.FC = () => {
@@ -42,12 +42,18 @@ export const App: React.FC = () => {
               }
             />
 
-            {/* Disponibilidad: para Árbitros u Oficiales de Mesa */}
+            {/* Disponibilidad: para Árbitros, Oficiales de Mesa y Comisión Técnica */}
             <Route
               path="disponibilidad"
               element={
-                <RoleGuard roles={[RoleName.ARBITRO, RoleName.OFICIAL_MESA]}>
-                  <AvailabilityPlaceholder />
+                <RoleGuard
+                  roles={[
+                    RoleName.ARBITRO,
+                    RoleName.OFICIAL_MESA,
+                    RoleName.ADMIN_COMISION_TECNICA,
+                  ]}
+                >
+                  <AvailabilityPage />
                 </RoleGuard>
               }
             />
