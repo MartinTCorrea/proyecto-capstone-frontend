@@ -30,4 +30,49 @@ describe('AppController (e2e)', () => {
         expect(res.body).toHaveProperty('uptime');
       });
   });
+
+  describe('Auth Endpoints (e2e)', () => {
+    let devToken: string;
+
+    it('/api/auth/me (GET) - Debe rechazar petición sin Bearer token (401)', () => {
+      return request(app.getHttpServer())
+        .get('/api/auth/me')
+        .expect(401)
+        .expect((res) => {
+          expect(res.body.message).toContain('Acceso denegado: Token JWT ausente');
+        });
+    });
+
+    it('/api/auth/dev-token (POST) - Debe generar token de prueba para desarrollo local (201)', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'arbitro.test@sgaob.cl',
+          firstName: 'Carlos',
+          lastName: 'Árbitro',
+          roles: ['ARBITRO'],
+        })
+        .expect(201);
+
+      expect(response.body).toHaveProperty('accessToken');
+      expect(response.body).toHaveProperty('user');
+      expect(response.body.user.email).toBe('arbitro.test@sgaob.cl');
+      expect(response.body.user.roles).toContain('ARBITRO');
+
+      devToken = response.body.accessToken;
+    });
+
+    it('/api/auth/me (GET) - Debe retornar el perfil al enviar Bearer token válido (200)', () => {
+      return request(app.getHttpServer())
+        .get('/api/auth/me')
+        .set('Authorization', `Bearer ${devToken}`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.email).toBe('arbitro.test@sgaob.cl');
+          expect(res.body.roles).toContain('ARBITRO');
+          expect(res.body).toHaveProperty('id');
+          expect(res.body).toHaveProperty('externalId');
+        });
+    });
+  });
 });
