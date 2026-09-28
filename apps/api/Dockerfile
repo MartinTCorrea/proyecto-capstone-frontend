@@ -5,6 +5,8 @@
 # Etapa 1: Construcción y generación de artefactos
 FROM node:20-alpine AS builder
 
+RUN apk add --no-cache openssl libc6-compat
+
 WORKDIR /app
 
 # Copiar manifiestos para aprovechar caché de capas Docker
@@ -27,6 +29,8 @@ RUN npm run build
 
 # Etapa 2: Imagen mínima de Producción
 FROM node:20-alpine AS runner
+
+RUN apk add --no-cache openssl libc6-compat
 
 WORKDIR /app
 
