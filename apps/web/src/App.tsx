@@ -12,6 +12,7 @@ import { UsersManagementPage } from './pages/UsersManagementPage';
 import { AvailabilityPage } from './pages/AvailabilityPage';
 import { MatchesPage } from './pages/MatchesPage';
 import { NominationsPage } from './pages/NominationsPage';
+import { ResourcesPage } from './pages/ResourcesPage';
 
 export const App: React.FC = () => {
   return (
@@ -87,6 +88,22 @@ export const App: React.FC = () => {
                   ]}
                 >
                   <NominationsPage />
+                </RoleGuard>
+              }
+            />
+
+            {/* Recursos y Comunicados (RF17–RF20) */}
+            <Route
+              path="recursos"
+              element={
+                <RoleGuard
+                  roles={[
+                    RoleName.ARBITRO,
+                    RoleName.OFICIAL_MESA,
+                    RoleName.ADMIN_COMISION_TECNICA,
+                  ]}
+                >
+                  <ResourcesPage />
                 </RoleGuard>
               }
             />

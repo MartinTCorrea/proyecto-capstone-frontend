@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { RoleName } from '@sgaob/shared';
 import { useAuth } from '../../hooks/useAuth';
-import { User, LogOut, Menu, X, Calendar, ClipboardList, Users, Trophy } from 'lucide-react';
+import { User, LogOut, Menu, X, Calendar, ClipboardList, Users, Trophy, FolderArchive } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, hasRole, logout } = useAuth();
@@ -109,6 +109,18 @@ export const Navbar: React.FC = () => {
                 >
                   <ClipboardList className="w-4 h-4 text-emerald-600" />
                   <span>Nominaciones</span>
+                </Link>
+
+                <Link
+                  to="/recursos"
+                  className={`flex items-center space-x-1.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive('/recursos')
+                      ? 'bg-blue-50 text-blue-700 font-semibold'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  <FolderArchive className="w-4 h-4 text-purple-600" />
+                  <span>Recursos</span>
                 </Link>
               </nav>
             )}
@@ -221,6 +233,13 @@ export const Navbar: React.FC = () => {
             className="block px-3 py-2 rounded-md text-base font-medium text-emerald-700 hover:bg-emerald-50"
           >
             Nominaciones
+          </Link>
+          <Link
+            to="/recursos"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-3 py-2 rounded-md text-base font-medium text-purple-700 hover:bg-purple-50"
+          >
+            Recursos
           </Link>
         </div>
       )}
