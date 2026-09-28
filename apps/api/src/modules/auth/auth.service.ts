@@ -1,10 +1,11 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { UserStatus, RoleName } from '@prisma/client';
 import { JwtPayload, AuthenticatedUser } from './auth.types';
 import { DevTokenDto } from './dto/dev-token.dto';
+import { CognitoLoginDto } from './dto/cognito-login.dto';
 
 @Injectable()
 export class AuthService {
@@ -83,6 +84,57 @@ export class AuthService {
       });
 
       this.logger.log(`Nuevo usuario auto-aprovisionado en estado PENDING_ROLE: ${userEmail} (ID: ${user.id})`);
+    }
+
+    // 4. Si el token contiene grupos de Cognito (cognito:groups), sincronizar roles
+    const rawGroups = payload['cognito:groups'] || payload.roles || [];
+    const tokenGroups: string[] = Array.isArray(rawGroups) ? rawGroups : [rawGroups];
+
+    if (tokenGroups.length > 0) {
+      let assignedCount = 0;
+      for (const groupName of tokenGroups) {
+        const roleRecord = await this.prisma.role.findUnique({
+          where: { name: groupName as RoleName },
+        });
+
+        if (roleRecord) {
+          await this.prisma.userRole.upsert({
+            where: {
+              userId_roleId: {
+                userId: user.id,
+                roleId: roleRecord.id,
+              },
+            },
+            update: {},
+            create: {
+              userId: user.id,
+              roleId: roleRecord.id,
+            },
+          });
+          assignedCount++;
+        }
+      }
+
+      if (assignedCount > 0 && user.status === UserStatus.PENDING_ROLE) {
+        user = (await this.prisma.user.update({
+          where: { id: user.id },
+          data: { status: UserStatus.ACTIVE },
+          include: {
+            roles: {
+              include: { role: true },
+            },
+          },
+        }))!;
+      } else if (assignedCount > 0) {
+        user = (await this.prisma.user.findUnique({
+          where: { id: user.id },
+          include: {
+            roles: {
+              include: { role: true },
+            },
+          },
+        }))!;
+      }
     }
 
     return this.mapToAuthenticatedUser(user);
@@ -188,6 +240,126 @@ export class AuthService {
     return {
       accessToken,
       user: authUser,
+    };
+  }
+
+  /**
+   * Autentica un usuario contra AWS Cognito mediante InitiateAuth (USER_PASSWORD_AUTH)
+   */
+  async loginCognito(dto: CognitoLoginDto): Promise<{ accessToken: string; user: AuthenticatedUser }> {
+    const region = this.configService.get<string>('AWS_REGION', 'us-east-1');
+    const clientId = this.configService.get<string>('COGNITO_CLIENT_ID', '');
+    const userPoolId = this.configService.get<string>('COGNITO_USER_POOL_ID', '');
+
+    if (!clientId || clientId.includes('your-cognito') || !userPoolId || userPoolId.includes('example')) {
+      throw new BadRequestException(
+        'AWS Cognito no está configurado en las variables de entorno. Por favor define COGNITO_USER_POOL_ID y COGNITO_CLIENT_ID en .env.',
+      );
+    }
+
+    try {
+      const response = await fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-amz-json-1.1',
+          'X-Amz-Target': 'AWSCognitoIdentityProviderService.InitiateAuth',
+        },
+        body: JSON.stringify({
+          AuthFlow: 'USER_PASSWORD_AUTH',
+          ClientId: clientId,
+          AuthParameters: {
+            USERNAME: dto.email,
+            PASSWORD: dto.password,
+          },
+        }),
+      });
+
+      const data: any = await response.json();
+
+      if (!response.ok || data.__type) {
+        const errorType = data.__type || 'CognitoAuthError';
+        const errorMessage = data.message || 'Error de autenticación con AWS Cognito';
+        this.logger.warn(`Error en AWS Cognito [${errorType}]: ${errorMessage}`);
+
+        if (errorType.includes('NotAuthorizedException') || errorType.includes('UserNotFoundException')) {
+          throw new UnauthorizedException('Credenciales inválidas en AWS Cognito (usuario o contraseña incorrectos)');
+        }
+        if (errorType.includes('UserNotConfirmedException')) {
+          throw new UnauthorizedException('La cuenta de AWS Cognito no ha sido confirmada todavía');
+        }
+        if (data.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
+          throw new BadRequestException('Se requiere cambio de contraseña inicial en AWS Cognito');
+        }
+
+        throw new BadRequestException(`Falla en AWS Cognito: ${errorMessage}`);
+      }
+
+      const idToken = data.AuthenticationResult?.IdToken;
+      const accessToken = data.AuthenticationResult?.AccessToken;
+
+      if (!idToken && !accessToken) {
+        throw new UnauthorizedException('Cognito no retornó tokens de acceso válidos');
+      }
+
+      const tokenToDecode = idToken || accessToken;
+      const payload = this.jwtService.decode(tokenToDecode) as JwtPayload;
+
+      if (!payload || !payload.sub) {
+        throw new UnauthorizedException('El token devuelto por Cognito es inválido o no posee claims estándar');
+      }
+
+      const user = await this.validateOrCreateUser(payload);
+
+      return {
+        accessToken: tokenToDecode,
+        user,
+      };
+    } catch (error: any) {
+      if (error instanceof UnauthorizedException || error instanceof BadRequestException) {
+        throw error;
+      }
+      this.logger.error(`Error inesperado al conectar con AWS Cognito: ${error.message}`, error.stack);
+      throw new BadRequestException(`No se pudo conectar con AWS Cognito: ${error.message}`);
+    }
+  }
+
+  /**
+   * Obtiene la configuración pública de AWS Cognito para el frontend
+   */
+  getCognitoConfig(): {
+    authProvider: string;
+    region: string;
+    userPoolId: string;
+    clientId: string;
+    isConfigured: boolean;
+    hostedUiUrl?: string;
+  } {
+    const authProvider = this.configService.get<string>('AUTH_PROVIDER', 'cognito');
+    const region = this.configService.get<string>('AWS_REGION', 'us-east-1');
+    const userPoolId = this.configService.get<string>('COGNITO_USER_POOL_ID', '');
+    const clientId = this.configService.get<string>('COGNITO_CLIENT_ID', '');
+    const cognitoDomain = this.configService.get<string>('COGNITO_DOMAIN', '');
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:5173');
+
+    const isConfigured = !!(
+      clientId &&
+      !clientId.includes('your-cognito') &&
+      userPoolId &&
+      !userPoolId.includes('example')
+    );
+
+    let hostedUiUrl: string | undefined;
+    if (isConfigured && cognitoDomain) {
+      hostedUiUrl = `https://${cognitoDomain}.auth.${region}.amazoncognito.com/login?client_id=${clientId}&response_type=token&scope=email+openid+profile&redirect_uri=${encodeURIComponent(frontendUrl)}`;
+    }
+
+    return {
+      authProvider,
+      region,
+      userPoolId,
+      clientId,
+      isConfigured,
+      hostedUiUrl,
     };
   }
 

@@ -177,7 +177,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('generateDevToken', () => {
+    describe('generateDevToken', () => {
     it('should generate JWT token and return user profile', async () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockUser);
 
@@ -189,6 +189,26 @@ describe('AuthService', () => {
       expect(result).toHaveProperty('accessToken', 'mock.jwt.token');
       expect(result.user.email).toBe('arbitro@sgaob.cl');
       expect(jwtService.sign).toHaveBeenCalled();
+    });
+  });
+
+  describe('loginCognito', () => {
+    it('should throw BadRequestException if Cognito is not configured in .env', async () => {
+      await expect(
+        service.loginCognito({
+          email: 'arbitro@sgaob.cl',
+          password: 'Password123!',
+        }),
+      ).rejects.toThrow();
+    });
+  });
+
+  describe('getCognitoConfig', () => {
+    it('should return public Cognito configuration structure', () => {
+      const config = service.getCognitoConfig();
+      expect(config).toHaveProperty('authProvider');
+      expect(config).toHaveProperty('region');
+      expect(config).toHaveProperty('isConfigured');
     });
   });
 });

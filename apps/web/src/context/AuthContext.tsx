@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { UserDto, RoleName } from '@sgaob/shared';
-import { authApi, DevTokenPayload } from '../api/auth.api';
+import { authApi, DevTokenPayload, CognitoLoginPayload } from '../api/auth.api';
 
 export interface AuthContextType {
   user: UserDto | null;
@@ -9,6 +9,8 @@ export interface AuthContextType {
   isLoading: boolean;
   hasRole: (...roles: RoleName[]) => boolean;
   loginWithDevToken: (payload: DevTokenPayload) => Promise<void>;
+  loginWithCognito: (payload: CognitoLoginPayload) => Promise<void>;
+  loginWithToken: (rawToken: string) => Promise<void>;
   logout: () => void;
   refreshProfile: () => Promise<void>;
 }
@@ -68,6 +70,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     [],
   );
 
+  const loginWithCognito = useCallback(
+    async (payload: CognitoLoginPayload) => {
+      setIsLoading(true);
+      try {
+        const response = await authApi.loginCognito(payload);
+        localStorage.setItem('sgaob_token', response.accessToken);
+        setToken(response.accessToken);
+        setUser(response.user);
+      } catch (error) {
+        console.error('Error en autenticación AWS Cognito:', error);
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [],
+  );
+
+  const loginWithToken = useCallback(
+    async (rawToken: string) => {
+      setIsLoading(true);
+      try {
+        localStorage.setItem('sgaob_token', rawToken);
+        setToken(rawToken);
+        const profile = await authApi.getProfile();
+        setUser(profile);
+      } catch (error) {
+        console.error('Error al autenticar con token externo:', error);
+        logout();
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [logout],
+  );
+
   const hasRole = useCallback(
     (...roles: RoleName[]): boolean => {
       if (!user || !user.roles) return false;
@@ -84,10 +123,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       isLoading,
       hasRole,
       loginWithDevToken,
+      loginWithCognito,
+      loginWithToken,
       logout,
       refreshProfile,
     }),
-    [user, token, isLoading, hasRole, loginWithDevToken, logout, refreshProfile],
+    [user, token, isLoading, hasRole, loginWithDevToken, loginWithCognito, loginWithToken, logout, refreshProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
