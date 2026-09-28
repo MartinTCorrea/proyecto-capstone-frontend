@@ -597,5 +597,143 @@ describe('AppController (e2e)', () => {
       expect(response.body.success).toBe(true);
     });
   });
+
+  // ==========================================
+  // MÓDULO 5: RECURSOS, CREDENCIALES Y EXPORTACIÓN (RF17–RF20)
+  // ==========================================
+  describe('Módulo 5: Recursos, Credenciales y Exportación (RF17–RF20)', () => {
+    let adminToken: string;
+    let arbitroToken: string;
+    let createdDocId: string;
+    let createdCredId: string;
+
+    beforeAll(async () => {
+      const adminRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'admin.res.e2e@sgaob.cl',
+          firstName: 'Admin',
+          lastName: 'Recursos',
+          roles: ['ADMIN_COMISION_TECNICA'],
+        });
+      adminToken = adminRes.body.accessToken;
+
+      const arbitroRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'arbitro.res.e2e@sgaob.cl',
+          firstName: 'Arbitro',
+          lastName: 'Recursos',
+          roles: ['ARBITRO'],
+        });
+      arbitroToken = arbitroRes.body.accessToken;
+    });
+
+    it('POST /api/resources - Comisión Técnica sube documento con visibilidad AUTHENTICATED (201, RF17)', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/resources')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          type: 'DOCUMENTO',
+          title: 'Reglamento de Competiciones 2026',
+          description: 'Documento normativo oficial',
+          fileUrl: 'https://storage.sgaob.cl/reglamento-2026.pdf',
+          visibility: 'AUTHENTICATED',
+        })
+        .expect(201);
+
+      expect(response.body).toHaveProperty('id');
+      expect(response.body.type).toBe('DOCUMENTO');
+      expect(response.body.visibility).toBe('AUTHENTICATED');
+      createdDocId = response.body.id;
+    });
+
+    it('POST /api/resources - REGLA DURA Anexo A.5: si type=CREDENCIAL fuerza incondicionalmente visibility=ADMIN (201, RF18)', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/resources')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          type: 'CREDENCIAL',
+          title: 'Token API NBN23 Sandbox',
+          content: 'SECRET_API_KEY_ACADEMY_LAB_999',
+          visibility: 'PUBLIC', // Intento del cliente de ponerla pública
+        })
+        .expect(201);
+
+      expect(response.body).toHaveProperty('id');
+      expect(response.body.type).toBe('CREDENCIAL');
+      expect(response.body.visibility).toBe('ADMIN'); // Verificación del forzado
+      createdCredId = response.body.id;
+    });
+
+    it('GET /api/resources - Árbitro consulta recursos y NO ve credenciales ni recursos ADMIN (200, RF18, Anexo A.5)', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/resources')
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty('data');
+      const items = response.body.data;
+      // El documento debe estar visible
+      expect(items.some((r: any) => r.id === createdDocId)).toBe(true);
+      // La credencial NUNCA debe estar en el listado para árbitros
+      expect(items.some((r: any) => r.id === createdCredId)).toBe(false);
+      expect(items.every((r: any) => r.type !== 'CREDENCIAL' && r.visibility !== 'ADMIN')).toBe(true);
+    });
+
+    it('GET /api/resources - Comisión Técnica consulta recursos y ve tanto documentos como credenciales (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/resources')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty('data');
+      const items = response.body.data;
+      expect(items.some((r: any) => r.id === createdDocId)).toBe(true);
+      expect(items.some((r: any) => r.id === createdCredId)).toBe(true);
+    });
+
+    it('GET /api/resources/:id - Árbitro que intenta acceder a una credencial por ID recibe 403 Forbidden (RF18)', () => {
+      return request(app.getHttpServer())
+        .get(`/api/resources/${createdCredId}`)
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .expect(403);
+    });
+
+    it('GET /api/resources/export/nominations - Comisión Técnica exporta asignaciones a CSV (200, RF20)', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/api/resources/export/nominations')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.headers['content-type']).toContain('text/csv');
+      expect(response.headers['content-disposition']).toContain('attachment');
+      expect(response.headers['content-disposition']).toContain('.csv');
+      // Verificación de UTF-8 BOM
+      expect(response.text.startsWith('\uFEFF')).toBe(true);
+      expect(response.text).toContain('Fecha');
+      expect(response.text).toContain('Torneo');
+      expect(response.text).toContain('Rol Asignado');
+    });
+
+    it('DELETE /api/resources/:id - Comisión Técnica elimina documento (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .delete(`/api/resources/${createdDocId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+    });
+
+    it('DELETE /api/resources/:id - Comisión Técnica elimina credencial (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .delete(`/api/resources/${createdCredId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+    });
+  });
 });
+
 

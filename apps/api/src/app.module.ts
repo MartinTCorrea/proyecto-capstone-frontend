@@ -12,6 +12,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AvailabilityModule } from './modules/availability/availability.module';
 import { MatchesModule } from './modules/matches/matches.module';
 import { NominationsModule } from './modules/nominations/nominations.module';
+import { ResourcesModule } from './modules/resources/resources.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { NominationsModule } from './modules/nominations/nominations.module';
     AvailabilityModule,
     MatchesModule,
     NominationsModule,
+    ResourcesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
