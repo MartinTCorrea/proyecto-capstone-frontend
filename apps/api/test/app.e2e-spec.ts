@@ -434,5 +434,168 @@ describe('AppController (e2e)', () => {
       expect(response.body).toHaveProperty('jobId');
     });
   });
+
+  describe('Nominations Endpoints (e2e, RF11-RF16, Anexo A.1, A.2)', () => {
+    let adminToken: string;
+    let arbitroToken: string;
+    let arbitroUserId: string;
+    let mesaToken: string;
+    let mesaUserId: string;
+    let testMatchId: string;
+    let createdNominationId: string;
+    const matchFutureDate = '2035-11-20T19:30:00.000Z';
+    const matchDateOnly = '2035-11-20';
+
+    beforeAll(async () => {
+      // 1. Admin Token
+      const adminRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'admin.nom.e2e@sgaob.cl',
+          firstName: 'Admin',
+          lastName: 'Nominaciones',
+          roles: ['ADMIN_COMISION_TECNICA'],
+        });
+      adminToken = adminRes.body.accessToken;
+
+      // 2. Árbitro Token y disponibilidad
+      const arbitroRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'arbitro.nom.e2e@sgaob.cl',
+          firstName: 'Esteban',
+          lastName: 'Árbitro',
+          roles: ['ARBITRO'],
+        });
+      arbitroToken = arbitroRes.body.accessToken;
+      arbitroUserId = arbitroRes.body.user.id;
+
+      // 3. Oficial de Mesa Token
+      const mesaRes = await request(app.getHttpServer())
+        .post('/api/auth/dev-token')
+        .send({
+          email: 'mesa.nom.e2e@sgaob.cl',
+          firstName: 'Carolina',
+          lastName: 'Mesa',
+          roles: ['OFICIAL_MESA'],
+        });
+      mesaToken = mesaRes.body.accessToken;
+      mesaUserId = mesaRes.body.user.id;
+
+      // 4. Crear partido de prueba
+      const matchRes = await request(app.getHttpServer())
+        .post('/api/matches')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          tournament: 'Torneo E2E Nominaciones',
+          category: 'Adulto Varones',
+          homeTeam: 'Club A',
+          awayTeam: 'Club B',
+          venue: 'Gimnasio Municipal',
+          matchDateTime: matchFutureDate,
+        });
+      testMatchId = matchRes.body.id;
+
+      // 5. Declarar disponibilidad del árbitro (FULL para cubrir cualquier bloque)
+      await request(app.getHttpServer())
+        .post('/api/availability/bulk')
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .send({
+          availabilities: [{ date: matchDateOnly, block: 'FULL' }],
+        });
+    });
+
+    it('GET /api/nominations/available-candidates - Consulta candidatos acreditados para un slot (CU-07)', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/api/nominations/available-candidates?matchId=${testMatchId}&matchRole=ARBITRO_PRINCIPAL`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty('requiredSystemRole', 'ARBITRO');
+      expect(response.body).toHaveProperty('availableCandidates');
+      expect(Array.isArray(response.body.availableCandidates)).toBe(true);
+      expect(response.body.availableCandidates.some((c: any) => c.id === arbitroUserId)).toBe(true);
+    });
+
+    it('POST /api/nominations - Rechaza asignación si el usuario no tiene el rol correspondiente (400, Anexo A.1)', () => {
+      // Intentar asignar a la Oficial de Mesa en slot ARBITRO_PRINCIPAL
+      return request(app.getHttpServer())
+        .post('/api/nominations')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          matchId: testMatchId,
+          userId: mesaUserId,
+          matchRole: 'ARBITRO_PRINCIPAL',
+        })
+        .expect(400)
+        .expect((res) => {
+          expect(res.body.message).toContain('Validación de rol fallida');
+        });
+    });
+
+    it('POST /api/nominations - Comisión Técnica asigna personal disponible a partido (201, RF11, RF14)', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/nominations')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          matchId: testMatchId,
+          userId: arbitroUserId,
+          matchRole: 'ARBITRO_PRINCIPAL',
+        })
+        .expect(201);
+
+      expect(response.body).toHaveProperty('id');
+      expect(response.body.matchRole).toBe('ARBITRO_PRINCIPAL');
+      expect(response.body.status).toBe('PENDING');
+      expect(response.body).toHaveProperty('notifiedAt');
+
+      createdNominationId = response.body.id;
+    });
+
+    it('POST /api/nominations - Rechaza slot duplicado en el mismo partido (409 Conflict)', () => {
+      return request(app.getHttpServer())
+        .post('/api/nominations')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          matchId: testMatchId,
+          userId: arbitroUserId,
+          matchRole: 'ARBITRO_PRINCIPAL',
+        })
+        .expect(409);
+    });
+
+    it('GET /api/nominations - Consulta listado de nominaciones con filtros (200, RF16)', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/api/nominations?matchId=${testMatchId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty('data');
+      expect(response.body.meta.total).toBeGreaterThanOrEqual(1);
+      expect(response.body.data[0].id).toBe(createdNominationId);
+    });
+
+    it('PATCH /api/nominations/:id/respond - Árbitro confirma nominación (200, RF15)', async () => {
+      const response = await request(app.getHttpServer())
+        .patch(`/api/nominations/${createdNominationId}/respond`)
+        .set('Authorization', `Bearer ${arbitroToken}`)
+        .send({
+          status: 'CONFIRMED',
+        })
+        .expect(200);
+
+      expect(response.body.status).toBe('CONFIRMED');
+      expect(response.body).toHaveProperty('respondedAt');
+    });
+
+    it('DELETE /api/nominations/:id - Comisión Técnica revoca nominación liberando el slot (200)', async () => {
+      const response = await request(app.getHttpServer())
+        .delete(`/api/nominations/${createdNominationId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+    });
+  });
 });
 

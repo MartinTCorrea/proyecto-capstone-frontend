@@ -11,6 +11,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { AvailabilityModule } from './modules/availability/availability.module';
 import { MatchesModule } from './modules/matches/matches.module';
+import { NominationsModule } from './modules/nominations/nominations.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { MatchesModule } from './modules/matches/matches.module';
     UsersModule,
     AvailabilityModule,
     MatchesModule,
+    NominationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
