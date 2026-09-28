@@ -11,7 +11,7 @@ import { UnauthorizedPage } from './pages/UnauthorizedPage';
 import { UsersManagementPage } from './pages/UsersManagementPage';
 import { AvailabilityPage } from './pages/AvailabilityPage';
 import { MatchesPage } from './pages/MatchesPage';
-import { NominationsPlaceholder } from './pages/NominationsPlaceholder';
+import { NominationsPage } from './pages/NominationsPage';
 
 export const App: React.FC = () => {
   return (
@@ -75,8 +75,21 @@ export const App: React.FC = () => {
               }
             />
 
-            {/* Nominaciones */}
-            <Route path="nominaciones" element={<NominationsPlaceholder />} />
+            {/* Nominaciones: para Árbitros, Oficiales de Mesa y Comisión Técnica */}
+            <Route
+              path="nominaciones"
+              element={
+                <RoleGuard
+                  roles={[
+                    RoleName.ARBITRO,
+                    RoleName.OFICIAL_MESA,
+                    RoleName.ADMIN_COMISION_TECNICA,
+                  ]}
+                >
+                  <NominationsPage />
+                </RoleGuard>
+              }
+            />
 
             {/* Pantalla 403 Forbidden */}
             <Route path="unauthorized" element={<UnauthorizedPage />} />

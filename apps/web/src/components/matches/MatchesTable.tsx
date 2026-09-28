@@ -1,9 +1,9 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import { MatchItem } from '../../api/matches.api';
 import { MatchStatusBadge } from './MatchStatusBadge';
 import { MatchPlatformBadge } from './MatchPlatformBadge';
 import { RoleName, MatchPlatform } from '@sgaob/shared';
-import { Calendar, MapPin, Trophy, Edit, Trash2, Users } from 'lucide-react';
+import { Calendar, MapPin, Trophy, Edit, Trash2, Users, UserPlus } from 'lucide-react';
 
 interface MatchesTableProps {
   matches: MatchItem[];
@@ -175,6 +175,14 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                   {isCT && (
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="flex items-center justify-end space-x-2">
+                        <Link
+                          to="/nominaciones"
+                          className="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                          title="Gestionar designaciones arbitrales (RF11)"
+                          aria-label={`Gestionar designaciones para ${match.homeTeam} vs ${match.awayTeam}`}
+                        >
+                          <UserPlus className="w-4 h-4" />
+                        </Link>
                         <button
                           onClick={() => onEditMatch(match)}
                           className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
