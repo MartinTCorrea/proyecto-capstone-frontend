@@ -223,6 +223,6 @@ En el directorio [`/docs`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/
 
 ## 8. Equipo de Desarrollo (Duoc UC)
 
-- **Martín Correa**
-- **Ignacio Mella**
-- **Benjamín Soto**
+- **Esteban Fuentes**
+- **Javier Sanchez**
+- **Martín Troncoso**
