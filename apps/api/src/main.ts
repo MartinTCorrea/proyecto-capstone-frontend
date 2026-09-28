@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -10,6 +11,9 @@ async function bootstrap() {
 
   // Security Headers
   app.use(helmet());
+
+  // Global Exception Filter (Manejo centralizado de errores y logging estructurado)
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   // CORS
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
