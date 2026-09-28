@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { RoleName, NominationStatus, MatchRole } from '@sgaob/shared';
 import {
   nominationsApi,
@@ -13,17 +13,14 @@ import { AssignNominationModal } from '../components/nominations/AssignNominatio
 import { RespondNominationModal } from '../components/nominations/RespondNominationModal';
 import {
   ClipboardCheck,
-  Filter,
   RefreshCw,
   Search,
-  Calendar,
   Layers,
   List,
   UserCheck,
   Clock,
   CheckCircle2,
   XCircle,
-  FileSpreadsheet,
 } from 'lucide-react';
 
 export const NominationsPage: React.FC = () => {

@@ -5,7 +5,6 @@ import { MatchRoleBadge } from './MatchRoleBadge';
 import {
   Calendar,
   MapPin,
-  Clock,
   Trash2,
   CheckSquare,
   MessageSquareQuote,

@@ -3,7 +3,6 @@ import { MatchRole, RoleName } from '@sgaob/shared';
 import {
   nominationsApi,
   AvailableCandidatesResponse,
-  CandidateItem,
 } from '../../api/nominations.api';
 import { MatchItem } from '../../api/matches.api';
 import { MatchRoleBadge } from './MatchRoleBadge';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MatchItem } from '../../api/matches.api';
 import { NominationItem } from '../../api/nominations.api';
-import { MatchRole, NominationStatus, RoleName } from '@sgaob/shared';
+import { MatchRole } from '@sgaob/shared';
 import { NominationStatusBadge } from './NominationStatusBadge';
 import { MatchRoleBadge } from './MatchRoleBadge';
 import {
