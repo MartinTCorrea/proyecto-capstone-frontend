@@ -67,12 +67,12 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({
           <div className="flex items-center space-x-2.5">
             <UserPlus className="w-5 h-5 text-blue-400" />
             <h2 id="create-user-modal-title" className="text-base font-bold">
-              Pre-registrar Usuario (RF03, CU-02)
+              Nuevo Registro de Usuario
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white rounded-lg p-1 transition-colors focus:ring-2 focus:ring-blue-400"
+            className="text-slate-400 hover:text-white rounded-lg p-1 transition-colors focus:ring-2 focus:ring-blue-400 cursor-pointer"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />

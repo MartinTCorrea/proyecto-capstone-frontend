@@ -52,12 +52,12 @@ export const StatusChangeModal: React.FC<StatusChangeModalProps> = ({
           <div className="flex items-center space-x-2.5">
             <AlertTriangle className="w-5 h-5 text-amber-400" />
             <h2 id="status-modal-title" className="text-base font-bold">
-              Cambiar Estado del Usuario (RF03)
+              Modificar Estado de Cuenta
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white rounded-lg p-1 transition-colors"
+            className="text-slate-400 hover:text-white rounded-lg p-1 transition-colors cursor-pointer"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />

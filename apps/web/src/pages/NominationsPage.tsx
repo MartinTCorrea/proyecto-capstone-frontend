@@ -141,7 +141,7 @@ export const NominationsPage: React.FC = () => {
           </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-              Nominaciones y Asignaciones (RF11–RF16)
+              Gestión de Nominaciones y Asignaciones
             </h1>
             <p className="text-xs sm:text-sm text-slate-500">
               Cruce automatizado de disponibilidad, designación técnica y confirmaciones oficiales
@@ -154,7 +154,7 @@ export const NominationsPage: React.FC = () => {
             type="button"
             onClick={() => loadData()}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-2xs disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Actualizar</span>
@@ -213,28 +213,28 @@ export const NominationsPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab('grid')}
-              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
                 activeTab === 'grid'
                   ? 'border-brand-600 text-brand-600 bg-brand-50/50'
                   : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
               }`}
             >
               <Layers className="w-4 h-4" />
-              <span>Grilla de Partidos y Ternas (RF16)</span>
+              <span>Cartelera de Partidos y Ternas</span>
             </button>
           )}
 
           <button
             type="button"
             onClick={() => setActiveTab('mine')}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all ${
+            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
               activeTab === 'mine'
                 ? 'border-brand-600 text-brand-600 bg-brand-50/50'
                 : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
             }`}
           >
             <UserCheck className="w-4 h-4" />
-            <span>Mis Asignaciones (RF15)</span>
+            <span>Mis Asignaciones</span>
           </button>
 
           <button
@@ -356,7 +356,7 @@ export const NominationsPage: React.FC = () => {
           <div className="bg-brand-50/60 border border-brand-200 rounded-xl p-4 text-xs text-brand-900 flex items-start gap-2.5">
             <UserCheck className="w-4 h-4 text-brand-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold">Panel Personal de Designaciones (RF15)</p>
+              <p className="font-bold">Mis Designaciones Activas</p>
               <p className="mt-0.5 text-brand-800">
                 Aquí visualizas los partidos a los que has sido nominado por la Comisión Técnica. Recuerda confirmar tu asistencia con anticipación o rechazar indicando el motivo para gestionar reemplazos oportunamente.
               </p>
@@ -382,7 +382,7 @@ export const NominationsPage: React.FC = () => {
         />
       )}
 
-      {/* Modal de Designación (CU-07) */}
+      {/* Modal de Designación */}
       <AssignNominationModal
         isOpen={assignModalOpen}
         onClose={() => setAssignModalOpen(false)}
@@ -391,7 +391,7 @@ export const NominationsPage: React.FC = () => {
         onNominationCreated={loadData}
       />
 
-      {/* Modal de Respuesta (CU-08, RF15) */}
+      {/* Modal de Respuesta */}
       <RespondNominationModal
         isOpen={respondModalOpen}
         onClose={() => setRespondModalOpen(false)}

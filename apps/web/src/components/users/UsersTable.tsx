@@ -46,13 +46,13 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                 Usuario / Contacto
               </th>
               <th scope="col" className="px-6 py-3.5">
-                Acreditaciones Técnicas (RF02)
+                Acreditaciones Técnicas
               </th>
               <th scope="col" className="px-6 py-3.5">
                 Estado
               </th>
               <th scope="col" className="px-6 py-3.5">
-                Consentimiento (RF01)
+                Consentimiento de Privacidad
               </th>
               <th scope="col" className="px-6 py-3.5 text-right">
                 Acciones

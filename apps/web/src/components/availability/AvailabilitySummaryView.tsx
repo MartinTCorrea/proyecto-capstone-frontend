@@ -43,7 +43,7 @@ export const AvailabilitySummaryView: React.FC = () => {
         <div>
           <h2 className="text-base font-bold text-slate-900 flex items-center space-x-2">
             <Users className="w-5 h-5 text-purple-600" />
-            <span>Consolidado de Disponibilidad (Comisión Técnica RF06)</span>
+            <span>Consolidado General de Disponibilidad</span>
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
             Consulta el padrón de árbitros y oficiales de mesa disponibles para designaciones.

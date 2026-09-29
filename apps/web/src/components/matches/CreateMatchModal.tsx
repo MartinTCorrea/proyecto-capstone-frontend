@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Calendar, MapPin, Trophy, Shield, Clock, AlertCircle } from 'lucide-react';
+import { X, Calendar, MapPin, Trophy, Shield, Clock, AlertCircle, Info } from 'lucide-react';
 import { matchesApi, CreateMatchPayload } from '../../api/matches.api';
 import { MatchPlatform } from '@sgaob/shared';
 
@@ -215,8 +215,11 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs text-slate-600">
-            💡 <strong>Cálculo Automático:</strong> El bloque horario (Horario 1, Horario 2 o Ambos) será calculado por el sistema en función del día (Laboral vs Fin de semana) y la hora programada, de acuerdo a las reglas de negocio (Anexo A.4).
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs text-slate-600 flex items-start space-x-2">
+            <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+            <div>
+              <strong>Cálculo Automático:</strong> El bloque horario (Horario 1, Horario 2 o Ambos) será determinado por el sistema en función del día y la hora programada para el partido.
+            </div>
           </div>
 
           {/* Botones de acción */}

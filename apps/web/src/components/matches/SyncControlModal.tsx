@@ -75,16 +75,16 @@ export const SyncControlModal: React.FC<SyncControlModalProps> = ({
             </div>
             <div>
               <h2 id="sync-modal-title" className="text-lg font-bold">
-                Sincronización de Cartelera (RF07, RF09)
+                Sincronización de Cartelera Externa
               </h2>
               <p className="text-xs text-blue-200">
-                Cola asíncrona BullMQ con reintentos y tolerancia a caídas
+                Conexión asíncrona con reintentos y tolerancia a fallos
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-1.5 transition-colors"
+            className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-1.5 transition-colors cursor-pointer"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />
@@ -96,13 +96,13 @@ export const SyncControlModal: React.FC<SyncControlModalProps> = ({
           {/* Selección de plataforma */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-              Plataforma Origen (RF07)
+              Plataforma de Origen
             </label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => setPlatform(MatchPlatform.SWISH)}
-                className={`p-3 rounded-lg border text-left flex items-start space-x-2.5 transition-all ${
+                className={`p-3 rounded-lg border text-left flex items-start space-x-2.5 transition-all cursor-pointer ${
                   platform === MatchPlatform.SWISH
                     ? 'border-blue-600 bg-blue-50/70 text-blue-900 ring-2 ring-blue-500/20'
                     : 'border-slate-200 hover:border-slate-300 text-slate-700'
@@ -118,7 +118,7 @@ export const SyncControlModal: React.FC<SyncControlModalProps> = ({
               <button
                 type="button"
                 onClick={() => setPlatform(MatchPlatform.NBN23)}
-                className={`p-3 rounded-lg border text-left flex items-start space-x-2.5 transition-all ${
+                className={`p-3 rounded-lg border text-left flex items-start space-x-2.5 transition-all cursor-pointer ${
                   platform === MatchPlatform.NBN23
                     ? 'border-emerald-600 bg-emerald-50/70 text-emerald-900 ring-2 ring-emerald-500/20'
                     : 'border-slate-200 hover:border-slate-300 text-slate-700'
@@ -138,9 +138,9 @@ export const SyncControlModal: React.FC<SyncControlModalProps> = ({
             <div className="flex items-center space-x-2.5">
               <ShieldCheck className="w-5 h-5 text-indigo-600 shrink-0" />
               <div>
-                <div className="text-xs font-bold text-slate-800">Modo Sandbox / Fixture Simulado ($0 Costo)</div>
+                <div className="text-xs font-bold text-slate-800">Modo Sandbox / Fixture Simulado</div>
                 <div className="text-[11px] text-slate-500">
-                  Genera partidos reales chilenos con soporte de reprogramaciones (RF10)
+                  Genera partidos con soporte de reprogramaciones automáticas
                 </div>
               </div>
             </div>
@@ -219,10 +219,10 @@ export const SyncControlModal: React.FC<SyncControlModalProps> = ({
               type="button"
               onClick={handleTriggerSync}
               disabled={syncing}
-              className="inline-flex items-center px-5 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors disabled:opacity-50"
+              className="inline-flex items-center px-5 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors disabled:opacity-50 cursor-pointer"
             >
               <RefreshCw className={`w-4 h-4 mr-2 ${syncing ? 'animate-spin' : ''}`} />
-              {syncing ? 'Sincronizando...' : 'Sincronizar Ahora (RF09)'}
+              {syncing ? 'Sincronizando...' : 'Sincronizar Ahora'}
             </button>
           </div>
         </div>

@@ -98,7 +98,7 @@ export const RespondNominationModal: React.FC<RespondNominationModalProps> = ({
         <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div>
             <h2 id="respond-nomination-title" className="text-lg font-bold text-slate-900">
-              Confirmar o Rechazar Asignación (RF15, CU-08)
+              Confirmar o Rechazar Designación
             </h2>
             <p className="text-xs text-slate-500">
               Responde a tu designación técnica para este partido
@@ -107,7 +107,7 @@ export const RespondNominationModal: React.FC<RespondNominationModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            className="text-slate-400 hover:text-slate-600 p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />

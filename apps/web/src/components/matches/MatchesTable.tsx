@@ -92,7 +92,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                 Gimnasio / Recinto
               </th>
               <th scope="col" className="px-6 py-3.5">
-                Estado (RF10)
+                Estado
               </th>
               <th scope="col" className="px-6 py-3.5">
                 Origen
@@ -177,8 +177,8 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                       <div className="flex items-center justify-end space-x-2">
                         <Link
                           to="/nominaciones"
-                          className="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
-                          title="Gestionar designaciones arbitrales (RF11)"
+                          className="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer"
+                          title="Gestionar designaciones arbitrales"
                           aria-label={`Gestionar designaciones para ${match.homeTeam} vs ${match.awayTeam}`}
                         >
                           <UserPlus className="w-4 h-4" />

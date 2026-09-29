@@ -165,9 +165,6 @@ export const AvailabilityPage: React.FC = () => {
               <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
                 Disponibilidad Horaria Semanal
               </h1>
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full border border-blue-200">
-                RF04 / RF05
-              </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
               Declaración de bloques para asignación de partidos (Árbitros y Oficiales de Mesa).
@@ -180,7 +177,7 @@ export const AvailabilityPage: React.FC = () => {
           <div className="flex p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-bold">
             <button
               onClick={() => setActiveTab('MY_AVAILABILITY')}
-              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center space-x-1.5 ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center space-x-1.5 cursor-pointer ${
                 activeTab === 'MY_AVAILABILITY'
                   ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-500 hover:text-slate-800'
@@ -191,14 +188,14 @@ export const AvailabilityPage: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('CT_SUMMARY')}
-              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center space-x-1.5 ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center space-x-1.5 cursor-pointer ${
                 activeTab === 'CT_SUMMARY'
                   ? 'bg-purple-600 text-white shadow-sm'
                   : 'text-slate-500 hover:text-slate-800'
               }`}
             >
               <Users className="w-3.5 h-3.5" />
-              <span>Consolidado CT (RF06)</span>
+              <span>Consolidado General</span>
             </button>
           </div>
         )}
@@ -208,7 +205,7 @@ export const AvailabilityPage: React.FC = () => {
         <AvailabilitySummaryView />
       ) : (
         <>
-          {/* Barra de Control Semanal y Estado del Plazo (RF05) */}
+          {/* Barra de Control Semanal y Estado del Plazo */}
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             {/* Selector de Semana */}
             <div className="flex items-center space-x-2">
@@ -307,11 +304,11 @@ export const AvailabilityPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Tarjeta explicativa de parámetros (Anexo A.4) */}
+          {/* Tarjeta explicativa de parámetros */}
           <div className="p-4 bg-slate-100 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1 leading-relaxed">
             <p className="font-bold text-slate-800 flex items-center space-x-1.5">
               <Layers className="w-4 h-4 text-blue-600" />
-              <span>Reglas de Declaración de Disponibilidad (RF04, Anexo A.3):</span>
+              <span>Reglas de Declaración de Bloques Horarios:</span>
             </p>
             <p>
               • <strong>Días Laborales (Lunes a Viernes):</strong> Horario 1 (18:30 - 20:30) y Horario 2 (20:30 - 22:30).

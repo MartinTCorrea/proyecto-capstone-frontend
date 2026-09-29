@@ -15,13 +15,14 @@ import {
   Loader2,
   CheckCircle2,
 } from 'lucide-react';
+import { BasketballLogo } from '../components/common/BasketballLogo';
 
 export const LoginPage: React.FC = () => {
   const { loginWithDevToken, loginWithCognito, loginWithToken, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Modo de login: 'dev' (Evaluación rápida 1-clic) | 'cognito' (AWS Cognito Cloud)
+  // Modo de login: 'dev' (Acceso rápido / Demo) | 'cognito' (Autenticación oficial)
   const [authMode, setAuthMode] = useState<'dev' | 'cognito'>('dev');
 
   // Estados de formularios y carga
@@ -146,8 +147,8 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <div className="mx-auto w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
-          🏀
+        <div className="mx-auto w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg mb-4">
+          <BasketballLogo className="w-9 h-9" />
         </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">SGAOB</h1>
         <p className="mt-2 text-sm text-slate-600">
@@ -172,14 +173,14 @@ export const LoginPage: React.FC = () => {
                 setAuthMode('dev');
                 setErrorMsg(null);
               }}
-              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center space-x-1.5 ${
+              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
                 authMode === 'dev'
                   ? 'bg-white shadow-sm text-blue-700 border border-slate-200'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>Evaluación Rápida (1 Clic)</span>
+              <span>Acceso Rápido / Demo</span>
             </button>
             <button
               type="button"
@@ -187,27 +188,27 @@ export const LoginPage: React.FC = () => {
                 setAuthMode('cognito');
                 setErrorMsg(null);
               }}
-              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center space-x-1.5 ${
+              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
                 authMode === 'cognito'
                   ? 'bg-white shadow-sm text-blue-700 border border-slate-200'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Cloud className="w-4 h-4 text-blue-600" />
-              <span>AWS Cognito (Cloud)</span>
+              <span>Acceso Oficial (Cognito)</span>
             </button>
           </div>
 
-          {/* VISTA 1: Modo Evaluación Rápida (1 Clic) */}
+          {/* VISTA 1: Modo Acceso Rápido / Demo */}
           {authMode === 'dev' && (
             <div className="space-y-4">
               <div>
                 <h2 className="text-base font-bold text-slate-900 flex items-center space-x-2">
                   <Shield className="w-5 h-5 text-blue-600" />
-                  <span>Acceso de Evaluación y Desarrollo (Capstone)</span>
+                  <span>Acceso Rápido / Demostración de Roles</span>
                 </h2>
                 <p className="mt-1 text-xs text-slate-500">
-                  Autenticación agnóstica offline: selecciona un perfil para ingresar sin dependencias externas.
+                  Selecciona un perfil operativo para ingresar y explorar la plataforma:
                 </p>
               </div>
 
@@ -342,24 +343,24 @@ export const LoginPage: React.FC = () => {
               </div>
 
               <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-xs text-slate-600">
-                <span className="font-medium">Modo activo: Token simétrico HS256 local</span>
+                <span className="font-medium">Sesión activa: Simulación de credencial autorizada</span>
                 <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-semibold text-[10px]">
-                  Evaluación 100% Offline
+                  Modo Operativo Rápido
                 </span>
               </div>
             </div>
           )}
 
-          {/* VISTA 2: Modo AWS Cognito Cloud */}
+          {/* VISTA 2: Modo AWS Cognito */}
           {authMode === 'cognito' && (
             <div className="space-y-5">
               <div>
                 <h2 className="text-base font-bold text-slate-900 flex items-center space-x-2">
                   <Cloud className="w-5 h-5 text-blue-600" />
-                  <span>Autenticación AWS Cognito (Producción Cloud)</span>
+                  <span>Autenticación Oficial (Amazon Cognito)</span>
                 </h2>
                 <p className="mt-1 text-xs text-slate-500">
-                  Inicia sesión con credenciales registradas en el User Pool de Amazon Cognito en la región us-east-1.
+                  Inicia sesión con credenciales registradas en el directorio oficial de usuarios.
                 </p>
               </div>
 

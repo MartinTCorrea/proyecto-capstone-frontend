@@ -96,7 +96,7 @@ export const App: React.FC = () => {
               }
             />
 
-            {/* Recursos y Comunicados (RF17–RF20) */}
+            {/* Recursos y Comunicados */}
             <Route
               path="recursos"
               element={

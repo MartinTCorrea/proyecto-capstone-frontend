@@ -112,7 +112,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
           </div>
         )}
 
-        {/* Bloque Seguro de Credencial (Solo Comisión Técnica - RF18) */}
+        {/* Bloque Seguro de Credencial (Solo Comisión Técnica) */}
         {isCredential && (
           <div className="p-3.5 bg-slate-900 rounded-xl border border-slate-800 text-white space-y-2.5">
             <div className="flex items-center justify-between text-[11px] text-slate-400">
@@ -124,7 +124,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowSecret(!showSecret)}
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-300 hover:text-white transition-colors"
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-300 hover:text-white transition-colors cursor-pointer"
                 >
                   {showSecret ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                   <span>{showSecret ? 'Ocultar' : 'Mostrar'}</span>
@@ -132,7 +132,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="ml-2 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-400 hover:text-brand-300 transition-colors"
+                  className="ml-2 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-400 hover:text-brand-300 transition-colors cursor-pointer"
                   title="Copiar credencial"
                 >
                   {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}

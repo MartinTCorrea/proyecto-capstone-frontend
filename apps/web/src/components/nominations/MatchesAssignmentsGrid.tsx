@@ -130,7 +130,7 @@ export const MatchesAssignmentsGrid: React.FC<MatchesAssignmentsGridProps> = ({
               <div className="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-slate-100 lg:pl-6 space-y-2">
                 <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-700">
                   <Shield className="w-4 h-4 text-brand-600" />
-                  <span>Terna Arbitral (RF13, Anexo A.1, A.2)</span>
+                  <span>Terna Arbitral</span>
                 </div>
                 <div className="space-y-1.5">
                   {REFEREE_SLOTS.map((slot) => {

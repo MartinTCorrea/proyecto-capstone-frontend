@@ -82,10 +82,10 @@ export const ResourcesPage: React.FC = () => {
           </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-              Recursos, Comunicados y Credenciales (RF17–RF20)
+              Centro de Documentación y Recursos
             </h1>
             <p className="text-xs sm:text-sm text-slate-500">
-              Bases reglamentarias, anuncios técnicos oficiales y exportación de cartelera
+              Bases reglamentarias, comunicados oficiales y exportación de planillas
             </p>
           </div>
         </div>
@@ -97,17 +97,17 @@ export const ResourcesPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setExportModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl border border-emerald-200 transition-colors shadow-2xs"
-                title="Exportar Grilla de Asignaciones a Excel (RF20)"
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl border border-emerald-200 transition-colors shadow-2xs cursor-pointer"
+                title="Exportar Grilla de Asignaciones a Excel"
               >
                 <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Exportar Asignaciones (RF20)</span>
+                <span>Exportar Asignaciones</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setCreateModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-xs transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-xs transition-colors cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Publicar Recurso</span>
@@ -119,7 +119,7 @@ export const ResourcesPage: React.FC = () => {
             type="button"
             onClick={() => loadResources()}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-2xs disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Actualizar</span>
@@ -133,41 +133,41 @@ export const ResourcesPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab(ResourceType.COMUNICADO)}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all ${
+            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
               activeTab === ResourceType.COMUNICADO
                 ? 'border-purple-600 text-purple-700 bg-purple-50/50'
                 : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
             }`}
           >
             <Megaphone className="w-4 h-4 text-purple-600" />
-            <span>Tablón de Comunicados (RF19)</span>
+            <span>Tablón de Comunicados</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab(ResourceType.DOCUMENTO)}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all ${
+            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
               activeTab === ResourceType.DOCUMENTO
                 ? 'border-blue-600 text-blue-700 bg-blue-50/50'
                 : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
             }`}
           >
             <FileText className="w-4 h-4 text-blue-600" />
-            <span>Documentos y Protocolos (RF17)</span>
+            <span>Documentos y Protocolos</span>
           </button>
 
           {isAdmin && (
             <button
               type="button"
               onClick={() => setActiveTab(ResourceType.CREDENCIAL)}
-              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
                 activeTab === ResourceType.CREDENCIAL
                   ? 'border-rose-600 text-rose-700 bg-rose-50/50'
                   : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
               }`}
             >
               <Key className="w-4 h-4 text-rose-600" />
-              <span>Bóveda de Credenciales (RF18, Anexo A.5)</span>
+              <span>Bóveda de Credenciales de Planillaje</span>
             </button>
           )}
         </div>

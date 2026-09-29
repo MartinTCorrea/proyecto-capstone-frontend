@@ -124,11 +124,11 @@ export const MatchesPage: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={() => setIsSyncModalOpen(true)}
-              className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors shadow-sm"
-              title="Sincronizar cartelera desde Swish / NBN23 (RF09)"
+              className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors shadow-sm cursor-pointer"
+              title="Sincronizar cartelera desde plataformas externas (Swish / NBN23)"
             >
               <RefreshCw className="w-4 h-4 mr-2 text-slate-600" />
-              Sincronizar (RF09)
+              Sincronizar Cartelera
             </button>
 
             <button
@@ -201,8 +201,8 @@ export const MatchesPage: React.FC = () => {
             >
               <option value="">Todos los estados</option>
               <option value={MatchStatus.SCHEDULED}>Programados</option>
-              <option value={MatchStatus.RESCHEDULED}>Reprogramados (RF10)</option>
-              <option value={MatchStatus.SUSPENDED}>Suspendidos (RF10)</option>
+              <option value={MatchStatus.RESCHEDULED}>Reprogramados</option>
+              <option value={MatchStatus.SUSPENDED}>Suspendidos</option>
               <option value={MatchStatus.CANCELLED}>Cancelados</option>
               <option value={MatchStatus.COMPLETED}>Finalizados</option>
             </select>
@@ -316,7 +316,7 @@ export const MatchesPage: React.FC = () => {
           setSelectedMatch(null);
         }}
         onMatchUpdated={() => {
-          setFeedback({ type: 'success', message: 'Partido y estado actualizados exitosamente (RF10)' });
+          setFeedback({ type: 'success', message: 'Partido y estado actualizados exitosamente' });
           fetchMatches();
         }}
       />

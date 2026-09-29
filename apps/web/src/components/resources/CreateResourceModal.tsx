@@ -242,7 +242,7 @@ export const CreateResourceModal: React.FC<CreateResourceModalProps> = ({
               <div className="p-3 bg-rose-50 rounded-xl border border-rose-200 text-xs text-rose-800 flex items-center gap-2">
                 <Lock className="w-4 h-4 text-rose-600 flex-shrink-0" />
                 <span>
-                  <strong>ADMIN (Obligatorio por regla Anexo A.5):</strong> Las credenciales tienen visibilidad restringida exclusivamente para Comisión Técnica.
+                  <strong>Acceso Restringido:</strong> Las credenciales tienen visibilidad reservada exclusivamente para la Comisión Técnica.
                 </span>
               </div>
             ) : (

@@ -48,7 +48,7 @@ export const DataConsentModal: React.FC<DataConsentModalProps> = ({ isOpen, onCl
           <ShieldCheck className="w-6 h-6 text-emerald-400 flex-shrink-0" />
           <div>
             <h2 id="consent-modal-title" className="text-base font-bold">
-              Consentimiento de Tratamiento de Datos (RF01)
+              Consentimiento de Tratamiento de Datos Personales
             </h2>
             <p className="text-[11px] text-slate-400">
               Cumplimiento normativo de privacidad de datos personales
@@ -62,7 +62,7 @@ export const DataConsentModal: React.FC<DataConsentModalProps> = ({ isOpen, onCl
               Términos de Privacidad y Tratamiento de Información en SGAOB:
             </p>
             <p>
-              En conformidad con la legislación aplicable sobre protección de la vida privada y datos de carácter personal, se informa que los datos proporcionados (nombre, correo electrónico, teléfono, disponibilidad horaria y designaciones arbitrales) serán utilizados exclusivamente para los siguientes fines institucionales:
+              En conformidad con la legislación aplicable sobre protección de la vida privada y datos de carácter personal, se informa que los datos proporcionados (nombre, correo electrónico, teléfono, disponibilidad horaria y designaciones arbitrales) serán utilizados exclusivamente para los siguientes fines operativos de la plataforma:
             </p>
             <ul className="list-disc pl-5 space-y-1">
               <li>Gestión operativa del padrón de árbitros y oficiales de mesa.</li>

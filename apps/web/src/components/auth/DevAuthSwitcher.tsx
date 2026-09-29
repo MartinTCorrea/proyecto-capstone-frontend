@@ -43,7 +43,7 @@ const DEV_PROFILES: MockProfile[] = [
   },
   {
     label: 'Doble Rol (Árbitro + Mesa)',
-    description: 'Demuestra la independencia técnica (Anexo A.1)',
+    description: 'Acreditaciones técnicas simultáneas e independientes',
     email: 'mario.doble@sgaob.cl',
     firstName: 'Mario',
     lastName: 'Silva',
@@ -52,7 +52,7 @@ const DEV_PROFILES: MockProfile[] = [
   },
   {
     label: 'Usuario sin Rol (Pendiente)',
-    description: 'Usuario pre-registrado esperando acreditación',
+    description: 'Usuario registrado pendiente de asignación de funciones',
     email: 'lucas.nuevo@sgaob.cl',
     firstName: 'Lucas',
     lastName: 'Valenzuela',
@@ -85,19 +85,19 @@ export const DevAuthSwitcher: React.FC = () => {
 
   return (
     <aside
-      aria-label="Panel de cambio de rol para desarrollo y evaluación"
+      aria-label="Panel de cambio rápido de perfil de usuario"
       className="fixed bottom-4 right-4 z-50 max-w-sm w-full font-sans"
     >
       <div className="bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden transition-all">
         {/* Barra superior de control */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-between px-4 py-2.5 bg-slate-900 text-white hover:bg-slate-800 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full flex items-center justify-between px-4 py-2.5 bg-slate-900 text-white hover:bg-slate-800 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           aria-expanded={isOpen}
         >
           <div className="flex items-center space-x-2">
             <Shield className="w-4 h-4 text-amber-400" />
-            <span>Dev Switcher (Modo Capstone)</span>
+            <span>Simulador de Roles</span>
           </div>
           {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
         </button>
@@ -106,7 +106,7 @@ export const DevAuthSwitcher: React.FC = () => {
         {isOpen && (
           <div className="p-4 bg-slate-50 border-t border-slate-200 max-h-96 overflow-y-auto space-y-3">
             <p className="text-xs text-slate-500 font-medium leading-relaxed">
-              Selecciona un perfil preconfigurado para probar en tiempo real las reglas de autorización RBAC y la vista del sistema:
+              Selecciona un perfil operativo para validar en tiempo real los permisos RBAC y la experiencia del usuario:
             </p>
 
             <div className="space-y-2">

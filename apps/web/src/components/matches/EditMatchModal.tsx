@@ -106,7 +106,7 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
             </div>
             <div>
               <h2 id="edit-match-title" className="text-lg font-bold">
-                Modificar Partido / Actualizar Estado (RF10)
+                Modificar Partido / Actualizar Estado
               </h2>
               <p className="text-xs text-slate-300">
                 {match.homeTeam} vs {match.awayTeam}
@@ -115,7 +115,7 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-1.5 transition-colors"
+            className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-1.5 transition-colors cursor-pointer"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />
@@ -134,7 +134,7 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
             <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start space-x-2.5 text-xs text-amber-800">
               <AlertTriangle className="w-4 h-4 mt-0.5 text-amber-600 shrink-0" />
               <div>
-                <strong>Aviso de Notificación RF10:</strong> Al guardar este partido como <em>{status}</em> o cambiar su horario, el sistema despachará automáticamente alertas por correo a todos los árbitros u oficiales que ya estén nominados.
+                <strong>Aviso de Notificación Automática:</strong> Al guardar este partido como <em>{status}</em> o cambiar su horario, el sistema despachará automáticamente alertas por correo a todos los árbitros u oficiales que ya estén nominados.
               </div>
             </div>
           )}

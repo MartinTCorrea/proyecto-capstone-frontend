@@ -16,19 +16,19 @@ export const MainLayout: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
       <Navbar />
 
-      {/* Banner de Aviso de Consentimiento de Datos Pendiente (RF01) */}
+      {/* Banner de Aviso de Consentimiento de Datos Pendiente */}
       {needsConsent && (
         <div className="bg-amber-500 text-white px-4 py-2.5 shadow-sm text-xs font-medium flex items-center justify-between">
           <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2">
             <div className="flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>
-                <strong>Aviso de Privacidad (RF01):</strong> Aún no has registrado el consentimiento formal para el tratamiento de tus datos personales.
+                <strong>Aviso de Privacidad:</strong> Aún no has registrado el consentimiento formal para el tratamiento de tus datos personales.
               </span>
             </div>
             <button
               onClick={() => setIsConsentModalOpen(true)}
-              className="px-3 py-1 bg-white text-amber-900 rounded-lg font-bold hover:bg-amber-50 transition-colors flex items-center space-x-1 shadow-sm"
+              className="px-3 py-1 bg-white text-amber-900 rounded-lg font-bold hover:bg-amber-50 transition-colors flex items-center space-x-1 shadow-sm cursor-pointer"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Aceptar Consentimiento</span>
@@ -46,10 +46,10 @@ export const MainLayout: React.FC = () => {
           <p>© 2026 SGAOB — Sistema de Gestión de Árbitros y Oficiales de Básquetbol.</p>
           <div className="flex items-center space-x-4">
             <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 text-emerald-800">
-              API Online (:3000)
+              Sistema Operativo
             </span>
             <span className="text-slate-400">|</span>
-            <span>Proyecto Capstone</span>
+            <span>Versión 1.0</span>
           </div>
         </div>
       </footer>

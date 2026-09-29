@@ -94,9 +94,6 @@ export const UsersManagementPage: React.FC = () => {
               <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
                 Gestión de Usuarios y Roles
               </h1>
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full border border-purple-200">
-                RF02 / RF03
-              </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
               Administración de padrón de árbitros, oficiales de mesa y personal técnico.
@@ -220,7 +217,7 @@ export const UsersManagementPage: React.FC = () => {
       <div className="p-4 bg-slate-100 rounded-xl border border-slate-200 flex items-start space-x-3 text-xs text-slate-600">
         <Shield className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
         <p className="leading-relaxed">
-          <strong className="text-slate-900">Independencia de Acreditaciones Técnicas:</strong> Recuerda que según el reglamento y las especificaciones del sistema (Anexo A.1), un usuario puede mantener activas sus funciones de árbitro y de oficial de mesa de forma independiente. Para asignar o deshabilitar una función en particular, haz clic en el botón <strong>Roles</strong> de la fila correspondiente.
+          <strong className="text-slate-900">Independencia de Acreditaciones Técnicas:</strong> Las funciones de árbitro y de oficial de mesa se gestionan de forma independiente. Un usuario puede mantener ambas acreditaciones activas simultáneamente. Para asignar o deshabilitar una función en particular, haz clic en el botón <strong>Roles</strong> de la fila correspondiente.
         </p>
       </div>
 

@@ -44,7 +44,7 @@ export const DeadlineStatusBadge: React.FC<DeadlineStatusBadgeProps> = ({
       <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
         <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0" />
         <span>
-          <strong>Plazo de declaración cerrado (RF05):</strong> Venció el {formattedDeadline}. Consulta en solo lectura.
+          <strong>Plazo de declaración cerrado:</strong> Venció el {formattedDeadline}. Consulta en solo lectura.
         </span>
       </div>
     );

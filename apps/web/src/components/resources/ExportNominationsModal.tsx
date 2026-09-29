@@ -64,7 +64,7 @@ export const ExportNominationsModal: React.FC<ExportNominationsModalProps> = ({
             </div>
             <div>
               <h2 id="export-nominations-title" className="text-lg font-bold text-slate-900">
-                Exportar Asignaciones (RF20)
+                Exportar Planilla de Asignaciones
               </h2>
               <p className="text-xs text-slate-500">
                 Descarga la grilla completa en formato CSV compatible con Microsoft Excel
@@ -74,7 +74,7 @@ export const ExportNominationsModal: React.FC<ExportNominationsModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            className="text-slate-400 hover:text-slate-600 p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { RoleName } from '@sgaob/shared';
 import { useAuth } from '../../hooks/useAuth';
 import { User, LogOut, Menu, X, Calendar, ClipboardList, Users, Trophy, FolderArchive } from 'lucide-react';
+import { BasketballLogo } from '../common/BasketballLogo';
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, hasRole, logout } = useAuth();
@@ -33,8 +34,8 @@ export const Navbar: React.FC = () => {
           {/* Logo y Navegación Principal */}
           <div className="flex items-center space-x-8">
             <Link to="/" className="flex items-center space-x-3 group focus:outline-none">
-              <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-md group-hover:bg-blue-700 transition-colors">
-                🏀
+              <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-md group-hover:bg-blue-700 transition-colors">
+                <BasketballLogo className="w-5 h-5" />
               </div>
               <div className="flex flex-col">
                 <span className="font-extrabold text-lg tracking-tight text-slate-900 leading-tight">

@@ -59,12 +59,12 @@ export const AssignRolesModal: React.FC<AssignRolesModalProps> = ({
           <div className="flex items-center space-x-2.5">
             <Shield className="w-5 h-5 text-purple-400" />
             <h2 id="modal-title" className="text-base font-bold">
-              Asignación de Roles Técnicos (RF02)
+              Acreditaciones Técnicas
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white rounded-lg p-1 transition-colors focus:ring-2 focus:ring-purple-400"
+            className="text-slate-400 hover:text-white rounded-lg p-1 transition-colors focus:ring-2 focus:ring-purple-400 cursor-pointer"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />
@@ -84,13 +84,13 @@ export const AssignRolesModal: React.FC<AssignRolesModalProps> = ({
             <p className="text-xs text-slate-600 font-mono">{user.email}</p>
           </div>
 
-          {/* Banner explicativo Anexo A.1 */}
+          {/* Banner explicativo */}
           <div className="bg-purple-50 border border-purple-200 p-3.5 rounded-xl flex items-start space-x-3 text-purple-900 text-xs leading-relaxed">
             <Info className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold">Regla de Negocio (Anexo A.1):</span>
+              <span className="font-bold">Acreditaciones independientes:</span>
               <p className="mt-0.5 text-purple-800">
-                Las funciones de <strong>Árbitro</strong> y <strong>Oficial de Mesa</strong> son <em>mutuamente independientes</em>. Un usuario puede poseer una, la otra, o ambas simultáneamente para desempeñar ambos roles en el torneo.
+                Las funciones de <strong>Árbitro</strong> y <strong>Oficial de Mesa</strong> son mutuamente independientes. Un usuario puede poseer una, la otra, o ambas simultáneamente para desempeñar ambas tareas en las competencias.
               </p>
             </div>
           </div>
