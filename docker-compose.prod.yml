@@ -47,6 +47,8 @@ services:
       dockerfile: apps/api/Dockerfile
     container_name: sgaob-api-prod
     restart: always
+    env_file:
+      - .env
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,7 +63,13 @@ services:
       REDIS_PORT: 6379
       SMTP_HOST: mailpit
       SMTP_PORT: 1025
-      AUTH_PROVIDER: ${AUTH_PROVIDER:-local}
+      AUTH_PROVIDER: ${AUTH_PROVIDER:-cognito}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      COGNITO_USER_POOL_ID: ${COGNITO_USER_POOL_ID}
+      COGNITO_CLIENT_ID: ${COGNITO_CLIENT_ID}
+      COGNITO_DOMAIN: ${COGNITO_DOMAIN}
+      COGNITO_JWKS_URI: ${COGNITO_JWKS_URI}
+      JWT_SECRET: ${JWT_SECRET:-sgaob_jwt_dev_secret_key_2026}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
     ports:
       - "3000:3000"
