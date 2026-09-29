@@ -287,15 +287,44 @@ export class AuthService {
         if (errorType.includes('UserNotConfirmedException')) {
           throw new UnauthorizedException('La cuenta de AWS Cognito no ha sido confirmada todavía');
         }
-        if (data.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-          throw new BadRequestException('Se requiere cambio de contraseña inicial en AWS Cognito');
-        }
 
         throw new BadRequestException(`Falla en AWS Cognito: ${errorMessage}`);
       }
 
-      const idToken = data.AuthenticationResult?.IdToken;
-      const accessToken = data.AuthenticationResult?.AccessToken;
+      let authResult = data.AuthenticationResult;
+
+      // Si Cognito solicita NEW_PASSWORD_REQUIRED (usuario creado con contraseña temporal por el admin),
+      // respondemos automáticamente al desafío para establecer la contraseña como definitiva.
+      if (!authResult && data.ChallengeName === 'NEW_PASSWORD_REQUIRED' && data.Session) {
+        this.logger.log(`Usuario [${dto.email}] en estado FORCE_CHANGE_PASSWORD. Confirmando contraseña definitiva automáticamente en AWS Cognito...`);
+        const challengeResponse = await fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-amz-json-1.1',
+            'X-Amz-Target': 'AWSCognitoIdentityProviderService.RespondToAuthChallenge',
+          },
+          body: JSON.stringify({
+            ChallengeName: 'NEW_PASSWORD_REQUIRED',
+            ClientId: clientId,
+            ChallengeResponses: {
+              USERNAME: dto.email,
+              NEW_PASSWORD: dto.password,
+            },
+            Session: data.Session,
+          }),
+        });
+
+        const challengeData: any = await challengeResponse.json();
+        authResult = challengeData.AuthenticationResult;
+
+        if (!authResult) {
+          const msg = challengeData.message || 'Se requiere cambio de contraseña inicial en AWS Cognito';
+          throw new BadRequestException(msg);
+        }
+      }
+
+      const idToken = authResult?.IdToken;
+      const accessToken = authResult?.AccessToken;
 
       if (!idToken && !accessToken) {
         throw new UnauthorizedException('Cognito no retornó tokens de acceso válidos');
