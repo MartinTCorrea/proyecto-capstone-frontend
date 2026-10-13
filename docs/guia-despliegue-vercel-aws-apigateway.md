@@ -148,3 +148,4 @@
    * Las peticiones (`/api/users/me`, `/api/matches`, etc.) se envían a `https://<api-id>.execute-api.us-east-1.amazonaws.com/api/...`.
    * El estado HTTP retorna `200 OK`.
    * La IP de tu servidor EC2 nunca queda expuesta en la barra de direcciones ni en el cliente web.
+

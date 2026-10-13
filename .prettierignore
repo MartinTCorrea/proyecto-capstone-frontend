@@ -1,8 +1,0 @@
-dist
-build
-node_modules
-coverage
-package-lock.json
-*.log
-docker/data
-

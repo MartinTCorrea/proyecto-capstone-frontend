@@ -50,6 +50,12 @@ __pycache__/
 # Docker volumes
 docker/data/
 
-# Local/Agent prompt documents
+# Local/Agent prompt documents and notes
 Prompt_IA_Agentica_SGAOB.md
 AGENTS.md
+agents.md
+datos.md
+.agent/
+.agents/
+.prettierrc
+.prettierignore

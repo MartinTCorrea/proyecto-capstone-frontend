@@ -1,10 +1,12 @@
 # SGAOB — Sistema de Gestión de Árbitros y Oficiales de Básquetbol
 
 ![Status](https://img.shields.io/badge/Status-100%25%20Completed-brightgreen)
-![Tests](https://img.shields.io/badge/Tests-184%20Passing-success)
+![Tests](https://img.shields.io/badge/Tests-191%20Passing-success)
 ![Coverage](https://img.shields.io/badge/Functional%20Requirements-RF01--RF20%20(100%25)-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict%20Mode-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)
+![AWS](https://img.shields.io/badge/AWS-API%20Gateway%20%7C%20Cognito%20%7C%20EC2-orange)
+![Vercel](https://img.shields.io/badge/Frontend-Vercel%20Edge%20CDN-black)
 
 Plataforma integral web para la digitalización, sincronización y optimización operativa de la gestión de árbitros y oficiales de mesa en el básquetbol chileno.
 
@@ -14,50 +16,46 @@ Plataforma integral web para la digitalización, sincronización y optimización
 
 ## 1. Diagrama de Arquitectura del Sistema
 
+El sistema implementa una arquitectura híbrida desacoplada de alta disponibilidad y latencia reducida:
+
 ```mermaid
 graph TD
-    subgraph Client["Cliente / Navegador Web"]
-        ReactApp["Frontend React 18 + Vite (SPA)\nAtomic Design + WCAG 2.1 AA\nLazy Loading por Rutas (25 kB entry)"]
+    subgraph Client["1. Capa de Clientes"]
+        Browser["Navegador Web / Mobile\n(SPA React 18 + Vite)"]
     end
 
-    subgraph Ingress["Capa de Entrada y Seguridad"]
-        Nginx["Nginx Alpine (Reverse Proxy + Gzip + Caché 1y)"]
-        Helmet["Helmet (Security Headers)"]
-        Throttler["Throttler Rate Limiting (100 req/min)"]
-        ExceptionFilter["AllExceptionsFilter (Logging Estructurado)"]
+    subgraph FrontendPlatform["2. Plataforma Frontend (Vercel Edge CDN)"]
+        VercelCDN["Vercel Global Edge Network\n• Single Page Application (SPA)\n• Enrutamiento con vercel.json\n• Despliegue continuo desde GitHub"]
     end
 
-    subgraph BackendApp["Backend API (NestJS Modular + TypeScript Strict)"]
-        AuthMod["Módulo Seguridad y Usuarios (RF01–RF03)"]
-        AvailMod["Módulo Disponibilidad (RF04–RF06)"]
-        MatchMod["Módulo Integración y Sincronización (RF07–RF10)"]
-        NomMod["Módulo Nominaciones y Asignaciones (RF11–RF16)"]
-        ResMod["Módulo Información y Recursos (RF17–RF20)"]
-        AuditMod["Auditoría Inmutable (AuditLog)"]
-        MailMod["Notificaciones por Correo (Nodemailer)"]
+    subgraph AWSCloud["3. Amazon Web Services (AWS Academy Lab - us-east-1)"]
+        Cognito["Amazon Cognito User Pool\n• Emisión y verificación de tokens JWT\n• Allowed Callback URLs hacia Vercel"]
+        APIGW["Amazon API Gateway (HTTP API v2)\n• Enrutamiento proxy: /{proxy+}\n• Manejo nativo de CORS\n• Enmascaramiento de la IP del servidor"]
+        
+        subgraph EC2["Instancia AWS EC2 (Docker Compose)"]
+            NestAPI["Backend NestJS 10 (Puerto 3000)\n• Prefijo: /api\n• Swagger: /api/docs\n• CORS Dinámico"]
+            Postgres[("PostgreSQL 16\n(Prisma ORM)")]
+            Redis[("Redis 7\n(Colas BullMQ)")]
+            Mailpit["Mailpit SMTP (Emulador de Correo)"]
+            
+            NestAPI --> Postgres
+            NestAPI --> Redis
+            NestAPI --> Mailpit
+        end
+        
+        APIGW -->|Proxy HTTP puerto 3000| NestAPI
+        NestAPI -->|Valida firma JWT con JWKS| Cognito
     end
 
-    subgraph DataQueue["Persistencia y Colas"]
-        Postgres[("PostgreSQL 16\n(Prisma ORM / Migraciones)")]
-        Redis[("Redis 7\n(BullMQ Jobs)")]
-        Mailpit["Mailpit SMTP (Emulador de Correo)"]
-    end
-
-    subgraph ExternalServices["Ecosistema Externo"]
-        AzureEntra["Microsoft Entra External ID / AWS Cognito"]
+    subgraph ExternalPlatforms["4. Plataformas Externas"]
         SwishAPI["Plataformas Swish / NBN23 (Sandbox $0)"]
     end
 
-    ReactApp -->|HTTP / REST| Nginx
-    Nginx --> Helmet --> Throttler --> ExceptionFilter
-    ExceptionFilter --> AuthMod & AvailMod & MatchMod & NomMod & ResMod
-
-    AuthMod & AvailMod & MatchMod & NomMod & ResMod --> Postgres
-    MatchMod --> Redis
-    NomMod --> MailMod
-    MailMod --> Mailpit
-    MatchMod --> SwishAPI
-    AuthMod -.-> AzureEntra
+    Browser -->|1. Carga SPA estática| VercelCDN
+    Browser -->|2. Login / Autenticación| Cognito
+    Cognito -->|3. Retorna Bearer JWT| Browser
+    Browser -->|4. Peticiones REST con Bearer JWT| APIGW
+    NestAPI -->|Sincronización Asíncrona| SwishAPI
 ```
 
 ---
@@ -66,7 +64,7 @@ graph TD
 
 | Módulo | Casos de Uso | Requerimientos | Capacidades Principales |
 |---|---|---|---|
-| **1. Seguridad y Usuarios** | CU-01, CU-02 | **RF01, RF02, RF03** | Autenticación agnóstica (Cognito / Entra / JWT), registro formal de consentimiento de datos personales con IP/timestamp, gestión de perfiles y estados de cuenta (`ACTIVE`, `INACTIVE`, `PENDING_ROLE`), y **separación estricta de roles técnicos (Árbitro vs Oficial de Mesa, Anexo A.1)**. |
+| **1. Seguridad y Usuarios** | CU-01, CU-02 | **RF01, RF02, RF03** | Autenticación agnóstica (Amazon Cognito / JWT), registro formal de consentimiento de datos personales con IP/timestamp, gestión de perfiles y estados de cuenta (`ACTIVE`, `INACTIVE`, `PENDING_ROLE`), y **separación estricta de roles técnicos (Árbitro vs Oficial de Mesa, Anexo A.1)**. |
 | **2. Disponibilidad** | CU-03, CU-04 | **RF04, RF05, RF06** | Declaración masiva semanal por bloques (`HORARIO_1`, `HORARIO_2`, `FULL`, `NO`), validación automática de regla de cierre (Miércoles 23:59), bloques parametrizados según día hábil o fin de semana (**Anexo A.4**) y consolidado administrativo para la Comisión Técnica. |
 | **3. Integración y Sincronización** | CU-05, CU-06 | **RF07, RF08, RF09, RF10** | Cartelera unificada de partidos, creación manual autónoma, prueba de conectividad y sincronización asíncrona mediante **BullMQ y Redis** contra Swish y NBN23 (entorno Sandbox sin costo), y detección de reprogramaciones con alerta automática al personal designado (**RF10**). |
 | **4. Nominaciones y Asignaciones** | CU-07, CU-08 | **RF11, RF12, RF13, RF14, RF15, RF16** | Cruce algorítmico inteligente (filtro por disponibilidad declarada, topes de horario y exclusión estricta de roles incorrectos), soporte para **modalidad de 3 árbitros (Anexo A.2)**, alertas por correo, confirmación o rechazo justificado y grilla interactiva de visualización. |
@@ -79,21 +77,21 @@ graph TD
 ```text
 .
 ├── apps/
-│   ├── api/                     # Backend NestJS (TypeScript Strict)
+│   ├── api/                     # Backend NestJS 10 (TypeScript Strict)
 │   │   ├── prisma/              # Esquema relacional, migraciones versionadas y seeds
 │   │   ├── src/                 # Controladores, servicios, DTOs, guards y exception filters
 │   │   ├── test/                # Pruebas e2e (app.e2e-spec.ts y pilot-validation.e2e-spec.ts)
-│   │   └── Dockerfile           # Imagen Docker multi-stage de producción (node:20-alpine)
+│   │   └── Dockerfile           # Imagen Docker multi-stage optimizada para producción
 │   └── web/                     # Frontend React 18 + Vite (SPA)
 │       ├── src/                 # Componentes modulares, hooks, páginas lazy y cliente API
-│       ├── nginx.conf           # Configuración Nginx con gzip, caché estática y proxy
-│       └── Dockerfile           # Imagen Docker multi-stage de producción (nginx:alpine)
+│       ├── vercel.json          # Configuración de reescritura de rutas SPA en Vercel
+│       └── Dockerfile           # Imagen Docker multi-stage (opcional para entornos locales)
 ├── packages/
 │   └── shared/                  # Contratos de dominio, enums y tipos compartidos
-├── docs/                        # Informes de avance PR1–PR16 y manuales técnicos
+├── docs/                        # Informes de avance PR1–PR20 y manuales operativos
 ├── docker-compose.yml           # Infraestructura local (Postgres, Redis, Mailpit)
-├── docker-compose.prod.yml      # Pila de producción completa (Web, API, BD, Redis, Mailpit)
-├── AGENTS.md                    # Protocolo de calidad, ingeniería y reglas pre-commit
+├── docker-compose.prod.yml      # Pila optimizada de producción (API, Postgres, Redis, Mailpit)
+├── .env.example                 # Plantilla de variables de entorno del sistema
 └── README.md                    # Documentación principal del repositorio
 ```
 
@@ -108,7 +106,7 @@ graph TD
 
 ---
 
-### Opción A: Modo Desarrollo Rápido (Recomendado para desarrollo local)
+### Opción A: Modo Desarrollo Rápido (Local)
 
 1. **Clonar e instalar dependencias del monorepo:**
    ```bash
@@ -153,17 +151,21 @@ graph TD
 
 ---
 
-### Opción B: Despliegue de Producción 100% Contenerizado
+### Opción B: Despliegue Híbrido en Producción (Vercel + Amazon API Gateway + AWS EC2)
 
-Para desplegar la aplicación completa (Frontend Nginx + Backend NestJS + PostgreSQL + Redis + Mailpit) en un solo comando:
+Consulta la guía detallada paso a paso en:  
+👉 [`docs/guia-despliegue-vercel-aws-apigateway.md`](docs/guia-despliegue-vercel-aws-apigateway.md)
 
-```bash
-docker compose -f docker-compose.prod.yml up --build -d
-```
-- **Frontend SPA (Nginx):** `http://localhost` (puerto 80)
-- **Backend API:** `http://localhost:3000/api`
-- **Swagger Docs:** `http://localhost:3000/api/docs`
-- **Mailpit Web UI:** `http://localhost:8025`
+1. **Backend en AWS EC2:**
+   ```bash
+   sudo docker compose -f docker-compose.prod.yml up --build -d
+   sudo docker compose -f docker-compose.prod.yml exec -T api npx prisma migrate deploy
+   sudo docker compose -f docker-compose.prod.yml exec -T api npm run prisma:seed
+   ```
+2. **Amazon API Gateway (HTTP API v2):**
+   Configurado con integración proxy `http://<IP_EC2>:3000/{proxy}` y CORS habilitado.
+3. **Frontend en Vercel:**
+   Conectado al repositorio GitHub con build command `npm run build:web` y variable `VITE_API_URL` apuntando al Gateway.
 
 ---
 
@@ -182,9 +184,9 @@ La aplicación incluye un componente interactivo (**DevAuthSwitcher**) que permi
 
 ## 6. Aseguramiento de Calidad y Pruebas Automatizadas
 
-El proyecto cuenta con un total de **184 pruebas automatizadas aprobadas al 100%**:
+El proyecto cuenta con un total de **191 pruebas automatizadas aprobadas al 100%**:
 
-### 1. Pruebas Unitarias del Backend (121 tests en 17 suites)
+### 1. Pruebas Unitarias del Backend (128 tests en 18 suites)
 ```bash
 npm run test --prefix apps/api
 ```
@@ -202,22 +204,23 @@ npx tsc --noEmit -p apps/api/tsconfig.json
 npm run lint --prefix apps/web
 ```
 
-### 4. Compilación Global del Monorepo
+### 4. Compilación del Frontend para Vercel
 ```bash
-npm run build
+npm run build:web
 ```
 
 ---
 
 ## 7. Documentación Técnica del Proyecto
 
-En el directorio [`/docs`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/docs) se encuentran los informes detallados de cada hito:
+En el directorio [`/docs`](docs/) se encuentran los informes detallados de cada hito:
 
-- [`docs/informe-final-capstone.md`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/docs/informe-final-capstone.md): **Informe Académico Final de Cierre**.
-- [`docs/avance-pr15.md`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/docs/avance-pr15.md): Reporte de la Validación Piloto E2E (Fases 1 a 6).
-- [`docs/avance-pr16.md`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/docs/avance-pr16.md): Reporte de Optimización, Code Splitting y Dockerfiles.
-- [`docs/arquitectura-estilos-frontend.md`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/docs/arquitectura-estilos-frontend.md): Guía de diseño modular de interfaces.
-- Informes de avance progresivo: `avance-pr1-pr2.md` a `avance-pr14.md`.
+- [`docs/guia-despliegue-vercel-aws-apigateway.md`](docs/guia-despliegue-vercel-aws-apigateway.md): **Guía Operativa de Despliegue Híbrido**.
+- [`docs/avance-pr20.md`](docs/avance-pr20.md): Reporte del Desacople Arquitectónico Híbrido y Amazon API Gateway.
+- [`docs/informe-final-capstone.md`](docs/informe-final-capstone.md): **Informe Académico Final de Cierre**.
+- [`docs/avance-pr19.md`](docs/avance-pr19.md): Reporte de Modernización Integral Frontend y Standalone SaaS.
+- [`docs/arquitectura-estilos-frontend.md`](docs/arquitectura-estilos-frontend.md): Guía de diseño modular de interfaces.
+- Informes de avance progresivo: `avance-pr1-pr2.md` a `avance-pr18.md`.
 
 ---
 
