@@ -15,13 +15,41 @@ async function bootstrap() {
   // Global Exception Filter (Manejo centralizado de errores y logging estructurado)
   app.useGlobalFilters(new AllExceptionsFilter());
 
-  // CORS
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+  // CORS: Soporte para Vercel (*.vercel.app), localhost y orígenes configurados
+  const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+  const configuredOrigins = rawFrontendUrl
+    .split(',')
+    .map((url) => url.trim())
+    .filter(Boolean);
+  const defaultAllowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://localhost:80',
+    'http://localhost',
+  ];
+
   app.enableCors({
-    origin: [frontendUrl, 'http://localhost:3000'],
+    origin: (origin, callback) => {
+      // Permitir peticiones sin origen (server-to-server, curl, API Gateway health checks)
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      const isAllowedConfigured = configuredOrigins.includes(origin);
+      const isAllowedDefault = defaultAllowedOrigins.includes(origin);
+      const isVercelOrigin = origin.endsWith('.vercel.app');
+      const isLocalhost = /^http:\/\/localhost(:\d+)?$/.test(origin);
+
+      if (isAllowedConfigured || isAllowedDefault || isVercelOrigin || isLocalhost) {
+        return callback(null, true);
+      }
+
+      logger.warn(`Petición bloqueada por CORS desde origen no autorizado: ${origin}`);
+      return callback(new Error(`Origen ${origin} no autorizado por política CORS`), false);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
 
   // Global API Prefix

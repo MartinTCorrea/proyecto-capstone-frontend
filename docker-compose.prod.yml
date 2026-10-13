@@ -75,6 +75,10 @@ services:
       - "3000:3000"
 
   web:
+    # Perfil opcional: el frontend ahora se despliega desacoplado en Vercel.
+    # Para levantar este contenedor Nginx localmente, usa: docker compose --profile with-web up -d
+    profiles:
+      - with-web
     build:
       context: .
       dockerfile: apps/web/Dockerfile
