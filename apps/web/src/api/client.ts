@@ -1,9 +1,16 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const getBaseUrl = (): string => {
+  let url = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || '/api';
+  // Si es una URL completa remota (ej: https://...execute-api.us-east-1.amazonaws.com) y no termina en /api
+  if (url.startsWith('http') && !url.endsWith('/api') && !url.includes('/api/')) {
+    url = `${url.replace(/\/+$/, '')}/api`;
+  }
+  return url;
+};
 
 export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: getBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
