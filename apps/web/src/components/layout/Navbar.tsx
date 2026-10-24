@@ -130,10 +130,14 @@ export const Navbar: React.FC = () => {
           {/* Sección de Usuario / Autenticación */}
           <div className="flex items-center space-x-3">
             {isAuthenticated && user ? (
-              <div className="flex items-center space-x-4">
-                <div className="hidden lg:flex flex-col items-end">
+              <div className="flex items-center space-x-3">
+                <Link
+                  to="/perfil"
+                  title="Ver Mi Perfil"
+                  className="hidden lg:flex flex-col items-end group p-1.5 rounded-lg hover:bg-slate-50 transition-colors"
+                >
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm font-bold text-slate-800">
+                    <span className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
                       {user.firstName} {user.lastName}
                     </span>
                     <span className="text-xs text-slate-400 font-mono">({user.email})</span>
@@ -157,13 +161,26 @@ export const Navbar: React.FC = () => {
                       </span>
                     )}
                   </div>
-                </div>
+                </Link>
+
+                <Link
+                  to="/perfil"
+                  title="Mi Perfil"
+                  aria-label="Mi Perfil"
+                  className={`p-2 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 cursor-pointer ${
+                    isActive('/perfil')
+                      ? 'text-blue-700 bg-blue-50'
+                      : 'text-slate-500 hover:text-blue-600 hover:bg-blue-50'
+                  }`}
+                >
+                  <User className="w-5 h-5" />
+                </Link>
 
                 <button
                   onClick={logout}
                   title="Cerrar sesión"
                   aria-label="Cerrar sesión"
-                  className="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors focus:ring-2 focus:ring-rose-500"
+                  className="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors focus:ring-2 focus:ring-rose-500 cursor-pointer"
                 >
                   <LogOut className="w-5 h-5" />
                 </button>
@@ -171,7 +188,7 @@ export const Navbar: React.FC = () => {
             ) : (
               <Link
                 to="/login"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors cursor-pointer"
               >
                 <User className="w-4 h-4 mr-1.5" />
                 Iniciar Sesión
@@ -182,7 +199,7 @@ export const Navbar: React.FC = () => {
             {isAuthenticated && (
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-md"
+                className="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-md cursor-pointer"
                 aria-expanded={mobileMenuOpen}
                 aria-label="Abrir menú de navegación"
               >
@@ -202,6 +219,13 @@ export const Navbar: React.FC = () => {
             className="block px-3 py-2 rounded-md text-base font-medium text-slate-800 hover:bg-slate-100"
           >
             Inicio
+          </Link>
+          <Link
+            to="/perfil"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-3 py-2 rounded-md text-base font-medium text-blue-700 hover:bg-blue-50"
+          >
+            Mi Perfil
           </Link>
           {hasRole(RoleName.ADMIN_COMISION_TECNICA) && (
             <Link

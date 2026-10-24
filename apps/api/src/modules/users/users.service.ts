@@ -2,10 +2,12 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  BadRequestException,
   Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { AuditService } from '../../common/audit/audit.service';
+import { AuthService } from '../auth/auth.service';
 import { RoleName, UserStatus } from '@prisma/client';
 import { AuditAction } from '@sgaob/shared';
 import { AuthenticatedUser } from '../auth/auth.types';
@@ -24,10 +26,12 @@ export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly auditService: AuditService,
+    private readonly authService: AuthService,
   ) {}
 
   /**
    * Crea un nuevo usuario en la base de datos (RF03, CU-02)
+   * Aprovisiona inmediatamente en AWS Cognito si está configurado.
    */
   async createUser(dto: CreateUserDto, creatorId?: string): Promise<AuthenticatedUser> {
     const existing = await this.prisma.user.findUnique({
@@ -40,9 +44,30 @@ export class UsersService {
       );
     }
 
-    // externalId temporal para usuarios pre-creados hasta que hagan su primer login en Cognito/Entra
-    const externalId = `pre-${dto.email}`;
-    const initialStatus = dto.status || (dto.roles && dto.roles.length > 0 ? UserStatus.ACTIVE : UserStatus.PENDING_ROLE);
+    const initialPassword = dto.password || 'Temporal2026!';
+    let cognitoSub: string | undefined;
+
+    try {
+      const cognitoResult = await this.authService.createCognitoUser({
+        email: dto.email,
+        password: initialPassword,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        phone: dto.phone,
+        roles: dto.roles,
+      });
+      cognitoSub = cognitoResult.sub;
+    } catch (cognitoError: any) {
+      this.logger.warn(`No se pudo crear automáticamente en AWS Cognito: ${cognitoError.message}`);
+      if (cognitoError instanceof BadRequestException) {
+        throw cognitoError;
+      }
+    }
+
+    // externalId de Cognito o temporal para usuarios pre-creados
+    const externalId = cognitoSub || `pre-${dto.email}`;
+    const initialStatus =
+      dto.status || (dto.roles && dto.roles.length > 0 ? UserStatus.ACTIVE : UserStatus.PENDING_ROLE);
 
     const createdUser = await this.prisma.$transaction(async (tx) => {
       const user = await tx.user.create({
@@ -91,7 +116,7 @@ export class UsersService {
       details: { email: result.email, roles: result.roles, status: result.status },
     });
 
-    this.logger.log(`Usuario creado exitosamente: ${result.email} (ID: ${result.id})`);
+    this.logger.log(`Usuario creado exitosamente: ${result.email} (ID: ${result.id}, ExternalId: ${externalId})`);
     return result;
   }
 

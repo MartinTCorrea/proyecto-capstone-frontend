@@ -27,6 +27,26 @@ export interface DevTokenResponse {
   user: UserDto;
 }
 
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ConfirmForgotPasswordPayload {
+  email: string;
+  confirmationCode: string;
+  newPassword: string;
+}
+
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface AuthActionResponse {
+  success: boolean;
+  message: string;
+}
+
 export const authApi = {
   /**
    * Obtiene el perfil del usuario autenticado actual desde /api/auth/me
@@ -49,6 +69,30 @@ export const authApi = {
    */
   async loginCognito(payload: CognitoLoginPayload): Promise<DevTokenResponse> {
     const response = await apiClient.post<DevTokenResponse>('/auth/cognito-login', payload);
+    return response.data;
+  },
+
+  /**
+   * Solicita el restablecimiento de contraseña vía correo electrónico (/api/auth/forgot-password)
+   */
+  async forgotPassword(payload: ForgotPasswordPayload): Promise<AuthActionResponse> {
+    const response = await apiClient.post<AuthActionResponse>('/auth/forgot-password', payload);
+    return response.data;
+  },
+
+  /**
+   * Confirma el restablecimiento de contraseña con código de 6 dígitos (/api/auth/confirm-forgot-password)
+   */
+  async confirmForgotPassword(payload: ConfirmForgotPasswordPayload): Promise<AuthActionResponse> {
+    const response = await apiClient.post<AuthActionResponse>('/auth/confirm-forgot-password', payload);
+    return response.data;
+  },
+
+  /**
+   * Cambia la contraseña del usuario actualmente autenticado (/api/auth/change-password)
+   */
+  async changePassword(payload: ChangePasswordPayload): Promise<AuthActionResponse> {
+    const response = await apiClient.post<AuthActionResponse>('/auth/change-password', payload);
     return response.data;
   },
 

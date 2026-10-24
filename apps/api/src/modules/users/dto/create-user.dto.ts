@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsArray, IsEnum } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsArray, IsEnum, MinLength } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { RoleName, UserStatus } from '@prisma/client';
 
@@ -10,7 +10,7 @@ export class CreateUserDto {
   })
   @IsEmail({}, { message: 'El correo electrónico debe tener un formato válido' })
   @IsNotEmpty({ message: 'El correo electrónico es obligatorio' })
-  @Transform(({ value }) => typeof value === 'string' ? value.toLowerCase().trim() : value)
+  @Transform(({ value }) => (typeof value === 'string' ? value.toLowerCase().trim() : value))
   email!: string;
 
   @ApiProperty({
@@ -30,6 +30,15 @@ export class CreateUserDto {
   lastName!: string;
 
   @ApiPropertyOptional({
+    example: 'Temporal2026!',
+    description: 'Contraseña inicial para el usuario en AWS Cognito (mínimo 8 caracteres)',
+  })
+  @IsOptional()
+  @IsString({ message: 'La contraseña inicial debe ser una cadena de texto' })
+  @MinLength(8, { message: 'La contraseña inicial debe contener al menos 8 caracteres' })
+  password?: string;
+
+  @ApiPropertyOptional({
     example: '+56912345678',
     description: 'Teléfono de contacto',
   })
@@ -45,7 +54,10 @@ export class CreateUserDto {
   })
   @IsOptional()
   @IsArray({ message: 'Los roles deben enviarse como una lista' })
-  @IsEnum(RoleName, { each: true, message: 'Cada rol debe ser un RoleName válido (ADMIN_COMISION_TECNICA, ARBITRO, OFICIAL_MESA)' })
+  @IsEnum(RoleName, {
+    each: true,
+    message: 'Cada rol debe ser un RoleName válido (ADMIN_COMISION_TECNICA, ARBITRO, OFICIAL_MESA)',
+  })
   roles?: RoleName[];
 
   @ApiPropertyOptional({

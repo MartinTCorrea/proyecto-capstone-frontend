@@ -23,6 +23,7 @@ export interface CreateUserPayload {
   email: string;
   firstName: string;
   lastName: string;
+  password?: string;
   phone?: string;
   roles?: RoleName[];
   status?: UserStatus;

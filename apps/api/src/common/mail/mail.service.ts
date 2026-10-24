@@ -278,4 +278,109 @@ export class MailService implements OnModuleInit {
       html,
     });
   }
+
+  /**
+   * Envía código de verificación para recuperación de contraseña (RF01)
+   */
+  async sendPasswordResetCode(options: {
+    to: string;
+    code: string;
+    userName?: string;
+  }): Promise<{ success: boolean; messageId?: string; error?: string }> {
+    const subject = `[SGAOB] Código de recuperación de contraseña: ${options.code}`;
+    const name = options.userName || 'Usuario';
+    const html = `
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 20px; }
+          .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; overflow: hidden; }
+          .header { background: #2563eb; color: #ffffff; padding: 20px; text-align: center; }
+          .content { padding: 24px; color: #334155; line-height: 1.6; }
+          .code-box { margin: 20px 0; background: #eff6ff; border: 2px dashed #3b82f6; border-radius: 8px; padding: 16px; text-align: center; font-size: 28px; font-weight: 800; letter-spacing: 6px; color: #1e40af; font-family: monospace; }
+          .footer { padding: 16px; text-align: center; font-size: 12px; color: #94a3b8; background: #f8fafc; }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <div class="header">
+            <h1 style="margin:0; font-size: 20px;">SGAOB — Seguridad de la Cuenta</h1>
+            <p style="margin: 4px 0 0 0; font-size: 14px; opacity: 0.9;">Recuperación de Contraseña</p>
+          </div>
+          <div class="content">
+            <p>Estimado/a <strong>${name}</strong>,</p>
+            <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en el Sistema de Gestión de Árbitros y Oficiales de Básquetbol.</p>
+            <p>Utiliza el siguiente código de confirmación de 6 dígitos en la pantalla de inicio de sesión:</p>
+            
+            <div class="code-box">${options.code}</div>
+
+            <p style="font-size: 13px; color: #64748b;">Este código es válido por 15 minutos. Si no solicitaste este cambio, puedes desestimar este mensaje; tu contraseña actual permanecerá inalterada.</p>
+          </div>
+          <div class="footer">
+            Sistema de Gestión de Árbitros y Oficiales de Básquetbol (SGAOB).
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    return this.sendMail({
+      to: options.to,
+      subject,
+      html,
+    });
+  }
+
+  /**
+   * Notificación de confirmación tras cambio exitoso de contraseña
+   */
+  async sendPasswordChangedAlert(options: {
+    to: string;
+    userId?: string;
+    userName?: string;
+  }): Promise<{ success: boolean; messageId?: string; error?: string }> {
+    const subject = `[SGAOB] Tu contraseña ha sido actualizada exitosamente`;
+    const name = options.userName || 'Usuario';
+    const html = `
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 20px; }
+          .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; overflow: hidden; }
+          .header { background: #059669; color: #ffffff; padding: 20px; text-align: center; }
+          .content { padding: 24px; color: #334155; line-height: 1.6; }
+          .footer { padding: 16px; text-align: center; font-size: 12px; color: #94a3b8; background: #f8fafc; }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <div class="header">
+            <h1 style="margin:0; font-size: 20px;">SGAOB — Seguridad de la Cuenta</h1>
+            <p style="margin: 4px 0 0 0; font-size: 14px; opacity: 0.9;">Actualización Exitosa</p>
+          </div>
+          <div class="content">
+            <p>Estimado/a <strong>${name}</strong>,</p>
+            <p>Te informamos que la contraseña asociada a tu cuenta (${options.to}) ha sido modificada correctamente.</p>
+            <p>Ya puedes iniciar sesión en SGAOB con tus nuevas credenciales.</p>
+            <p style="font-size: 13px; color: #ef4444; margin-top: 16px;"><strong>¿No reconoces esta actividad?</strong> Si no realizaste este cambio, por favor contacta de inmediato con la Comisión Técnica.</p>
+          </div>
+          <div class="footer">
+            Sistema de Gestión de Árbitros y Oficiales de Básquetbol (SGAOB).
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    return this.sendMail({
+      to: options.to,
+      userId: options.userId,
+      subject,
+      html,
+    });
+  }
 }

@@ -37,6 +37,18 @@ describe('AuthController', () => {
               accessToken: 'mock-cognito-id-token',
               user: mockUser,
             }),
+            forgotPassword: jest.fn().mockResolvedValue({
+              success: true,
+              message: 'Código de recuperación despachado',
+            }),
+            confirmForgotPassword: jest.fn().mockResolvedValue({
+              success: true,
+              message: 'Contraseña restablecida exitosamente',
+            }),
+            changePassword: jest.fn().mockResolvedValue({
+              success: true,
+              message: 'Contraseña actualizada exitosamente',
+            }),
             getCognitoConfig: jest.fn().mockReturnValue({
               authProvider: 'cognito',
               region: 'us-east-1',
@@ -85,6 +97,43 @@ describe('AuthController', () => {
       expect(result).toHaveProperty('accessToken', 'mock-cognito-id-token');
       expect(result.user).toEqual(mockUser);
       expect(authService.loginCognito).toHaveBeenCalledWith(dto);
+    });
+  });
+
+  describe('forgotPassword', () => {
+    it('should call authService.forgotPassword', async () => {
+      const dto = { email: 'arbitro@sgaob.cl' };
+      const result = await controller.forgotPassword(dto);
+
+      expect(result.success).toBe(true);
+      expect(authService.forgotPassword).toHaveBeenCalledWith(dto);
+    });
+  });
+
+  describe('confirmForgotPassword', () => {
+    it('should call authService.confirmForgotPassword', async () => {
+      const dto = {
+        email: 'arbitro@sgaob.cl',
+        confirmationCode: '123456',
+        newPassword: 'NuevaContrasenaSegura2026!',
+      };
+      const result = await controller.confirmForgotPassword(dto);
+
+      expect(result.success).toBe(true);
+      expect(authService.confirmForgotPassword).toHaveBeenCalledWith(dto);
+    });
+  });
+
+  describe('changePassword', () => {
+    it('should call authService.changePassword with current user id', async () => {
+      const dto = {
+        currentPassword: 'Password123!',
+        newPassword: 'NuevaContrasenaSegura2026!',
+      };
+      const result = await controller.changePassword(mockUser, dto);
+
+      expect(result.success).toBe(true);
+      expect(authService.changePassword).toHaveBeenCalledWith(mockUser.id, dto);
     });
   });
 

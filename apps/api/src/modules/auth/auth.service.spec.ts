@@ -4,12 +4,14 @@ import { JwtService } from '@nestjs/jwt';
 import { NotFoundException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../../common/prisma/prisma.service';
+import { MailService } from '../../common/mail/mail.service';
 import { RoleName, UserStatus } from '@prisma/client';
 
 describe('AuthService', () => {
   let service: AuthService;
   let prisma: PrismaService;
   let jwtService: JwtService;
+  let mailService: MailService;
 
   const mockUser = {
     id: 'user-uuid-1',
@@ -66,12 +68,21 @@ describe('AuthService', () => {
             sign: jest.fn().mockReturnValue('mock.jwt.token'),
           },
         },
+        {
+          provide: MailService,
+          useValue: {
+            sendMail: jest.fn().mockResolvedValue({ success: true }),
+            sendPasswordResetCode: jest.fn().mockResolvedValue({ success: true }),
+            sendPasswordChangedAlert: jest.fn().mockResolvedValue({ success: true }),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
     prisma = module.get<PrismaService>(PrismaService);
     jwtService = module.get<JwtService>(JwtService);
+    mailService = module.get<MailService>(MailService);
   });
 
   it('should be defined', () => {
@@ -96,11 +107,8 @@ describe('AuthService', () => {
     });
 
     it('should link externalId when user exists by email but has no externalId match', async () => {
-      // 1st call by externalId returns null
       (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
-      // 2nd call by email returns user
       (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockUser);
-      // update returns updated user
       (prisma.user.update as jest.Mock).mockResolvedValueOnce({
         ...mockUser,
         externalId: 'new-ext-uuid',
@@ -122,8 +130,8 @@ describe('AuthService', () => {
 
     it('should auto-provision new user in PENDING_ROLE when not found in database', async () => {
       (prisma.user.findUnique as jest.Mock)
-        .mockResolvedValueOnce(null) // by externalId
-        .mockResolvedValueOnce(null); // by email
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce(null);
 
       const newProvisionedUser = {
         id: 'new-user-uuid',
@@ -177,7 +185,7 @@ describe('AuthService', () => {
     });
   });
 
-    describe('generateDevToken', () => {
+  describe('generateDevToken', () => {
     it('should generate JWT token and return user profile', async () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockUser);
 
@@ -200,6 +208,68 @@ describe('AuthService', () => {
           password: 'Password123!',
         }),
       ).rejects.toThrow();
+    });
+  });
+
+  describe('createCognitoUser', () => {
+    it('should simulate user creation in local auth mode', async () => {
+      const result = await service.createCognitoUser({
+        email: 'nuevo.oficial@sgaob.cl',
+        firstName: 'Ana',
+        lastName: 'Gómez',
+      });
+
+      expect(result).toHaveProperty('sub');
+      expect(result.sub).toContain('cognito-local');
+      expect(result.userConfirmed).toBe(true);
+    });
+  });
+
+  describe('forgotPassword and confirmForgotPassword (Local fallback)', () => {
+    it('should send a verification code and allow resetting password', async () => {
+      (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
+
+      const forgotRes = await service.forgotPassword({ email: 'arbitro@sgaob.cl' });
+      expect(forgotRes.success).toBe(true);
+      expect(mailService.sendPasswordResetCode).toHaveBeenCalled();
+
+      const lastCall = (mailService.sendPasswordResetCode as jest.Mock).mock.calls[0][0];
+      const code = lastCall.code;
+      expect(code).toBeDefined();
+
+      const confirmRes = await service.confirmForgotPassword({
+        email: 'arbitro@sgaob.cl',
+        confirmationCode: code,
+        newPassword: 'NuevaContrasenaSegura2026!',
+      });
+
+      expect(confirmRes.success).toBe(true);
+      expect(mailService.sendPasswordChangedAlert).toHaveBeenCalled();
+    });
+  });
+
+  describe('changePassword', () => {
+    it('should update password and send alert notification', async () => {
+      (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockUser);
+
+      const result = await service.changePassword('user-uuid-1', {
+        currentPassword: 'Password123!',
+        newPassword: 'NuevaContrasenaSegura2026!',
+      });
+
+      expect(result.success).toBe(true);
+      expect(mailService.sendPasswordChangedAlert).toHaveBeenCalled();
+    });
+
+    it('should throw NotFoundException if user is not found', async () => {
+      (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
+
+      await expect(
+        service.changePassword('non-existent', {
+          currentPassword: 'Password123!',
+          newPassword: 'NuevaContrasenaSegura2026!',
+        }),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 

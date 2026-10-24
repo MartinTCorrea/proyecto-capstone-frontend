@@ -5,8 +5,13 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { AuthenticatedUser } from './auth.types';
-import { DevTokenDto } from './dto/dev-token.dto';
-import { CognitoLoginDto } from './dto/cognito-login.dto';
+import {
+  DevTokenDto,
+  CognitoLoginDto,
+  ForgotPasswordDto,
+  ConfirmForgotPasswordDto,
+  ChangePasswordDto,
+} from './dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -69,6 +74,50 @@ export class AuthController {
     @Body() dto: CognitoLoginDto,
   ): Promise<{ accessToken: string; user: AuthenticatedUser }> {
     return this.authService.loginCognito(dto);
+  }
+
+  @Post('forgot-password')
+  @Public()
+  @ApiOperation({
+    summary: 'Solicitar código de recuperación de contraseña por correo electrónico',
+    description: 'Envía un código de 6 dígitos al correo registrado vía AWS Cognito o MailService.',
+  })
+  @ApiResponse({ status: 200, description: 'Código de recuperación despachado' })
+  @ApiResponse({ status: 400, description: 'Error al solicitar el código o correo inválido' })
+  async forgotPassword(
+    @Body() dto: ForgotPasswordDto,
+  ): Promise<{ success: boolean; message: string }> {
+    return this.authService.forgotPassword(dto);
+  }
+
+  @Post('confirm-forgot-password')
+  @Public()
+  @ApiOperation({
+    summary: 'Restablecer contraseña con código de confirmación',
+    description: 'Valida el código de 6 dígitos y establece la nueva contraseña en AWS Cognito.',
+  })
+  @ApiResponse({ status: 200, description: 'Contraseña restablecida exitosamente' })
+  @ApiResponse({ status: 400, description: 'Código incorrecto, expirado o contraseña no cumple requisitos' })
+  async confirmForgotPassword(
+    @Body() dto: ConfirmForgotPasswordDto,
+  ): Promise<{ success: boolean; message: string }> {
+    return this.authService.confirmForgotPassword(dto);
+  }
+
+  @Post('change-password')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('bearer-token')
+  @ApiOperation({
+    summary: 'Cambiar la contraseña del usuario autenticado',
+    description: 'Valida la contraseña actual y actualiza a la nueva contraseña en AWS Cognito.',
+  })
+  @ApiResponse({ status: 200, description: 'Contraseña modificada correctamente' })
+  @ApiResponse({ status: 400, description: 'Contraseña actual incorrecta o nueva contraseña inválida' })
+  async changePassword(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: ChangePasswordDto,
+  ): Promise<{ success: boolean; message: string }> {
+    return this.authService.changePassword(user.id, dto);
   }
 
   @Get('cognito-config')

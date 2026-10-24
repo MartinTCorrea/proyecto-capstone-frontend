@@ -14,6 +14,8 @@ import {
   ExternalLink,
   Loader2,
   CheckCircle2,
+  KeyRound,
+  X,
 } from 'lucide-react';
 import { BasketballLogo } from '../components/common/BasketballLogo';
 
@@ -32,6 +34,17 @@ export const LoginPage: React.FC = () => {
   const [isSubmittingCognito, setIsSubmittingCognito] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [cognitoConfig, setCognitoConfig] = useState<CognitoConfigResponse | null>(null);
+
+  // Estados del flujo de recuperación de contraseña
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const [forgotStep, setForgotStep] = useState<'request' | 'confirm' | 'success'>('request');
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [confirmationCode, setConfirmationCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [isSubmittingForgot, setIsSubmittingForgot] = useState(false);
+  const [forgotMsg, setForgotMsg] = useState<string | null>(null);
+  const [forgotError, setForgotError] = useState<string | null>(null);
 
   // Redirigir si ya está autenticado
   useEffect(() => {
@@ -144,6 +157,72 @@ export const LoginPage: React.FC = () => {
     }
   };
 
+  // Paso 1 de recuperación: solicitar código
+  const handleRequestRecoveryCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!forgotEmail) {
+      setForgotError('Por favor ingresa tu correo electrónico.');
+      return;
+    }
+
+    try {
+      setIsSubmittingForgot(true);
+      setForgotError(null);
+      setForgotMsg(null);
+
+      const res = await authApi.forgotPassword({ email: forgotEmail.trim() });
+      setForgotMsg(res.message);
+      setForgotStep('confirm');
+    } catch (err: any) {
+      setForgotError(
+        err.response?.data?.message || 'Error al solicitar el código de recuperación.',
+      );
+    } finally {
+      setIsSubmittingForgot(false);
+    }
+  };
+
+  // Paso 2 de recuperación: confirmar nueva contraseña
+  const handleConfirmNewPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotError(null);
+
+    if (!confirmationCode || !newPassword || !confirmNewPassword) {
+      setForgotError('Por favor completa todos los campos.');
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      setForgotError('Las contraseñas no coinciden.');
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setForgotError('La nueva contraseña debe tener al menos 8 caracteres.');
+      return;
+    }
+
+    try {
+      setIsSubmittingForgot(true);
+      const res = await authApi.confirmForgotPassword({
+        email: forgotEmail.trim(),
+        confirmationCode: confirmationCode.trim(),
+        newPassword,
+      });
+
+      setForgotMsg(res.message);
+      setForgotStep('success');
+      setCognitoEmail(forgotEmail.trim());
+      setCognitoPassword(newPassword);
+    } catch (err: any) {
+      setForgotError(
+        err.response?.data?.message || 'Error al restablecer la contraseña.',
+      );
+    } finally {
+      setIsSubmittingForgot(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
@@ -224,7 +303,7 @@ export const LoginPage: React.FC = () => {
                     )
                   }
                   disabled={!!loadingRole}
-                  className="p-4 rounded-lg border border-purple-200 bg-purple-50/50 hover:bg-purple-100/60 hover:border-purple-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-purple-500"
+                  className="p-4 rounded-lg border border-purple-200 bg-purple-50/50 hover:bg-purple-100/60 hover:border-purple-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-purple-500 cursor-pointer"
                 >
                   <div>
                     <span className="text-[10px] uppercase font-bold tracking-wider text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full inline-block mb-1.5">
@@ -256,7 +335,7 @@ export const LoginPage: React.FC = () => {
                     )
                   }
                   disabled={!!loadingRole}
-                  className="p-4 rounded-lg border border-blue-200 bg-blue-50/50 hover:bg-blue-100/60 hover:border-blue-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-blue-500"
+                  className="p-4 rounded-lg border border-blue-200 bg-blue-50/50 hover:bg-blue-100/60 hover:border-blue-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-blue-500 cursor-pointer"
                 >
                   <div>
                     <span className="text-[10px] uppercase font-bold tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full inline-block mb-1.5">
@@ -288,7 +367,7 @@ export const LoginPage: React.FC = () => {
                     )
                   }
                   disabled={!!loadingRole}
-                  className="p-4 rounded-lg border border-amber-200 bg-amber-50/50 hover:bg-amber-100/60 hover:border-amber-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-amber-500"
+                  className="p-4 rounded-lg border border-amber-200 bg-amber-50/50 hover:bg-amber-100/60 hover:border-amber-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-amber-500 cursor-pointer"
                 >
                   <div>
                     <span className="text-[10px] uppercase font-bold tracking-wider text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full inline-block mb-1.5">
@@ -320,7 +399,7 @@ export const LoginPage: React.FC = () => {
                     )
                   }
                   disabled={!!loadingRole}
-                  className="p-4 rounded-lg border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/60 hover:border-emerald-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-emerald-500"
+                  className="p-4 rounded-lg border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/60 hover:border-emerald-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-emerald-500 cursor-pointer"
                 >
                   <div>
                     <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full inline-block mb-1.5">
@@ -424,10 +503,29 @@ export const LoginPage: React.FC = () => {
                   </div>
                 </div>
 
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsForgotPasswordOpen(true);
+                      setForgotStep('request');
+                      setForgotEmail(cognitoEmail || '');
+                      setForgotMsg(null);
+                      setForgotError(null);
+                      setConfirmationCode('');
+                      setNewPassword('');
+                      setConfirmNewPassword('');
+                    }}
+                    className="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
+                  >
+                    ¿Olvidaste tu contraseña?
+                  </button>
+                </div>
+
                 <button
                   type="submit"
                   disabled={isSubmittingCognito}
-                  className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg shadow transition-colors flex items-center justify-center space-x-2 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                  className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg shadow transition-colors flex items-center justify-center space-x-2 focus:ring-2 focus:ring-blue-500 disabled:opacity-50 cursor-pointer"
                 >
                   {isSubmittingCognito ? (
                     <>
@@ -457,7 +555,7 @@ export const LoginPage: React.FC = () => {
 
                   <a
                     href={cognitoConfig.hostedUiUrl}
-                    className="w-full py-2 px-4 border border-slate-300 hover:border-slate-400 text-slate-700 font-semibold text-xs rounded-lg shadow-sm transition-colors flex items-center justify-center space-x-1.5 bg-slate-50 hover:bg-slate-100"
+                    className="w-full py-2 px-4 border border-slate-300 hover:border-slate-400 text-slate-700 font-semibold text-xs rounded-lg shadow-sm transition-colors flex items-center justify-center space-x-1.5 bg-slate-50 hover:bg-slate-100 cursor-pointer"
                   >
                     <span>Abrir Portal de Login Hosted UI de AWS</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -474,6 +572,198 @@ export const LoginPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* MODAL DE RECUPERACIÓN DE CONTRASEÑA */}
+      {isForgotPasswordOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150"
+        >
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 bg-slate-900 text-white">
+              <div className="flex items-center space-x-2.5">
+                <KeyRound className="w-5 h-5 text-blue-400" />
+                <h2 className="text-base font-bold">Recuperación de Contraseña</h2>
+              </div>
+              <button
+                onClick={() => setIsForgotPasswordOpen(false)}
+                className="text-slate-400 hover:text-white rounded-lg p-1 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {forgotError && (
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-center space-x-2 text-rose-700 text-xs">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{forgotError}</span>
+                </div>
+              )}
+
+              {forgotMsg && (
+                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center space-x-2 text-emerald-800 text-xs">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                  <span>{forgotMsg}</span>
+                </div>
+              )}
+
+              {/* PASO 1: Ingresar correo electrónico */}
+              {forgotStep === 'request' && (
+                <form onSubmit={handleRequestRecoveryCode} className="space-y-4">
+                  <p className="text-xs text-slate-600">
+                    Ingresa el correo electrónico asociado a tu cuenta para recibir un código de confirmación de 6 dígitos.
+                  </p>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Correo Electrónico
+                    </label>
+                    <div className="relative rounded-md shadow-sm">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <Mail className="w-4 h-4" />
+                      </div>
+                      <input
+                        type="email"
+                        required
+                        value={forgotEmail}
+                        onChange={(e) => setForgotEmail(e.target.value)}
+                        placeholder="arbitro@sgaob.cl"
+                        className="block w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end space-x-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsForgotPasswordOpen(false)}
+                      className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg cursor-pointer"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmittingForgot}
+                      className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors flex items-center space-x-1.5 cursor-pointer disabled:opacity-50"
+                    >
+                      {isSubmittingForgot ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>Enviando código...</span>
+                        </>
+                      ) : (
+                        <span>Enviar Código</span>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* PASO 2: Confirmar código y nueva clave */}
+              {forgotStep === 'confirm' && (
+                <form onSubmit={handleConfirmNewPassword} className="space-y-4">
+                  <p className="text-xs text-slate-600">
+                    Ingresa el código de 6 dígitos enviado a <strong>{forgotEmail}</strong> y define tu nueva contraseña.
+                  </p>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Código de Confirmación (6 dígitos)
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      maxLength={6}
+                      value={confirmationCode}
+                      onChange={(e) => setConfirmationCode(e.target.value)}
+                      placeholder="123456"
+                      className="block w-full px-3 py-2 text-center tracking-widest font-mono text-base border border-slate-300 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Nueva Contraseña (min. 8 caracteres)
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      minLength={8}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="block w-full px-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Confirmar Nueva Contraseña
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      minLength={8}
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="block w-full px-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="flex justify-between items-center pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setForgotStep('request')}
+                      className="text-xs text-slate-500 hover:text-slate-800 underline cursor-pointer"
+                    >
+                      Volver a pedir código
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmittingForgot}
+                      className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors flex items-center space-x-1.5 cursor-pointer disabled:opacity-50"
+                    >
+                      {isSubmittingForgot ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>Restableciendo...</span>
+                        </>
+                      ) : (
+                        <span>Restablecer Contraseña</span>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* PASO 3: Éxito */}
+              {forgotStep === 'success' && (
+                <div className="text-center space-y-4 py-2">
+                  <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+                    <CheckCircle2 className="w-7 h-7" />
+                  </div>
+                  <h3 className="text-sm font-bold text-slate-900">
+                    Contraseña Restablecida Exitosamente
+                  </h3>
+                  <p className="text-xs text-slate-600">
+                    Tu contraseña ha sido actualizada. Ya puedes iniciar sesión con tu cuenta.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setIsForgotPasswordOpen(false)}
+                    className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs rounded-lg transition-colors cursor-pointer"
+                  >
+                    Volver al Inicio de Sesión
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

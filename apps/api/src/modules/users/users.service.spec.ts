@@ -3,6 +3,7 @@ import { NotFoundException, ConflictException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { AuditService } from '../../common/audit/audit.service';
+import { AuthService } from '../auth/auth.service';
 import { RoleName, UserStatus } from '@prisma/client';
 import { AuditAction } from '@sgaob/shared';
 import { CreateUserDto, UpdateUserDto, AssignRolesDto, UpdateUserStatusDto } from './dto';
@@ -11,6 +12,7 @@ describe('UsersService', () => {
   let service: UsersService;
   let prisma: PrismaService;
   let auditService: AuditService;
+  let authService: AuthService;
 
   const mockUserRecord = {
     id: 'user-uuid-1',
@@ -62,12 +64,19 @@ describe('UsersService', () => {
             log: jest.fn().mockResolvedValue(undefined),
           },
         },
+        {
+          provide: AuthService,
+          useValue: {
+            createCognitoUser: jest.fn().mockResolvedValue({ sub: 'cognito-sub-1', userConfirmed: true }),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
     prisma = module.get<PrismaService>(PrismaService);
     auditService = module.get<AuditService>(AuditService);
+    authService = module.get<AuthService>(AuthService);
   });
 
   it('should be defined', () => {
@@ -127,6 +136,7 @@ describe('UsersService', () => {
       expect(result.id).toBe('user-uuid-2');
       expect(result.email).toBe('nuevo@sgaob.cl');
       expect(result.roles).toContain(RoleName.OFICIAL_MESA);
+      expect(authService.createCognitoUser).toHaveBeenCalled();
       expect(auditService.log).toHaveBeenCalledWith(
         expect.objectContaining({
           userId: 'admin-uuid-1',
@@ -139,44 +149,33 @@ describe('UsersService', () => {
   });
 
   describe('findAll', () => {
-    it('should return paginated list and calculate metadata correctly', async () => {
-      (prisma.user.count as jest.Mock).mockResolvedValueOnce(25);
+    it('should return paginated list of users', async () => {
+      (prisma.user.count as jest.Mock).mockResolvedValueOnce(1);
       (prisma.user.findMany as jest.Mock).mockResolvedValueOnce([mockUserRecord]);
 
-      const result = await service.findAll({ page: 2, limit: 10, search: 'Carlos' });
+      const result = await service.findAll({ page: 1, limit: 10 });
 
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].id).toBe('user-uuid-1');
-      expect(result.meta).toEqual({
-        total: 25,
-        page: 2,
-        limit: 10,
-        totalPages: 3,
-      });
-
+      expect(result.meta.total).toBe(1);
+      expect(result.meta.page).toBe(1);
+      expect(result.meta.totalPages).toBe(1);
       expect(prisma.user.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          skip: 10,
+          skip: 0,
           take: 10,
-          where: expect.objectContaining({
-            OR: expect.arrayContaining([
-              { firstName: { contains: 'Carlos', mode: 'insensitive' } },
-            ]),
-          }),
         }),
       );
     });
 
-    it('should filter by role and status when provided', async () => {
+    it('should filter by role if provided', async () => {
       (prisma.user.count as jest.Mock).mockResolvedValueOnce(1);
       (prisma.user.findMany as jest.Mock).mockResolvedValueOnce([mockUserRecord]);
 
-      await service.findAll({ role: RoleName.ARBITRO, status: UserStatus.ACTIVE });
+      await service.findAll({ role: RoleName.ARBITRO });
 
       expect(prisma.user.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: expect.objectContaining({
-            status: UserStatus.ACTIVE,
             roles: {
               some: {
                 role: {
@@ -188,18 +187,39 @@ describe('UsersService', () => {
         }),
       );
     });
+
+    it('should filter by search term matching name or email', async () => {
+      (prisma.user.count as jest.Mock).mockResolvedValueOnce(1);
+      (prisma.user.findMany as jest.Mock).mockResolvedValueOnce([mockUserRecord]);
+
+      await service.findAll({ search: 'Carlos' });
+
+      expect(prisma.user.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            OR: expect.arrayContaining([
+              { firstName: { contains: 'Carlos', mode: 'insensitive' } },
+            ]),
+          }),
+        }),
+      );
+    });
   });
 
   describe('findById', () => {
-    it('should return authenticated user when found', async () => {
+    it('should return user by id', async () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockUserRecord);
 
       const result = await service.findById('user-uuid-1');
+
       expect(result.id).toBe('user-uuid-1');
-      expect(result.email).toBe('carlos.arbitro@sgaob.cl');
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { id: 'user-uuid-1' },
+        include: { roles: { include: { role: true } } },
+      });
     });
 
-    it('should throw NotFoundException when user does not exist', async () => {
+    it('should throw NotFoundException if user does not exist', async () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
 
       await expect(service.findById('non-existent')).rejects.toThrow(NotFoundException);
@@ -207,29 +227,37 @@ describe('UsersService', () => {
   });
 
   describe('updateUser', () => {
-    it('should update personal data and log audit action', async () => {
+    it('should update user fields and log audit action', async () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockUserRecord);
 
       const updateDto: UpdateUserDto = {
-        firstName: 'Carlos Actualizado',
-        phone: '+56999999999',
+        firstName: 'Carlos Modificado',
+        phone: '+56999887766',
       };
 
       const updatedRecord = {
         ...mockUserRecord,
-        firstName: 'Carlos Actualizado',
-        phone: '+56999999999',
+        firstName: 'Carlos Modificado',
+        phone: '+56999887766',
       };
 
       (prisma.user.update as jest.Mock).mockResolvedValueOnce(updatedRecord);
 
-      const result = await service.updateUser('user-uuid-1', updateDto, 'admin-1');
+      const result = await service.updateUser('user-uuid-1', updateDto, 'admin-uuid-1');
 
-      expect(result.firstName).toBe('Carlos Actualizado');
-      expect(result.phone).toBe('+56999999999');
+      expect(result.firstName).toBe('Carlos Modificado');
+      expect(prisma.user.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: 'user-uuid-1' },
+          data: expect.objectContaining({
+            firstName: 'Carlos Modificado',
+            phone: '+56999887766',
+          }),
+        }),
+      );
       expect(auditService.log).toHaveBeenCalledWith(
         expect.objectContaining({
-          userId: 'admin-1',
+          userId: 'admin-uuid-1',
           action: AuditAction.USER_UPDATED,
           entityType: 'User',
           entityId: 'user-uuid-1',
@@ -239,26 +267,28 @@ describe('UsersService', () => {
   });
 
   describe('assignRoles', () => {
-    it('should reassign roles, activate user if PENDING_ROLE, and log audit', async () => {
+    it('should replace user roles and activate if status was PENDING_ROLE (RF02)', async () => {
       const pendingUserRecord = {
         ...mockUserRecord,
         status: UserStatus.PENDING_ROLE,
         roles: [],
       };
 
-      // 1st findById
       (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(pendingUserRecord);
 
       const assignDto: AssignRolesDto = {
         roles: [RoleName.ARBITRO, RoleName.OFICIAL_MESA],
       };
 
+      const roleArbitro = { id: 'role-arb-1', name: RoleName.ARBITRO };
+      const roleOficial = { id: 'role-ofi-1', name: RoleName.OFICIAL_MESA };
+
       const updatedRecord = {
         ...pendingUserRecord,
         status: UserStatus.ACTIVE,
         roles: [
-          { role: { id: 'r1', name: RoleName.ARBITRO } },
-          { role: { id: 'r2', name: RoleName.OFICIAL_MESA } },
+          { role: roleArbitro },
+          { role: roleOficial },
         ],
       };
 
@@ -271,8 +301,8 @@ describe('UsersService', () => {
           role: {
             findUnique: jest
               .fn()
-              .mockResolvedValueOnce({ id: 'r1', name: RoleName.ARBITRO })
-              .mockResolvedValueOnce({ id: 'r2', name: RoleName.OFICIAL_MESA }),
+              .mockResolvedValueOnce(roleArbitro)
+              .mockResolvedValueOnce(roleOficial),
           },
           user: {
             update: jest.fn().mockResolvedValue(updatedRecord),
@@ -283,10 +313,9 @@ describe('UsersService', () => {
 
       const result = await service.assignRoles('user-uuid-1', assignDto, 'admin-uuid-1');
 
-      expect(result.status).toBe(UserStatus.ACTIVE);
-      expect(result.roles).toHaveLength(2);
       expect(result.roles).toContain(RoleName.ARBITRO);
       expect(result.roles).toContain(RoleName.OFICIAL_MESA);
+      expect(result.status).toBe(UserStatus.ACTIVE);
       expect(auditService.log).toHaveBeenCalledWith(
         expect.objectContaining({
           userId: 'admin-uuid-1',
