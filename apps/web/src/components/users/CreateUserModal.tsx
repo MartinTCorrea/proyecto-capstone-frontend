@@ -135,7 +135,7 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({
 
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Contraseña Inicial (AWS Cognito) *
+              Contraseña Inicial *
             </label>
             <div className="relative rounded-md shadow-sm">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -160,7 +160,7 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({
               </button>
             </div>
             <p className="text-[11px] text-slate-500 mt-1">
-              Clave inicial generada para el usuario. Podrá iniciar sesión inmediatamente en AWS Cognito.
+              Clave inicial generada para el usuario. Podrá iniciar sesión inmediatamente con sus credenciales.
             </p>
           </div>
 

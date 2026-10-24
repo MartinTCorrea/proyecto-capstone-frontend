@@ -200,7 +200,7 @@ export const SyncControlModal: React.FC<SyncControlModalProps> = ({
               </div>
               {syncResult.jobId && (
                 <div className="mt-1 text-[11px] text-blue-700">
-                  ID de Trabajo BullMQ: <code>{syncResult.jobId}</code>
+                  ID de Tarea: <code>{syncResult.jobId}</code>
                 </div>
               )}
             </div>

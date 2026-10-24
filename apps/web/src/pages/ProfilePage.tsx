@@ -413,7 +413,7 @@ export const ProfilePage: React.FC = () => {
                 {isChangingPassword ? (
                   <>
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    <span>Actualizando en Cognito...</span>
+                    <span>Actualizando contraseña...</span>
                   </>
                 ) : (
                   <>

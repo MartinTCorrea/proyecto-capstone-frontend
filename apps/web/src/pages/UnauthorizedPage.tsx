@@ -13,7 +13,7 @@ export const UnauthorizedPage: React.FC = () => {
       </div>
 
       <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-        Acceso No Autorizado (403 Forbidden)
+        Acceso No Autorizado
       </h1>
 
       <p className="mt-3 text-sm text-slate-600 max-w-md leading-relaxed">

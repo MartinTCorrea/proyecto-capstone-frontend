@@ -9,7 +9,6 @@ import {
   Mail,
   ArrowRight,
   AlertCircle,
-  Cloud,
   Sparkles,
   ExternalLink,
   Loader2,
@@ -24,8 +23,8 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Modo de login: 'dev' (Acceso rápido / Demo) | 'cognito' (Autenticación oficial)
-  const [authMode, setAuthMode] = useState<'dev' | 'cognito'>('dev');
+  // Modo de login: 'cognito' (Autenticación oficial predeterminada) | 'dev' (Modo Test / Demo)
+  const [authMode, setAuthMode] = useState<'cognito' | 'dev'>('cognito');
 
   // Estados de formularios y carga
   const [loadingRole, setLoadingRole] = useState<string | null>(null);
@@ -81,7 +80,7 @@ export const LoginPage: React.FC = () => {
           .catch((err: any) => {
             setErrorMsg(
               err.response?.data?.message ||
-                'Error al validar el token de AWS Cognito contra el backend.',
+                'Error al validar las credenciales de sesión.',
             );
           })
           .finally(() => {
@@ -121,7 +120,7 @@ export const LoginPage: React.FC = () => {
     } catch (err: any) {
       setErrorMsg(
         err.response?.data?.message ||
-          'Error al conectar con la API de autenticación. Verifica que el backend esté en ejecución.',
+          'No fue posible conectar con el servicio. Por favor, reintenta en unos instantes.',
       );
     } finally {
       setLoadingRole(null);
@@ -150,7 +149,7 @@ export const LoginPage: React.FC = () => {
     } catch (err: any) {
       setErrorMsg(
         err.response?.data?.message ||
-          'Error al iniciar sesión con AWS Cognito. Revisa que las credenciales sean válidas.',
+          'Credenciales incorrectas. Revisa tu correo electrónico y contraseña.',
       );
     } finally {
       setIsSubmittingCognito(false);
@@ -244,8 +243,23 @@ export const LoginPage: React.FC = () => {
             </div>
           )}
 
-          {/* Selector de modo de autenticación (Dev Agnóstico vs AWS Cognito) */}
+          {/* Selector de modo de autenticación (Inicio de Sesión oficial vs Modo Test) */}
           <div className="flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+            <button
+              type="button"
+              onClick={() => {
+                setAuthMode('cognito');
+                setErrorMsg(null);
+              }}
+              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
+                authMode === 'cognito'
+                  ? 'bg-white shadow-sm text-blue-700 border border-slate-200'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Lock className="w-4 h-4 text-blue-600" />
+              <span>Iniciar Sesión</span>
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -259,22 +273,7 @@ export const LoginPage: React.FC = () => {
               }`}
             >
               <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>Acceso Rápido / Demo</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setAuthMode('cognito');
-                setErrorMsg(null);
-              }}
-              className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
-                authMode === 'cognito'
-                  ? 'bg-white shadow-sm text-blue-700 border border-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Cloud className="w-4 h-4 text-blue-600" />
-              <span>Acceso Oficial (Cognito)</span>
+              <span>Modo Test / Demo</span>
             </button>
           </div>
 
@@ -430,40 +429,20 @@ export const LoginPage: React.FC = () => {
             </div>
           )}
 
-          {/* VISTA 2: Modo AWS Cognito */}
+          {/* VISTA 1: Modo Oficial (Inicio de Sesión) */}
           {authMode === 'cognito' && (
             <div className="space-y-5">
               <div>
                 <h2 className="text-base font-bold text-slate-900 flex items-center space-x-2">
-                  <Cloud className="w-5 h-5 text-blue-600" />
-                  <span>Autenticación Oficial (Amazon Cognito)</span>
+                  <Lock className="w-5 h-5 text-blue-600" />
+                  <span>Ingreso a la Plataforma</span>
                 </h2>
                 <p className="mt-1 text-xs text-slate-500">
-                  Inicia sesión con credenciales registradas en el directorio oficial de usuarios.
+                  Inicia sesión con tus credenciales de acceso para gestionar partidos y asignaciones.
                 </p>
               </div>
 
-              {/* Estado de conexión de AWS Cognito */}
-              {cognitoConfig?.isConfigured ? (
-                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center space-x-2.5 text-xs text-emerald-800">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                  <span>
-                    AWS Cognito vinculado: <strong>{cognitoConfig.userPoolId}</strong> ({cognitoConfig.region})
-                  </span>
-                </div>
-              ) : (
-                <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-lg flex items-start space-x-2.5 text-xs text-amber-800">
-                  <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold">AWS Cognito pendiente de vincular:</span>
-                    <p className="mt-0.5">
-                      Crea tu User Pool en AWS Academy y define <code>COGNITO_USER_POOL_ID</code> y <code>COGNITO_CLIENT_ID</code> en <code>.env</code>.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Formulario de Login Directo con Cognito */}
+              {/* Formulario de Login Directo */}
               <form onSubmit={handleCognitoLogin} className="space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
@@ -530,18 +509,18 @@ export const LoginPage: React.FC = () => {
                   {isSubmittingCognito ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Autenticando con Cognito...</span>
+                      <span>Iniciando sesión...</span>
                     </>
                   ) : (
                     <>
-                      <Cloud className="w-4 h-4" />
-                      <span>Iniciar Sesión con AWS Cognito</span>
+                      <Lock className="w-4 h-4" />
+                      <span>Iniciar Sesión</span>
                     </>
                   )}
                 </button>
               </form>
 
-              {/* Botón de Hosted UI si fue configurado */}
+              {/* Botón de acceso federado si fue configurado */}
               {cognitoConfig?.hostedUiUrl && (
                 <div className="pt-2">
                   <div className="relative my-3">
@@ -549,7 +528,7 @@ export const LoginPage: React.FC = () => {
                       <div className="w-full border-t border-slate-200" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-2 text-slate-400 font-semibold">O vía Hosted UI</span>
+                      <span className="bg-white px-2 text-slate-400 font-semibold">O mediante portal institucional</span>
                     </div>
                   </div>
 
@@ -557,17 +536,11 @@ export const LoginPage: React.FC = () => {
                     href={cognitoConfig.hostedUiUrl}
                     className="w-full py-2 px-4 border border-slate-300 hover:border-slate-400 text-slate-700 font-semibold text-xs rounded-lg shadow-sm transition-colors flex items-center justify-center space-x-1.5 bg-slate-50 hover:bg-slate-100 cursor-pointer"
                   >
-                    <span>Abrir Portal de Login Hosted UI de AWS</span>
+                    <span>Ingresar mediante Portal SSO</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
               )}
-
-              <div className="text-center">
-                <p className="text-[11px] text-slate-400">
-                  Validación de firma RS256 con claves públicas JWKS de Amazon Cognito.
-                </p>
-              </div>
             </div>
           )}
         </div>

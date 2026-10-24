@@ -198,7 +198,7 @@ export class NominationsService {
       if (hasAvailability && !isAssignedToThisMatch && !conflictingNom) {
         availableCandidates.push(candidateData);
       } else {
-        let reason = 'Sin disponibilidad declarada para este bloque horario (RF12)';
+        let reason = 'Sin disponibilidad declarada para este bloque horario';
         if (isAssignedToThisMatch) reason = 'Ya asignado a otro slot en este mismo partido';
         else if (conflictingNom) reason = `Conflicto de horario con otro partido asignado (${candidateData.conflictDetail})`;
         else if (userBlock === AvailabilityBlock.NO) reason = 'Declaró NO disponible para esta fecha';
@@ -320,7 +320,7 @@ export class NominationsService {
     if (!isAvailable) {
       if (!dto.overrideAvailability) {
         throw new BadRequestException(
-          `El usuario no tiene disponibilidad declarada para este bloque horario (RF12). Bloque declarado: ${userBlock}, Requerido: ${match.timeBlock}. Para forzar asignación por excepción administrativa, active overrideAvailability con su motivo.`,
+          `El usuario no tiene disponibilidad declarada para este bloque horario. Bloque declarado: ${userBlock}, Requerido: ${match.timeBlock}. Para forzar asignación por excepción administrativa, active overrideAvailability con su motivo.`,
         );
       }
 
@@ -439,7 +439,7 @@ export class NominationsService {
     }
 
     if (dto.status === NominationStatus.REJECTED && !dto.rejectionReason?.trim()) {
-      throw new BadRequestException('Es obligatorio proporcionar un motivo justificado al rechazar una nominación (RF15).');
+      throw new BadRequestException('Es obligatorio proporcionar un motivo justificado al rechazar una nominación.');
     }
 
     const updated = await this.prisma.nomination.update({

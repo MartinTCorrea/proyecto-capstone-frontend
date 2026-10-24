@@ -325,7 +325,7 @@ export const MatchesPage: React.FC = () => {
         isOpen={isSyncModalOpen}
         onClose={() => setIsSyncModalOpen(false)}
         onSyncCompleted={() => {
-          setFeedback({ type: 'success', message: 'Sincronización encolada en BullMQ exitosamente' });
+          setFeedback({ type: 'success', message: 'Sincronización de cartelera iniciada exitosamente' });
           // Esperar brevemente a que el worker procese y recargar
           setTimeout(() => fetchMatches(1), 1500);
         }}

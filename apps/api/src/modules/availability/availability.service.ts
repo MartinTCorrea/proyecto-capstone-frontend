@@ -141,7 +141,7 @@ export class AvailabilityService {
         // Si la fecha objetivo ya pasó o el plazo de miércoles 23:59 ya venció
         if (targetDate.getTime() < now.setHours(0, 0, 0, 0) || new Date().getTime() > deadline.getTime()) {
           throw new BadRequestException(
-            `El plazo para declarar disponibilidad para la fecha ${item.date} venció el miércoles previo a las 23:59 (RF05). Contacte a la Comisión Técnica para casos justificados.`,
+            `El plazo para declarar disponibilidad para la fecha ${item.date} venció el miércoles previo a las 23:59. Contacte a la Comisión Técnica para casos justificados.`,
           );
         }
       }

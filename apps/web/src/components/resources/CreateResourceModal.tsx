@@ -90,7 +90,7 @@ export const CreateResourceModal: React.FC<CreateResourceModalProps> = ({
             </div>
             <div>
               <h2 id="create-resource-title" className="text-lg font-bold text-slate-900">
-                Nuevo Recurso o Comunicado (CU-10)
+                Nuevo Recurso o Comunicado
               </h2>
               <p className="text-xs text-slate-500">
                 Publica normativas, comunicados técnicos o credenciales seguras

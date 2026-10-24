@@ -297,13 +297,13 @@ export class AuthService {
         this.logger.warn(`Error en AWS Cognito [${errorType}]: ${errorMessage}`);
 
         if (errorType.includes('NotAuthorizedException') || errorType.includes('UserNotFoundException')) {
-          throw new UnauthorizedException('Credenciales inválidas en AWS Cognito (usuario o contraseña incorrectos)');
+          throw new UnauthorizedException('Credenciales inválidas (usuario o contraseña incorrectos)');
         }
         if (errorType.includes('UserNotConfirmedException')) {
-          throw new UnauthorizedException('La cuenta de AWS Cognito no ha sido confirmada todavía');
+          throw new UnauthorizedException('La cuenta de usuario no ha sido confirmada todavía');
         }
 
-        throw new BadRequestException(`Falla en AWS Cognito: ${errorMessage}`);
+        throw new BadRequestException(`Falla en la autenticación: ${errorMessage}`);
       }
 
       let authResult = data.AuthenticationResult;
@@ -663,14 +663,14 @@ export class AuthService {
           if (errorType.includes('UserNotFoundException')) {
             return {
               success: true,
-              message: 'Si el correo se encuentra registrado en AWS Cognito, recibirás un código de recuperación.',
+              message: 'Si el correo se encuentra registrado, recibirás un código de recuperación.',
             };
           }
           if (errorType.includes('LimitExceededException')) {
             throw new BadRequestException('Límite de solicitudes de recuperación superado. Por favor espera unos minutos.');
           }
 
-          throw new BadRequestException(`Falla en AWS Cognito: ${errorMessage}`);
+          throw new BadRequestException(`Error en recuperación de contraseña: ${errorMessage}`);
         }
 
         const destination = data.CodeDeliveryDetails?.Destination || email;
@@ -769,7 +769,7 @@ export class AuthService {
 
         return {
           success: true,
-          message: 'Tu contraseña ha sido restablecida exitosamente en AWS Cognito. Ya puedes iniciar sesión.',
+          message: 'Tu contraseña ha sido restablecida exitosamente. Ya puedes iniciar sesión.',
         };
       } catch (err: any) {
         if (err instanceof BadRequestException) throw err;
