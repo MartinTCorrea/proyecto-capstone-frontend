@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { RoleName } from '@sgaob/shared';
 import { useAuth } from '../hooks/useAuth';
-import { authApi, CognitoConfigResponse } from '../api/auth.api';
+import { authApi } from '../api/auth.api';
 import {
   Shield,
   Lock,
@@ -10,7 +10,6 @@ import {
   ArrowRight,
   AlertCircle,
   Sparkles,
-  ExternalLink,
   Loader2,
   CheckCircle2,
   KeyRound,
@@ -19,7 +18,7 @@ import {
 import { BasketballLogo } from '../components/common/BasketballLogo';
 
 export const LoginPage: React.FC = () => {
-  const { loginWithDevToken, loginWithCognito, loginWithToken, isAuthenticated } = useAuth();
+  const { loginWithDevToken, loginWithCognito, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,7 +31,6 @@ export const LoginPage: React.FC = () => {
   const [cognitoPassword, setCognitoPassword] = useState('');
   const [isSubmittingCognito, setIsSubmittingCognito] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [cognitoConfig, setCognitoConfig] = useState<CognitoConfigResponse | null>(null);
 
   // Estados del flujo de recuperación de contraseña
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
@@ -52,43 +50,6 @@ export const LoginPage: React.FC = () => {
       navigate(from, { replace: true });
     }
   }, [isAuthenticated, navigate, location]);
-
-  // Consultar configuración pública de AWS Cognito
-  useEffect(() => {
-    authApi
-      .getCognitoConfig()
-      .then((cfg) => setCognitoConfig(cfg))
-      .catch((err) => {
-        console.warn('No se pudo obtener la configuración pública de Cognito:', err);
-      });
-  }, []);
-
-  // Detectar redirección OIDC de Cognito Hosted UI vía URL hash (#id_token=... o #access_token=...)
-  useEffect(() => {
-    const hash = window.location.hash.substring(1);
-    if (hash && (hash.includes('id_token=') || hash.includes('access_token='))) {
-      const params = new URLSearchParams(hash);
-      const token = params.get('id_token') || params.get('access_token');
-      if (token) {
-        setIsSubmittingCognito(true);
-        loginWithToken(token)
-          .then(() => {
-            window.history.replaceState(null, '', window.location.pathname);
-            const from = (location.state as any)?.from?.pathname || '/';
-            navigate(from, { replace: true });
-          })
-          .catch((err: any) => {
-            setErrorMsg(
-              err.response?.data?.message ||
-                'Error al validar las credenciales de sesión.',
-            );
-          })
-          .finally(() => {
-            setIsSubmittingCognito(false);
-          });
-      }
-    }
-  }, [location, loginWithToken, navigate]);
 
   // Manejo de inicio de sesión dev / evaluación rápida
   const handleDevLogin = async (
@@ -519,28 +480,6 @@ export const LoginPage: React.FC = () => {
                   )}
                 </button>
               </form>
-
-              {/* Botón de acceso federado si fue configurado */}
-              {cognitoConfig?.hostedUiUrl && (
-                <div className="pt-2">
-                  <div className="relative my-3">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-slate-200" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-2 text-slate-400 font-semibold">O mediante portal institucional</span>
-                    </div>
-                  </div>
-
-                  <a
-                    href={cognitoConfig.hostedUiUrl}
-                    className="w-full py-2 px-4 border border-slate-300 hover:border-slate-400 text-slate-700 font-semibold text-xs rounded-lg shadow-sm transition-colors flex items-center justify-center space-x-1.5 bg-slate-50 hover:bg-slate-100 cursor-pointer"
-                  >
-                    <span>Ingresar mediante Portal SSO</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              )}
             </div>
           )}
         </div>

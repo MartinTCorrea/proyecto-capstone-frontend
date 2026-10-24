@@ -168,7 +168,7 @@ export const NominationsPage: React.FC = () => {
           <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Total Asignaciones</p>
           <div className="flex items-baseline justify-between mt-1">
             <p className="text-2xl font-black text-slate-900">{totalCount}</p>
-            <span className="text-xs text-slate-400">registradas</span>
+            <span className="text-xs text-slate-400">Registradas</span>
           </div>
         </div>
 
@@ -179,7 +179,7 @@ export const NominationsPage: React.FC = () => {
           </div>
           <div className="flex items-baseline justify-between mt-1">
             <p className="text-2xl font-black text-amber-900">{pendingCount}</p>
-            <span className="text-xs text-amber-700 font-medium">por confirmar</span>
+            <span className="text-xs text-amber-700 font-medium">Por confirmar</span>
           </div>
         </div>
 
@@ -190,7 +190,7 @@ export const NominationsPage: React.FC = () => {
           </div>
           <div className="flex items-baseline justify-between mt-1">
             <p className="text-2xl font-black text-emerald-900">{confirmedCount}</p>
-            <span className="text-xs text-emerald-700 font-medium">ratificadas</span>
+            <span className="text-xs text-emerald-700 font-medium">Ratificadas</span>
           </div>
         </div>
 
@@ -201,7 +201,7 @@ export const NominationsPage: React.FC = () => {
           </div>
           <div className="flex items-baseline justify-between mt-1">
             <p className="text-2xl font-black text-rose-900">{rejectedCount}</p>
-            <span className="text-xs text-rose-700 font-medium">con motivo</span>
+            <span className="text-xs text-rose-700 font-medium">Con motivo</span>
           </div>
         </div>
       </div>
