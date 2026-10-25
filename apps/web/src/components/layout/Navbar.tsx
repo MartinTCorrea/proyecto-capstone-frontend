@@ -132,50 +132,74 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center space-x-2 sm:space-x-3">
             {isAuthenticated && user ? (
               <div className="flex items-center space-x-2 sm:space-x-3">
-                <Link
-                  to="/perfil"
-                  title="Ver Mi Perfil"
-                  className="hidden lg:flex flex-col items-end group p-1.5 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                      {user.firstName} {user.lastName}
-                    </span>
-                    <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">({user.email})</span>
-                  </div>
-                  <div className="flex space-x-1.5 mt-0.5">
-                    {user.roles && user.roles.length > 0 ? (
-                      user.roles.map((r) => {
-                        const badge = roleBadgeMap[r];
-                        return (
-                          <span
-                            key={r}
-                            className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${badge?.color}`}
-                          >
-                            {badge?.label || r}
-                          </span>
-                        );
-                      })
-                    ) : (
-                      <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-full">
-                        Sin roles asignados
-                      </span>
-                    )}
-                  </div>
-                </Link>
+                {/* Botón de Perfil con Hover Card */}
+                <div className="relative group">
+                  <Link
+                    to="/perfil"
+                    title="Mi Perfil"
+                    aria-label="Mi Perfil"
+                    className={`p-2 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 flex items-center justify-center cursor-pointer ${
+                      isActive('/perfil')
+                        ? 'text-blue-700 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800/60'
+                    }`}
+                  >
+                    <User className="w-5 h-5" />
+                  </Link>
 
-                <Link
-                  to="/perfil"
-                  title="Mi Perfil"
-                  aria-label="Mi Perfil"
-                  className={`p-2 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 cursor-pointer ${
-                    isActive('/perfil')
-                      ? 'text-blue-700 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400'
-                      : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800/60'
-                  }`}
-                >
-                  <User className="w-5 h-5" />
-                </Link>
+                  {/* Hover Card desplegable */}
+                  <div className="absolute right-0 top-full mt-1.5 w-64 p-3.5 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none group-hover:pointer-events-auto before:absolute before:-top-2 before:left-0 before:right-0 before:h-2">
+                    <div className="flex items-center space-x-3 pb-2.5 mb-2.5 border-b border-slate-100 dark:border-slate-800">
+                      <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-slate-800 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/40 flex items-center justify-center font-bold text-xs flex-shrink-0">
+                        {user.firstName[0]}
+                        {user.lastName[0]}
+                      </div>
+                      <div className="overflow-hidden">
+                        <p className="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">
+                          {user.firstName} {user.lastName}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate font-mono">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
+                        Roles asignados
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {user.roles && user.roles.length > 0 ? (
+                          user.roles.map((r) => {
+                            const badge = roleBadgeMap[r];
+                            return (
+                              <span
+                                key={r}
+                                className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${badge?.color}`}
+                              >
+                                {badge?.label || r}
+                              </span>
+                            );
+                          })
+                        ) : (
+                          <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-full">
+                            Sin roles asignados
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800">
+                      <Link
+                        to="/perfil"
+                        className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center justify-between group/link"
+                      >
+                        <span>Ver mi perfil</span>
+                        <span className="group-hover/link:translate-x-0.5 transition-transform">→</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Switch de Modo Oscuro colocado exactamente entre el botón de Perfil y de Logout */}
                 <ThemeToggle />

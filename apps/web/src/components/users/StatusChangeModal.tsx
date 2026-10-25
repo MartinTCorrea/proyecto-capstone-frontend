@@ -103,7 +103,7 @@ export const StatusChangeModal: React.FC<StatusChangeModalProps> = ({
                   className="mt-1 text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700"
                 />
                 <div className="text-xs">
-                  <span className="font-bold text-emerald-900 dark:text-emerald-300">Activo (ACTIVE)</span>
+                  <span className="font-bold text-emerald-900 dark:text-emerald-300">Activo</span>
                   <p className="text-slate-500 dark:text-slate-400 mt-0.5">
                     El usuario puede ingresar, declarar disponibilidad y recibir nominaciones arbitrales.
                   </p>
@@ -126,7 +126,7 @@ export const StatusChangeModal: React.FC<StatusChangeModalProps> = ({
                   className="mt-1 text-rose-600 focus:ring-rose-500 border-slate-300 dark:border-slate-700"
                 />
                 <div className="text-xs">
-                  <span className="font-bold text-rose-900 dark:text-rose-300">Inactivo (INACTIVE)</span>
+                  <span className="font-bold text-rose-900 dark:text-rose-300">Inactivo</span>
                   <p className="text-slate-500 dark:text-slate-400 mt-0.5">
                     Suspende al usuario: no podrá ser nominado a partidos ni participar en la programación.
                   </p>
@@ -149,7 +149,7 @@ export const StatusChangeModal: React.FC<StatusChangeModalProps> = ({
                   className="mt-1 text-amber-600 focus:ring-amber-500 border-slate-300 dark:border-slate-700"
                 />
                 <div className="text-xs">
-                  <span className="font-bold text-amber-900 dark:text-amber-300">Pendiente de Rol (PENDING_ROLE)</span>
+                  <span className="font-bold text-amber-900 dark:text-amber-300">Pendiente de Rol</span>
                   <p className="text-slate-500 dark:text-slate-400 mt-0.5">
                     Usuario registrado pero a la espera de validación de credenciales técnicas.
                   </p>
