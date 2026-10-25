@@ -240,7 +240,7 @@ export const AvailabilityPage: React.FC = () => {
                   onClick={() => setWeekOffset(0)}
                   className="text-xs text-blue-600 hover:underline font-semibold ml-2"
                 >
-                  Volver a hoy
+                  Ir a Semana Actual
                 </button>
               )}
             </div>

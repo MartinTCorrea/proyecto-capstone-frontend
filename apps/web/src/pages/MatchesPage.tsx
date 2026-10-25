@@ -128,7 +128,7 @@ export const MatchesPage: React.FC = () => {
               title="Sincronizar cartelera desde plataformas externas (Swish / NBN23)"
             >
               <RefreshCw className="w-4 h-4 mr-2 text-slate-600" />
-              Sincronizar Cartelera
+              Configurar Sincronización...
             </button>
 
             <button
@@ -137,7 +137,7 @@ export const MatchesPage: React.FC = () => {
               title="Crear partido manual sin depender de APIs externas (100% Autónomo)"
             >
               <Plus className="w-4 h-4 mr-1.5" />
-              Nuevo Partido Manual
+              Crear Partido...
             </button>
           </div>
         )}

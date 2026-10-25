@@ -164,7 +164,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                     title="Asignar o revocar roles técnicos"
                   >
                     <Settings className="w-3.5 h-3.5 mr-1" />
-                    Roles
+                    Editar Roles...
                   </button>
 
                   <button
@@ -173,7 +173,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                     title="Modificar estado del usuario"
                   >
                     <RefreshCw className="w-3.5 h-3.5 mr-1" />
-                    Estado
+                    Cambiar Estado...
                   </button>
                 </td>
               </tr>

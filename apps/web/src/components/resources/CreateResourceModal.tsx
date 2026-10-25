@@ -357,10 +357,22 @@ export const CreateResourceModal: React.FC<CreateResourceModalProps> = ({
               {submitting ? (
                 <>
                   <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Publicando...</span>
+                  <span>
+                    {type === ResourceType.CREDENCIAL
+                      ? 'Guardando credencial...'
+                      : type === ResourceType.DOCUMENTO
+                      ? 'Subiendo documento...'
+                      : 'Publicando comunicado...'}
+                  </span>
                 </>
               ) : (
-                <span>Publicar Recurso</span>
+                <span>
+                  {type === ResourceType.CREDENCIAL
+                    ? 'Guardar Credencial de Planillaje'
+                    : type === ResourceType.DOCUMENTO
+                    ? 'Subir y Guardar Documento'
+                    : 'Publicar Comunicado Oficial'}
+                </span>
               )}
             </button>
           </div>

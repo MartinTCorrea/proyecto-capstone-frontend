@@ -155,7 +155,7 @@ export const NominationsTable: React.FC<NominationsTableProps> = ({
                           title="Confirmar o Rechazar Designación"
                         >
                           <CheckSquare className="w-3.5 h-3.5" />
-                          <span>Responder</span>
+                          <span>Responder Designación...</span>
                         </button>
                       )}
 

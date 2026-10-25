@@ -104,7 +104,7 @@ export const UsersManagementPage: React.FC = () => {
         <div className="flex items-center space-x-2">
           <button
             onClick={() => fetchUsers()}
-            title="Recargar datos"
+            title="Recargar listado de usuarios"
             className="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -114,7 +114,7 @@ export const UsersManagementPage: React.FC = () => {
             className="inline-flex items-center px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-sm transition-all focus:ring-2 focus:ring-purple-500"
           >
             <UserPlus className="w-4 h-4 mr-1.5" />
-            <span>Nuevo Usuario</span>
+            <span>Registrar Nuevo Usuario...</span>
           </button>
         </div>
       </div>

@@ -101,7 +101,7 @@ export const ResourcesPage: React.FC = () => {
                 title="Exportar Grilla de Asignaciones a Excel"
               >
                 <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Exportar Asignaciones</span>
+                <span>Exportar Asignaciones a Excel...</span>
               </button>
 
               <button
@@ -110,7 +110,7 @@ export const ResourcesPage: React.FC = () => {
                 className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-xs transition-colors cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Publicar Recurso</span>
+                <span>Nueva Publicación o Recurso...</span>
               </button>
             </>
           )}
@@ -122,7 +122,7 @@ export const ResourcesPage: React.FC = () => {
             className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>Actualizar</span>
+            <span>Recargar Recursos</span>
           </button>
         </div>
       </div>

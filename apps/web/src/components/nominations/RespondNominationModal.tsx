@@ -250,12 +250,20 @@ export const RespondNominationModal: React.FC<RespondNominationModalProps> = ({
               {submitting ? (
                 <>
                   <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Enviando...</span>
+                  <span>
+                    {selectedStatus === NominationStatus.CONFIRMED
+                      ? 'Confirmando asistencia...'
+                      : 'Enviando rechazo...'}
+                  </span>
                 </>
               ) : (
                 <>
                   <Send className="w-3.5 h-3.5" />
-                  <span>Enviar Respuesta</span>
+                  <span>
+                    {selectedStatus === NominationStatus.CONFIRMED
+                      ? 'Confirmar Asistencia al Partido'
+                      : 'Enviar Rechazo de Designación'}
+                  </span>
                 </>
               )}
             </button>
