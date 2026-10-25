@@ -190,27 +190,17 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Tarjeta 1: Días Hábiles (Lunes a Viernes) */}
+      {/* Tarjeta 1: Lunes - Viernes */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
         {/* Cabecera Tarjeta 1 */}
         <div className="px-5 py-4 bg-slate-50/80 dark:bg-slate-950/50 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
-              <Calendar className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                  Días Hábiles (Lunes a Viernes)
-                </h3>
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-100 dark:bg-slate-800 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/40">
-                  Día Hábil
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Declaración semanal para partidos escolares, formativos y ligas vespertinas
-              </p>
-            </div>
+          <div>
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+              Lunes - Viernes
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Disponibilidad para jornadas escolares, formativas y ligas vespertinas
+            </p>
           </div>
 
           {/* Horarios de Referencia */}
@@ -236,27 +226,17 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
         </div>
       </div>
 
-      {/* Tarjeta 2: Fin de Semana (Sábado y Domingo) */}
+      {/* Tarjeta 2: Sábado - Domingo */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-blue-200 dark:border-blue-900/40 shadow-sm overflow-hidden transition-colors">
         {/* Cabecera Tarjeta 2 */}
         <div className="px-5 py-4 bg-blue-50/60 dark:bg-blue-950/20 border-b border-blue-100 dark:border-blue-900/40 flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
-              <Sun className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center space-x-2">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                  Fin de Semana (Sábado y Domingo)
-                </h3>
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-100 dark:bg-slate-800 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/40">
-                  Fin de Semana
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Declaración para torneos oficiales de alta competencia y jornadas intensivas
-              </p>
-            </div>
+          <div>
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+              Sábado - Domingo
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Disponibilidad para torneos oficiales y competencias de fin de semana
+            </p>
           </div>
 
           {/* Horarios de Referencia */}

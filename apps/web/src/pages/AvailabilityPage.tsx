@@ -14,7 +14,6 @@ import {
   CheckCircle,
   AlertCircle,
   Clock,
-  Layers,
   Users,
 } from 'lucide-react';
 
@@ -314,23 +313,6 @@ export const AvailabilityPage: React.FC = () => {
               <Save className="w-4 h-4 mr-1.5" />
               <span>{isSaving ? 'Guardando disponibilidad...' : 'Guardar Disponibilidad Semanal'}</span>
             </button>
-          </div>
-
-          {/* Tarjeta explicativa de parámetros */}
-          <div className="p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-1 leading-relaxed">
-            <p className="font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
-              <Layers className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span>Reglas de Declaración de Bloques Horarios:</span>
-            </p>
-            <p>
-              • <strong>Días Laborales (Lunes a Viernes):</strong> Horario 1 (18:30 - 20:30) y Horario 2 (20:30 - 22:30).
-            </p>
-            <p>
-              • <strong>Fines de Semana (Sábados y Domingos):</strong> Horario 1 (09:00 - 14:00) y Horario 2 (14:00 - 21:00).
-            </p>
-            <p>
-              • <strong>Jornada Completa (Full Day):</strong> Declara disponibilidad tanto para Horario 1 como Horario 2.
-            </p>
           </div>
         </>
       )}
