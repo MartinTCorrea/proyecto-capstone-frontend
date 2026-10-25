@@ -17,6 +17,8 @@ import {
   ForgotPasswordDto,
   ConfirmForgotPasswordDto,
   ChangePasswordDto,
+  ConfirmSignUpDto,
+  ResendConfirmationCodeDto,
 } from './dto';
 import * as crypto from 'crypto';
 
@@ -885,6 +887,167 @@ export class AuthService {
     return {
       success: true,
       message: 'Contraseña actualizada exitosamente.',
+    };
+  }
+
+  /**
+   * Confirma la cuenta del usuario en AWS Cognito utilizando el código de 6 dígitos (RF01, RF03)
+   */
+  async confirmSignUp(dto: ConfirmSignUpDto): Promise<{ success: boolean; message: string }> {
+    const email = dto.email.toLowerCase().trim();
+    const region = this.configService.get<string>('AWS_REGION', 'us-east-1');
+    const clientId = this.configService.get<string>('COGNITO_CLIENT_ID', '');
+    const userPoolId = this.configService.get<string>('COGNITO_USER_POOL_ID', '');
+    const authProvider = this.configService.get<string>('AUTH_PROVIDER', 'cognito');
+
+    const isConfigured = !!(
+      clientId &&
+      !clientId.includes('your-cognito') &&
+      userPoolId &&
+      !userPoolId.includes('example')
+    );
+
+    if (authProvider === 'cognito' && isConfigured) {
+      try {
+        const response = await fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-amz-json-1.1',
+            'X-Amz-Target': 'AWSCognitoIdentityProviderService.ConfirmSignUp',
+          },
+          body: JSON.stringify({
+            ClientId: clientId,
+            Username: email,
+            ConfirmationCode: dto.confirmationCode.trim(),
+          }),
+        });
+
+        const data: any = await response.json();
+
+        if (!response.ok || data.__type) {
+          const errorType = data.__type || 'CognitoConfirmSignUpError';
+          const errorMessage = data.message || 'Error en AWS Cognito';
+          this.logger.warn(`Error en Cognito ConfirmSignUp [${errorType}]: ${errorMessage}`);
+
+          if (errorType.includes('CodeMismatchException')) {
+            throw new BadRequestException('El código de confirmación ingresado es incorrecto.');
+          }
+          if (errorType.includes('ExpiredCodeException')) {
+            throw new BadRequestException('El código de confirmación ha expirado. Por favor solicita uno nuevo.');
+          }
+          if (errorType.includes('NotAuthorizedException') && errorMessage.includes('CONFIRMED')) {
+            return {
+              success: true,
+              message: 'La cuenta ya ha sido confirmada previamente. Puedes iniciar sesión.',
+            };
+          }
+          if (errorType.includes('UserNotFoundException')) {
+            throw new BadRequestException('No existe una cuenta registrada con ese correo electrónico.');
+          }
+
+          throw new BadRequestException(`No se pudo confirmar la cuenta: ${errorMessage}`);
+        }
+
+        this.logger.log(`Usuario confirmado exitosamente en AWS Cognito: ${email}`);
+      } catch (err: any) {
+        if (err instanceof BadRequestException) throw err;
+        this.logger.error(`Error conectando con AWS Cognito ConfirmSignUp: ${err.message}`);
+        throw new BadRequestException(`Error de conexión con AWS Cognito: ${err.message}`);
+      }
+    } else {
+      this.logger.log(`[Modo Local] Cuenta de usuario confirmada simulada para: ${email}`);
+    }
+
+    // Sincronizar usuario en PostgreSQL si estaba en PENDING_ROLE con roles
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      include: { roles: { include: { role: true } } },
+    });
+
+    if (user && user.status === UserStatus.PENDING_ROLE && user.roles.length > 0) {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { status: UserStatus.ACTIVE },
+      });
+    }
+
+    return {
+      success: true,
+      message: 'Cuenta confirmada exitosamente. Ya puedes iniciar sesión con tus credenciales.',
+    };
+  }
+
+  /**
+   * Reenvía el código de confirmación de registro por correo electrónico (RF01)
+   */
+  async resendConfirmationCode(dto: ResendConfirmationCodeDto): Promise<{ success: boolean; message: string }> {
+    const email = dto.email.toLowerCase().trim();
+    const region = this.configService.get<string>('AWS_REGION', 'us-east-1');
+    const clientId = this.configService.get<string>('COGNITO_CLIENT_ID', '');
+    const userPoolId = this.configService.get<string>('COGNITO_USER_POOL_ID', '');
+    const authProvider = this.configService.get<string>('AUTH_PROVIDER', 'cognito');
+
+    const isConfigured = !!(
+      clientId &&
+      !clientId.includes('your-cognito') &&
+      userPoolId &&
+      !userPoolId.includes('example')
+    );
+
+    if (authProvider === 'cognito' && isConfigured) {
+      try {
+        const response = await fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-amz-json-1.1',
+            'X-Amz-Target': 'AWSCognitoIdentityProviderService.ResendConfirmationCode',
+          },
+          body: JSON.stringify({
+            ClientId: clientId,
+            Username: email,
+          }),
+        });
+
+        const data: any = await response.json();
+
+        if (!response.ok || data.__type) {
+          const errorType = data.__type || 'CognitoResendConfirmationCodeError';
+          const errorMessage = data.message || 'Error en AWS Cognito';
+          this.logger.warn(`Error en Cognito ResendConfirmationCode [${errorType}]: ${errorMessage}`);
+
+          if (errorType.includes('InvalidParameterException') && errorMessage.includes('CONFIRMED')) {
+            return {
+              success: true,
+              message: 'La cuenta ya se encuentra confirmada. Puedes iniciar sesión.',
+            };
+          }
+          if (errorType.includes('UserNotFoundException')) {
+            throw new BadRequestException('No existe una cuenta registrada con ese correo electrónico.');
+          }
+          if (errorType.includes('LimitExceededException')) {
+            throw new BadRequestException('Límite de solicitudes de código superado. Por favor espera unos minutos.');
+          }
+
+          throw new BadRequestException(`No se pudo reenviar el código: ${errorMessage}`);
+        }
+
+        const destination = data.CodeDeliveryDetails?.Destination || email;
+        this.logger.log(`Código de confirmación reenviado por Cognito a ${destination} para ${email}`);
+
+        return {
+          success: true,
+          message: `Nuevo código de confirmación enviado a tu correo (${destination}).`,
+        };
+      } catch (err: any) {
+        if (err instanceof BadRequestException) throw err;
+        this.logger.error(`Error conectando con AWS Cognito ResendConfirmationCode: ${err.message}`);
+        throw new BadRequestException(`Error de conexión con AWS Cognito: ${err.message}`);
+      }
+    }
+
+    return {
+      success: true,
+      message: 'Nuevo código de confirmación enviado a tu correo electrónico.',
     };
   }
 

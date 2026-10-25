@@ -11,6 +11,8 @@ import {
   ForgotPasswordDto,
   ConfirmForgotPasswordDto,
   ChangePasswordDto,
+  ConfirmSignUpDto,
+  ResendConfirmationCodeDto,
 } from './dto';
 
 @ApiTags('Auth')
@@ -102,6 +104,34 @@ export class AuthController {
     @Body() dto: ConfirmForgotPasswordDto,
   ): Promise<{ success: boolean; message: string }> {
     return this.authService.confirmForgotPassword(dto);
+  }
+
+  @Post('confirm-sign-up')
+  @Public()
+  @ApiOperation({
+    summary: 'Confirmar cuenta de usuario con código de 6 dígitos',
+    description: 'Valida el código de verificación enviado por AWS Cognito y activa la cuenta para iniciar sesión.',
+  })
+  @ApiResponse({ status: 200, description: 'Cuenta confirmada y activada correctamente' })
+  @ApiResponse({ status: 400, description: 'Código inválido, expirado o cuenta no encontrada' })
+  async confirmSignUp(
+    @Body() dto: ConfirmSignUpDto,
+  ): Promise<{ success: boolean; message: string }> {
+    return this.authService.confirmSignUp(dto);
+  }
+
+  @Post('resend-confirmation-code')
+  @Public()
+  @ApiOperation({
+    summary: 'Reenviar código de confirmación de cuenta',
+    description: 'Solicita un nuevo código de 6 dígitos a AWS Cognito para una cuenta aún no confirmada.',
+  })
+  @ApiResponse({ status: 200, description: 'Código de confirmación reenviado exitosamente' })
+  @ApiResponse({ status: 400, description: 'Correo inválido o límite de intentos superado' })
+  async resendConfirmationCode(
+    @Body() dto: ResendConfirmationCodeDto,
+  ): Promise<{ success: boolean; message: string }> {
+    return this.authService.resendConfirmationCode(dto);
   }
 
   @Post('change-password')

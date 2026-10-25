@@ -273,6 +273,29 @@ describe('AuthService', () => {
     });
   });
 
+  describe('confirmSignUp and resendConfirmationCode', () => {
+    it('should confirm user account locally when cognito is not configured', async () => {
+      (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockUser);
+
+      const result = await service.confirmSignUp({
+        email: 'arbitro@sgaob.cl',
+        confirmationCode: '947249',
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.message).toContain('Cuenta confirmada exitosamente');
+    });
+
+    it('should resend confirmation code successfully', async () => {
+      const result = await service.resendConfirmationCode({
+        email: 'arbitro@sgaob.cl',
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.message).toContain('confirmación');
+    });
+  });
+
   describe('getCognitoConfig', () => {
     it('should return public Cognito configuration structure', () => {
       const config = service.getCognitoConfig();

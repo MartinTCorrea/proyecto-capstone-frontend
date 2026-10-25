@@ -45,6 +45,14 @@ describe('AuthController', () => {
               success: true,
               message: 'Contraseña restablecida exitosamente',
             }),
+            confirmSignUp: jest.fn().mockResolvedValue({
+              success: true,
+              message: 'Cuenta confirmada exitosamente',
+            }),
+            resendConfirmationCode: jest.fn().mockResolvedValue({
+              success: true,
+              message: 'Nuevo código de confirmación enviado',
+            }),
             changePassword: jest.fn().mockResolvedValue({
               success: true,
               message: 'Contraseña actualizada exitosamente',
@@ -121,6 +129,31 @@ describe('AuthController', () => {
 
       expect(result.success).toBe(true);
       expect(authService.confirmForgotPassword).toHaveBeenCalledWith(dto);
+    });
+  });
+
+  describe('confirmSignUp', () => {
+    it('should call authService.confirmSignUp', async () => {
+      const dto = {
+        email: 'arbitro@sgaob.cl',
+        confirmationCode: '947249',
+      };
+      const result = await controller.confirmSignUp(dto);
+
+      expect(result.success).toBe(true);
+      expect(authService.confirmSignUp).toHaveBeenCalledWith(dto);
+    });
+  });
+
+  describe('resendConfirmationCode', () => {
+    it('should call authService.resendConfirmationCode', async () => {
+      const dto = {
+        email: 'arbitro@sgaob.cl',
+      };
+      const result = await controller.resendConfirmationCode(dto);
+
+      expect(result.success).toBe(true);
+      expect(authService.resendConfirmationCode).toHaveBeenCalledWith(dto);
     });
   });
 

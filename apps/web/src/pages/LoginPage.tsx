@@ -13,6 +13,7 @@ import {
   Loader2,
   CheckCircle2,
   KeyRound,
+  UserCheck,
   X,
 } from 'lucide-react';
 import { BasketballLogo } from '../components/common/BasketballLogo';
@@ -43,6 +44,16 @@ export const LoginPage: React.FC = () => {
   const [isSubmittingForgot, setIsSubmittingForgot] = useState(false);
   const [forgotMsg, setForgotMsg] = useState<string | null>(null);
   const [forgotError, setForgotError] = useState<string | null>(null);
+
+  // Estados del flujo de confirmación de cuenta con código (SignUp)
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [confirmEmail, setConfirmEmail] = useState('');
+  const [confirmCode, setConfirmCode] = useState('');
+  const [isSubmittingConfirm, setIsSubmittingConfirm] = useState(false);
+  const [isResendingConfirmCode, setIsResendingConfirmCode] = useState(false);
+  const [confirmMsg, setConfirmMsg] = useState<string | null>(null);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
+  const [confirmSuccess, setConfirmSuccess] = useState(false);
 
   // Redirigir si ya está autenticado
   useEffect(() => {
@@ -184,6 +195,59 @@ export const LoginPage: React.FC = () => {
     }
   };
 
+  // Manejo de confirmación de cuenta con código de 6 dígitos
+  const handleConfirmAccount = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setConfirmError(null);
+    setConfirmMsg(null);
+
+    if (!confirmEmail || !confirmCode) {
+      setConfirmError('Por favor ingresa tanto el correo como el código de 6 dígitos.');
+      return;
+    }
+
+    try {
+      setIsSubmittingConfirm(true);
+      const res = await authApi.confirmSignUp({
+        email: confirmEmail.trim(),
+        confirmationCode: confirmCode.trim(),
+      });
+
+      setConfirmMsg(res.message);
+      setConfirmSuccess(true);
+      setCognitoEmail(confirmEmail.trim());
+      setErrorMsg(null);
+    } catch (err: any) {
+      setConfirmError(
+        err.response?.data?.message || 'Error al confirmar la cuenta. Verifica el código ingresado.',
+      );
+    } finally {
+      setIsSubmittingConfirm(false);
+    }
+  };
+
+  // Reenviar código de confirmación de registro
+  const handleResendConfirmationCode = async () => {
+    if (!confirmEmail) {
+      setConfirmError('Por favor ingresa tu correo electrónico para solicitar un nuevo código.');
+      return;
+    }
+
+    try {
+      setIsResendingConfirmCode(true);
+      setConfirmError(null);
+      setConfirmMsg(null);
+      const res = await authApi.resendConfirmationCode({ email: confirmEmail.trim() });
+      setConfirmMsg(res.message);
+    } catch (err: any) {
+      setConfirmError(
+        err.response?.data?.message || 'No fue posible reenviar el código. Intenta nuevamente.',
+      );
+    } finally {
+      setIsResendingConfirmCode(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative transition-colors duration-200">
       {/* Switch de Modo Oscuro en la esquina superior del Login */}
@@ -206,9 +270,30 @@ export const LoginPage: React.FC = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-xl">
         <div className="bg-white dark:bg-slate-900 py-8 px-6 shadow-xl border border-slate-200 dark:border-slate-800 sm:rounded-xl sm:px-10 space-y-6 transition-colors duration-200">
           {errorMsg && (
-            <div className="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-lg flex items-start space-x-3 text-rose-700 dark:text-rose-300 text-sm">
-              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-              <span>{errorMsg}</span>
+            <div className="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-lg flex flex-col space-y-2 text-rose-700 dark:text-rose-300 text-sm">
+              <div className="flex items-start space-x-3">
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
+                <span>{errorMsg}</span>
+              </div>
+              {errorMsg.toLowerCase().includes('no ha sido confirmada') && (
+                <div className="pl-8 pt-0.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfirmEmail(cognitoEmail || '');
+                      setConfirmCode('');
+                      setConfirmError(null);
+                      setConfirmMsg(null);
+                      setConfirmSuccess(false);
+                      setIsConfirmModalOpen(true);
+                    }}
+                    className="inline-flex items-center space-x-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline cursor-pointer transition-colors"
+                  >
+                    <span>¿Recibiste un código de 6 dígitos en tu correo? Activar cuenta aquí</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -451,7 +536,22 @@ export const LoginPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfirmEmail(cognitoEmail || '');
+                      setConfirmCode('');
+                      setConfirmError(null);
+                      setConfirmMsg(null);
+                      setConfirmSuccess(false);
+                      setIsConfirmModalOpen(true);
+                    }}
+                    className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                  >
+                    ¿Confirmar cuenta con código?
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => {
@@ -679,6 +779,142 @@ export const LoginPage: React.FC = () => {
                     Volver al Inicio de Sesión
                   </button>
                 </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE CONFIRMACIÓN DE CUENTA DE USUARIO */}
+      {isConfirmModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150"
+        >
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-md w-full overflow-hidden transition-colors duration-200">
+            <div className="flex items-center justify-between px-6 py-4 bg-slate-900 dark:bg-slate-950 text-white border-b dark:border-slate-800">
+              <div className="flex items-center space-x-2.5">
+                <UserCheck className="w-5 h-5 text-blue-400" />
+                <h2 className="text-base font-bold">Confirmación de Cuenta</h2>
+              </div>
+              <button
+                onClick={() => setIsConfirmModalOpen(false)}
+                className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                aria-label="Cerrar modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {confirmSuccess ? (
+                <div className="text-center space-y-4 py-2">
+                  <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
+                    <CheckCircle2 className="w-7 h-7" />
+                  </div>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                    ¡Cuenta Confirmada Exitosamente!
+                  </h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    Tu cuenta ha sido activada en la plataforma. Ya puedes iniciar sesión con tu correo y contraseña.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsConfirmModalOpen(false);
+                      setAuthMode('cognito');
+                    }}
+                    className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs rounded-lg transition-colors cursor-pointer"
+                  >
+                    Ir al Inicio de Sesión
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleConfirmAccount} className="space-y-4">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    Ingresa el código de 6 dígitos que recibiste por correo electrónico para activar tu cuenta e ingresar a la plataforma.
+                  </p>
+
+                  {confirmError && (
+                    <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-lg flex items-start space-x-2.5 text-rose-700 dark:text-rose-300 text-xs">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                      <span>{confirmError}</span>
+                    </div>
+                  )}
+
+                  {confirmMsg && (
+                    <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-lg flex items-start space-x-2.5 text-emerald-700 dark:text-emerald-300 text-xs">
+                      <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                      <span>{confirmMsg}</span>
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                      Correo Electrónico
+                    </label>
+                    <div className="relative rounded-md shadow-sm">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <Mail className="w-4 h-4" />
+                      </div>
+                      <input
+                        type="email"
+                        required
+                        value={confirmEmail}
+                        onChange={(e) => setConfirmEmail(e.target.value)}
+                        placeholder="tu-correo@sgaob.cl"
+                        className="block w-full pl-9 pr-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                      Código de Confirmación (6 dígitos)
+                    </label>
+                    <div className="relative rounded-md shadow-sm">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <KeyRound className="w-4 h-4" />
+                      </div>
+                      <input
+                        type="text"
+                        required
+                        maxLength={6}
+                        value={confirmCode}
+                        onChange={(e) => setConfirmCode(e.target.value)}
+                        placeholder="947249"
+                        className="block w-full pl-9 pr-3 py-2 text-center tracking-widest font-mono text-base border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-2">
+                    <button
+                      type="button"
+                      disabled={isResendingConfirmCode}
+                      onClick={handleResendConfirmationCode}
+                      className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline cursor-pointer disabled:opacity-50"
+                    >
+                      {isResendingConfirmCode ? 'Reenviando...' : 'Reenviar código'}
+                    </button>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmittingConfirm}
+                      className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors flex items-center space-x-1.5 cursor-pointer disabled:opacity-50"
+                    >
+                      {isSubmittingConfirm ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>Verificando...</span>
+                        </>
+                      ) : (
+                        <span>Confirmar Cuenta</span>
+                      )}
+                    </button>
+                  </div>
+                </form>
               )}
             </div>
           </div>

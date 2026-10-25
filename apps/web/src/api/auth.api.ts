@@ -37,6 +37,15 @@ export interface ConfirmForgotPasswordPayload {
   newPassword: string;
 }
 
+export interface ConfirmSignUpPayload {
+  email: string;
+  confirmationCode: string;
+}
+
+export interface ResendConfirmationCodePayload {
+  email: string;
+}
+
 export interface ChangePasswordPayload {
   currentPassword: string;
   newPassword: string;
@@ -85,6 +94,22 @@ export const authApi = {
    */
   async confirmForgotPassword(payload: ConfirmForgotPasswordPayload): Promise<AuthActionResponse> {
     const response = await apiClient.post<AuthActionResponse>('/auth/confirm-forgot-password', payload);
+    return response.data;
+  },
+
+  /**
+   * Confirma el registro y activa la cuenta con código de 6 dígitos (/api/auth/confirm-sign-up)
+   */
+  async confirmSignUp(payload: ConfirmSignUpPayload): Promise<AuthActionResponse> {
+    const response = await apiClient.post<AuthActionResponse>('/auth/confirm-sign-up', payload);
+    return response.data;
+  },
+
+  /**
+   * Reenvía el código de confirmación de registro de cuenta (/api/auth/resend-confirmation-code)
+   */
+  async resendConfirmationCode(payload: ResendConfirmationCodePayload): Promise<AuthActionResponse> {
+    const response = await apiClient.post<AuthActionResponse>('/auth/resend-confirmation-code', payload);
     return response.data;
   },
 
