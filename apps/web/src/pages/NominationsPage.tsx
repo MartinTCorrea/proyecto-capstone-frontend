@@ -102,7 +102,6 @@ export const NominationsPage: React.FC = () => {
     loadData();
   }, [loadData]);
 
-  // Manejadores de modales
   const handleOpenAssignModal = (match: MatchItem, role: MatchRole) => {
     setSelectedMatchForAssign(match);
     setSelectedRoleForAssign(role);
@@ -115,17 +114,18 @@ export const NominationsPage: React.FC = () => {
   };
 
   const handleDeleteNomination = async (id: string) => {
+    if (!window.confirm('¿Confirmas que deseas desvincular a este árbitro/oficial del partido?')) {
+      return;
+    }
     try {
       await nominationsApi.deleteNomination(id);
-      loadData();
+      await loadData();
     } catch (err: any) {
-      alert(
-        err.response?.data?.message || 'Error al revocar la asignación técnica.',
-      );
+      alert(err.response?.data?.message || 'Error al eliminar la designación');
     }
   };
 
-  // Métricas calculadas para la barra superior
+  // Contadores para métricas
   const totalCount = nominations.length;
   const pendingCount = nominations.filter((n) => n.status === NominationStatus.PENDING).length;
   const confirmedCount = nominations.filter((n) => n.status === NominationStatus.CONFIRMED).length;
@@ -133,19 +133,21 @@ export const NominationsPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Encabezado Principal */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-brand-50 border border-brand-200/60 flex items-center justify-center text-brand-700">
-            <ClipboardCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-              Gestión de Nominaciones y Asignaciones
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Cruce automatizado de disponibilidad, designación técnica y confirmaciones oficiales
-            </p>
+      {/* Cabecera Principal */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-200">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-slate-800 border dark:border-blue-900/40 flex items-center justify-center text-blue-700 dark:text-blue-400">
+              <ClipboardCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Designaciones y Ternas
+              </h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Supervisión y ratificación de ternas arbitrales y mesa de control.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -154,7 +156,7 @@ export const NominationsPage: React.FC = () => {
             type="button"
             onClick={() => loadData()}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Recargar Asignaciones</span>
@@ -164,50 +166,50 @@ export const NominationsPage: React.FC = () => {
 
       {/* Tarjetas de Métricas de Asignaciones */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Total Asignaciones</p>
+        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs transition-colors duration-200">
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Total Asignaciones</p>
           <div className="flex items-baseline justify-between mt-1">
-            <p className="text-2xl font-black text-slate-900">{totalCount}</p>
-            <span className="text-xs text-slate-400">Registradas</span>
+            <p className="text-2xl font-black text-slate-900 dark:text-white">{totalCount}</p>
+            <span className="text-xs text-slate-400 dark:text-slate-500">Registradas</span>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-amber-200 shadow-2xs bg-amber-50/20">
-          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700">
+        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-amber-200 dark:border-amber-900/40 shadow-2xs bg-amber-50/20 dark:bg-slate-800/40 transition-colors duration-200">
+          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
             <Clock className="w-3.5 h-3.5" />
             <span>Pendientes</span>
           </div>
           <div className="flex items-baseline justify-between mt-1">
-            <p className="text-2xl font-black text-amber-900">{pendingCount}</p>
-            <span className="text-xs text-amber-700 font-medium">Por confirmar</span>
+            <p className="text-2xl font-black text-amber-900 dark:text-amber-300">{pendingCount}</p>
+            <span className="text-xs text-amber-700 dark:text-amber-400 font-medium">Por confirmar</span>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-emerald-200 shadow-2xs bg-emerald-50/20">
-          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700">
+        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-emerald-200 dark:border-emerald-900/40 shadow-2xs bg-emerald-50/20 dark:bg-slate-800/40 transition-colors duration-200">
+          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
             <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Confirmadas</span>
           </div>
           <div className="flex items-baseline justify-between mt-1">
-            <p className="text-2xl font-black text-emerald-900">{confirmedCount}</p>
-            <span className="text-xs text-emerald-700 font-medium">Ratificadas</span>
+            <p className="text-2xl font-black text-emerald-900 dark:text-emerald-300">{confirmedCount}</p>
+            <span className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">Ratificadas</span>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-rose-200 shadow-2xs bg-rose-50/20">
-          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-rose-700">
+        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-rose-200 dark:border-rose-900/40 shadow-2xs bg-rose-50/20 dark:bg-slate-800/40 transition-colors duration-200">
+          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-rose-700 dark:text-rose-400">
             <XCircle className="w-3.5 h-3.5" />
             <span>Rechazadas</span>
           </div>
           <div className="flex items-baseline justify-between mt-1">
-            <p className="text-2xl font-black text-rose-900">{rejectedCount}</p>
-            <span className="text-xs text-rose-700 font-medium">Con motivo</span>
+            <p className="text-2xl font-black text-rose-900 dark:text-rose-300">{rejectedCount}</p>
+            <span className="text-xs text-rose-700 dark:text-rose-400 font-medium">Con motivo</span>
           </div>
         </div>
       </div>
 
       {/* Pestañas de Vista */}
-      <div className="border-b border-slate-200 flex items-center justify-between">
+      <div className="border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
         <div className="flex space-x-1">
           {isAdmin && (
             <button
@@ -215,8 +217,8 @@ export const NominationsPage: React.FC = () => {
               onClick={() => setActiveTab('grid')}
               className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
                 activeTab === 'grid'
-                  ? 'border-brand-600 text-brand-600 bg-brand-50/50'
-                  : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                  ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30'
+                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
               }`}
             >
               <Layers className="w-4 h-4" />
@@ -229,8 +231,8 @@ export const NominationsPage: React.FC = () => {
             onClick={() => setActiveTab('mine')}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
               activeTab === 'mine'
-                ? 'border-brand-600 text-brand-600 bg-brand-50/50'
-                : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
             }`}
           >
             <UserCheck className="w-4 h-4" />
@@ -240,10 +242,10 @@ export const NominationsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('table')}
-            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all ${
+            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
               activeTab === 'table'
-                ? 'border-brand-600 text-brand-600 bg-brand-50/50'
-                : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
             }`}
           >
             <List className="w-4 h-4" />
@@ -253,10 +255,10 @@ export const NominationsPage: React.FC = () => {
       </div>
 
       {/* Barra de Filtros */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 transition-colors duration-200">
         {/* Filtro Torneo */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             Torneo
           </label>
           <div className="relative">
@@ -265,15 +267,15 @@ export const NominationsPage: React.FC = () => {
               value={filterTournament}
               onChange={(e) => setFilterTournament(e.target.value)}
               placeholder="Ej. LNB Chile, Escolar..."
-              className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 bg-slate-50/50"
+              className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-slate-50/50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
             />
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+            <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-2.5 top-2.5" />
           </div>
         </div>
 
         {/* Filtro Recinto */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             Recinto / Gimnasio
           </label>
           <div className="relative">
@@ -282,21 +284,21 @@ export const NominationsPage: React.FC = () => {
               value={filterVenue}
               onChange={(e) => setFilterVenue(e.target.value)}
               placeholder="Ej. CEO Ñuñoa, Palestino..."
-              className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 bg-slate-50/50"
+              className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-slate-50/50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
             />
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+            <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-2.5 top-2.5" />
           </div>
         </div>
 
         {/* Filtro Estado */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             Estado Designación
           </label>
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 bg-slate-50/50 text-slate-700"
+            className="w-full px-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-slate-50/50 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
           >
             <option value="ALL">Todos los Estados</option>
             <option value={NominationStatus.PENDING}>Pendientes</option>
@@ -307,34 +309,34 @@ export const NominationsPage: React.FC = () => {
 
         {/* Filtro Fecha Desde */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             Desde
           </label>
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 bg-slate-50/50 text-slate-700"
+            className="w-full px-2.5 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-slate-50/50 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
           />
         </div>
 
         {/* Filtro Fecha Hasta */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             Hasta
           </label>
           <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="w-full px-2.5 py-1.5 text-xs border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 bg-slate-50/50 text-slate-700"
+            className="w-full px-2.5 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 bg-slate-50/50 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
           />
         </div>
       </div>
 
       {/* Mensaje de Error si lo hay */}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
+        <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-300 text-xs">
           {error}
         </div>
       )}
@@ -353,11 +355,11 @@ export const NominationsPage: React.FC = () => {
         />
       ) : activeTab === 'mine' ? (
         <div className="space-y-4">
-          <div className="bg-brand-50/60 border border-brand-200 rounded-xl p-4 text-xs text-brand-900 flex items-start gap-2.5">
-            <UserCheck className="w-4 h-4 text-brand-600 flex-shrink-0 mt-0.5" />
+          <div className="bg-blue-50/60 dark:bg-slate-800/60 border border-blue-200 dark:border-blue-900/40 rounded-xl p-4 text-xs text-blue-900 dark:text-blue-300 flex items-start gap-2.5">
+            <UserCheck className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
             <div>
               <p className="font-bold">Mis Designaciones Activas</p>
-              <p className="mt-0.5 text-brand-800">
+              <p className="mt-0.5 text-blue-800 dark:text-blue-400">
                 Aquí visualizas los partidos a los que has sido nominado por la Comisión Técnica. Recuerda confirmar tu asistencia con anticipación o rechazar indicando el motivo para gestionar reemplazos oportunamente.
               </p>
             </div>

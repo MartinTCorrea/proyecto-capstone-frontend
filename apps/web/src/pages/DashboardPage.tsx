@@ -37,23 +37,23 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="space-y-8">
       {/* Cabecera Principal de Bienvenida */}
-      <section className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <section className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 transition-colors duration-200">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full inline-block">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-slate-800 px-2.5 py-0.5 rounded-full inline-block border dark:border-blue-900/40">
               Sesión Activa
             </span>
-            <span className="text-xs font-medium text-slate-500 capitalize flex items-center">
-              <Calendar className="w-3.5 h-3.5 mr-1 text-slate-400" />
+            <span className="text-xs font-medium text-slate-500 dark:text-slate-400 capitalize flex items-center">
+              <Calendar className="w-3.5 h-3.5 mr-1 text-slate-400 dark:text-slate-500" />
               {todayFormatted}
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
             Hola, {user.firstName} {user.lastName}
           </h1>
 
-          <p className="text-slate-600 text-sm">
+          <p className="text-slate-600 dark:text-slate-400 text-sm">
             {isAdmin
               ? 'Panel operativo de la Comisión Técnica: supervisa disponibilidad, cartelera y designaciones.'
               : 'Panel personal de árbitros y oficiales: gestiona tu disponibilidad semanal y partidos asignados.'}
@@ -67,7 +67,7 @@ export const DashboardPage: React.FC = () => {
               user.roles.map((r) => (
                 <span
                   key={r}
-                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 text-white shadow-sm"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-900 dark:bg-slate-800 text-white border dark:border-slate-700 shadow-sm"
                 >
                   {r === RoleName.ADMIN_COMISION_TECNICA && (
                     <Shield className="w-3.5 h-3.5 mr-1.5 text-purple-400" />
@@ -86,7 +86,7 @@ export const DashboardPage: React.FC = () => {
                 </span>
               ))
             ) : (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 dark:bg-slate-800 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/40">
                 <AlertTriangle className="w-3.5 h-3.5 mr-1.5" />
                 Acreditación Pendiente
               </span>
@@ -95,17 +95,17 @@ export const DashboardPage: React.FC = () => {
 
           {/* Selector de Modo para Usuarios con Doble Rol */}
           {isDualRole && (
-            <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+            <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
               <button
                 type="button"
                 onClick={() => setActiveTab('ADMIN')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
                   activeTab === 'ADMIN'
-                    ? 'bg-white text-purple-800 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-slate-900 text-purple-800 dark:text-purple-300 shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
-                <Shield className="w-3.5 h-3.5 text-purple-600" />
+                <Shield className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                 <span>Comisión Técnica</span>
               </button>
 
@@ -114,11 +114,11 @@ export const DashboardPage: React.FC = () => {
                 onClick={() => setActiveTab('REFEREE')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
                   activeTab === 'REFEREE'
-                    ? 'bg-white text-blue-800 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-slate-900 text-blue-800 dark:text-blue-300 shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
-                <Layers className="w-3.5 h-3.5 text-blue-600" />
+                <Layers className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                 <span>Mi Perfil Arbitral</span>
               </button>
             </div>
@@ -132,12 +132,12 @@ export const DashboardPage: React.FC = () => {
       ) : isTechnicalPersonnel ? (
         <RefereeDashboardView />
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-3">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 text-center space-y-3 transition-colors duration-200">
           <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto" />
-          <h2 className="text-lg font-bold text-slate-800">
+          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
             Acreditación Técnica en Proceso
           </h2>
-          <p className="text-sm text-slate-600 max-w-md mx-auto">
+          <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
             Tu cuenta se encuentra registrada y habilitada en el sistema, pero aún no tiene acreditaciones asignadas de árbitro u oficial de mesa.
             Comunícate con la Comisión Técnica para habilitar tus funciones operativas.
           </p>

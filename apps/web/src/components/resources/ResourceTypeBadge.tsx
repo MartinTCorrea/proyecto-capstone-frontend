@@ -17,9 +17,9 @@ export const ResourceTypeBadge: React.FC<ResourceTypeBadgeProps> = ({
     case ResourceType.DOCUMENTO:
       return (
         <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/80 ${className}`}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/80 dark:bg-slate-800/80 dark:text-blue-300 dark:border-blue-900/40 ${className}`}
         >
-          {showIcon && <FileText className="w-3.5 h-3.5 text-blue-600" aria-hidden="true" />}
+          {showIcon && <FileText className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" aria-hidden="true" />}
           <span>Documento</span>
         </span>
       );
@@ -27,9 +27,9 @@ export const ResourceTypeBadge: React.FC<ResourceTypeBadgeProps> = ({
     case ResourceType.CREDENCIAL:
       return (
         <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/80 ${className}`}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200/80 dark:bg-slate-800/80 dark:text-rose-300 dark:border-rose-900/40 ${className}`}
         >
-          {showIcon && <Key className="w-3.5 h-3.5 text-rose-600" aria-hidden="true" />}
+          {showIcon && <Key className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" aria-hidden="true" />}
           <span>Credencial Segura</span>
         </span>
       );
@@ -38,9 +38,9 @@ export const ResourceTypeBadge: React.FC<ResourceTypeBadgeProps> = ({
     default:
       return (
         <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200/80 ${className}`}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200/80 dark:bg-slate-800/80 dark:text-purple-300 dark:border-purple-900/40 ${className}`}
         >
-          {showIcon && <Megaphone className="w-3.5 h-3.5 text-purple-600" aria-hidden="true" />}
+          {showIcon && <Megaphone className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" aria-hidden="true" />}
           <span>Comunicado</span>
         </span>
       );

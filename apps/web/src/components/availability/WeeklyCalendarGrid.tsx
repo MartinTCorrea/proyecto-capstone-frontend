@@ -44,27 +44,27 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
             key={day.date}
             className={`rounded-xl border p-4 flex flex-col justify-between transition-all ${
               isWeekend
-                ? 'bg-blue-50/40 border-blue-200'
-                : 'bg-white border-slate-200'
+                ? 'bg-blue-50/40 dark:bg-slate-900 border-blue-200 dark:border-blue-900/40'
+                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'
             }`}
           >
             {/* Cabecera del día */}
-            <div className="border-b border-slate-100 pb-2.5 mb-3">
+            <div className="border-b border-slate-100 dark:border-slate-800 pb-2.5 mb-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-slate-800">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-100">
                   {day.dayName}
                 </span>
                 <span
-                  className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${
+                  className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded border ${
                     isWeekend
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'bg-slate-100 text-slate-600'
+                      ? 'bg-blue-100 dark:bg-slate-800 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900/40'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'
                   }`}
                 >
                   {isWeekend ? 'Finde' : 'Laboral'}
                 </span>
               </div>
-              <div className="flex items-center text-xs text-slate-500 font-mono mt-1">
+              <div className="flex items-center text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">
                 <Calendar className="w-3 h-3 mr-1 text-slate-400" />
                 <span>{day.formattedDate}</span>
               </div>
@@ -77,10 +77,10 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
                 type="button"
                 disabled={isReadOnly}
                 onClick={() => onBlockChange(day.date, AvailabilityBlock.HORARIO_1)}
-                className={`w-full text-left p-2 rounded-lg border text-xs transition-all flex items-center justify-between ${
+                className={`w-full text-left p-2 rounded-lg border text-xs transition-all flex items-center justify-between cursor-pointer ${
                   day.selectedBlock === AvailabilityBlock.HORARIO_1
                     ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-sm'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/80'
                 } ${isReadOnly ? 'cursor-not-allowed opacity-80' : ''}`}
               >
                 <div className="flex items-center space-x-1.5 overflow-hidden">
@@ -103,10 +103,10 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
                 type="button"
                 disabled={isReadOnly}
                 onClick={() => onBlockChange(day.date, AvailabilityBlock.HORARIO_2)}
-                className={`w-full text-left p-2 rounded-lg border text-xs transition-all flex items-center justify-between ${
+                className={`w-full text-left p-2 rounded-lg border text-xs transition-all flex items-center justify-between cursor-pointer ${
                   day.selectedBlock === AvailabilityBlock.HORARIO_2
                     ? 'bg-amber-600 text-white border-amber-600 font-bold shadow-sm'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/80'
                 } ${isReadOnly ? 'cursor-not-allowed opacity-80' : ''}`}
               >
                 <div className="flex items-center space-x-1.5 overflow-hidden">
@@ -124,22 +124,22 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
                 )}
               </button>
 
-              {/* Opción 3: Full (Ambos) */}
+              {/* Opción 3: Jornada Completa (Full Day) */}
               <button
                 type="button"
                 disabled={isReadOnly}
                 onClick={() => onBlockChange(day.date, AvailabilityBlock.FULL)}
-                className={`w-full text-left p-2 rounded-lg border text-xs transition-all flex items-center justify-between ${
+                className={`w-full text-left p-2 rounded-lg border text-xs transition-all flex items-center justify-between cursor-pointer ${
                   day.selectedBlock === AvailabilityBlock.FULL
                     ? 'bg-emerald-600 text-white border-emerald-600 font-bold shadow-sm'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/80'
                 } ${isReadOnly ? 'cursor-not-allowed opacity-80' : ''}`}
               >
                 <div className="flex items-center space-x-1.5">
                   <Check className="w-3.5 h-3.5 flex-shrink-0" />
                   <div>
-                    <div className="text-[11px] leading-tight">Full Day</div>
-                    <div className="text-[9px] opacity-80 mt-0.5">Ambos horarios</div>
+                    <div className="text-[11px] leading-tight font-semibold">Jornada Completa</div>
+                    <div className="text-[9px] opacity-80">H1 + H2 disponible</div>
                   </div>
                 </div>
                 {day.selectedBlock === AvailabilityBlock.FULL && (
@@ -147,20 +147,23 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
                 )}
               </button>
 
-              {/* Opción 4: No Disponible */}
+              {/* Opción 4: No disponible */}
               <button
                 type="button"
                 disabled={isReadOnly}
                 onClick={() => onBlockChange(day.date, AvailabilityBlock.NO)}
-                className={`w-full text-left p-2 rounded-lg border text-xs transition-all flex items-center justify-between ${
+                className={`w-full text-left p-2 rounded-lg border text-xs transition-all flex items-center justify-between cursor-pointer ${
                   day.selectedBlock === AvailabilityBlock.NO
-                    ? 'bg-slate-700 text-white border-slate-700 font-bold shadow-sm'
-                    : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
+                    ? 'bg-rose-600 text-white border-rose-600 font-bold shadow-sm'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/80'
                 } ${isReadOnly ? 'cursor-not-allowed opacity-80' : ''}`}
               >
                 <div className="flex items-center space-x-1.5">
-                  <X className="w-3.5 h-3.5 flex-shrink-0 text-rose-400" />
-                  <span className="text-[11px]">No disponible</span>
+                  <X className="w-3.5 h-3.5 flex-shrink-0" />
+                  <div>
+                    <div className="text-[11px] leading-tight font-semibold">No Disponible</div>
+                    <div className="text-[9px] opacity-80">Sin disponibilidad</div>
+                  </div>
                 </div>
                 {day.selectedBlock === AvailabilityBlock.NO && (
                   <Check className="w-3.5 h-3.5 ml-1 flex-shrink-0" />

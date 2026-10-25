@@ -13,12 +13,12 @@ export const MainLayout: React.FC = () => {
   const needsConsent = !!user && !user.dataConsent;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200">
       <Navbar />
 
       {/* Banner de Aviso de Consentimiento de Datos Pendiente */}
       {needsConsent && (
-        <div className="bg-amber-500 text-white px-4 py-2.5 shadow-sm text-xs font-medium flex items-center justify-between">
+        <div className="bg-amber-500 dark:bg-amber-600 text-white px-4 py-2.5 shadow-sm text-xs font-medium flex items-center justify-between">
           <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2">
             <div className="flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -41,14 +41,14 @@ export const MainLayout: React.FC = () => {
         <Outlet />
       </main>
 
-      <footer className="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+      <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
           <p>© 2026 SGAOB — Sistema de Gestión de Árbitros y Oficiales de Básquetbol.</p>
           <div className="flex items-center space-x-4">
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 text-emerald-800">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border dark:border-emerald-800/40">
               Sistema Operativo
             </span>
-            <span className="text-slate-400">|</span>
+            <span className="text-slate-400 dark:text-slate-600">|</span>
             <span>Versión 1.0</span>
           </div>
         </div>

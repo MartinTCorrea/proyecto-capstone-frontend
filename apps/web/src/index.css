@@ -29,8 +29,25 @@ body {
   flex-direction: column;
 }
 
+/* Modo Oscuro Sobrio: Slate & Acero Muted */
+html.dark {
+  color-scheme: dark;
+  color: #f8fafc;
+  background-color: #0b0f19;
+}
+
+html.dark body {
+  background-color: #0b0f19;
+  color: #f8fafc;
+}
+
 /* Accessibility: focus ring indicator for keyboard navigation (Tab - WCAG 2.1 AA) */
 *:focus-visible {
   outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+html.dark *:focus-visible {
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }

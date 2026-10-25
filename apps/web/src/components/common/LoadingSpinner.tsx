@@ -22,9 +22,9 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       className="flex flex-col items-center justify-center p-8 space-y-3"
     >
       <div
-        className={`${sizeClasses[size]} border-blue-200 border-t-blue-600 rounded-full animate-spin`}
+        className={`${sizeClasses[size]} border-blue-200 dark:border-slate-800 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin`}
       />
-      {message && <p className="text-sm font-medium text-slate-600">{message}</p>}
+      {message && <p className="text-sm font-medium text-slate-600 dark:text-slate-400">{message}</p>}
       <span className="sr-only">{message}</span>
     </div>
   );

@@ -16,6 +16,7 @@ import {
   X,
 } from 'lucide-react';
 import { BasketballLogo } from '../components/common/BasketballLogo';
+import { ThemeToggle } from '../components/common/ThemeToggle';
 
 export const LoginPage: React.FC = () => {
   const { loginWithDevToken, loginWithCognito, isAuthenticated } = useAuth();
@@ -184,28 +185,35 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative transition-colors duration-200">
+      {/* Switch de Modo Oscuro en la esquina superior del Login */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
+        <ThemeToggle />
+      </div>
+
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <div className="mx-auto w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg mb-4">
           <BasketballLogo className="w-9 h-9" />
         </div>
-        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">SGAOB</h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          SGAOB
+        </h1>
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
           Sistema de Gestión de Árbitros y Oficiales de Básquetbol
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-xl">
-        <div className="bg-white py-8 px-6 shadow-xl border border-slate-200 sm:rounded-xl sm:px-10 space-y-6">
+        <div className="bg-white dark:bg-slate-900 py-8 px-6 shadow-xl border border-slate-200 dark:border-slate-800 sm:rounded-xl sm:px-10 space-y-6 transition-colors duration-200">
           {errorMsg && (
-            <div className="p-4 bg-rose-50 border border-rose-200 rounded-lg flex items-start space-x-3 text-rose-700 text-sm">
+            <div className="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-lg flex items-start space-x-3 text-rose-700 dark:text-rose-300 text-sm">
               <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {/* Selector de modo de autenticación (Inicio de Sesión oficial vs Modo Test) */}
-          <div className="flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+          <div className="flex p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700">
             <button
               type="button"
               onClick={() => {
@@ -214,11 +222,11 @@ export const LoginPage: React.FC = () => {
               }}
               className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
                 authMode === 'cognito'
-                  ? 'bg-white shadow-sm text-blue-700 border border-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-900 shadow-sm text-blue-700 dark:text-blue-400 border border-slate-200 dark:border-slate-700'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
-              <Lock className="w-4 h-4 text-blue-600" />
+              <Lock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span>Iniciar Sesión</span>
             </button>
             <button
@@ -229,8 +237,8 @@ export const LoginPage: React.FC = () => {
               }}
               className={`flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
                 authMode === 'dev'
-                  ? 'bg-white shadow-sm text-blue-700 border border-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-900 shadow-sm text-blue-700 dark:text-blue-400 border border-slate-200 dark:border-slate-700'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <Sparkles className="w-4 h-4 text-amber-500" />
@@ -242,11 +250,11 @@ export const LoginPage: React.FC = () => {
           {authMode === 'dev' && (
             <div className="space-y-4">
               <div>
-                <h2 className="text-base font-bold text-slate-900 flex items-center space-x-2">
-                  <Shield className="w-5 h-5 text-blue-600" />
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
+                  <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   <span>Acceso Rápido / Demostración de Roles</span>
                 </h2>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                   Selecciona un perfil operativo para ingresar y explorar la plataforma:
                 </p>
               </div>
@@ -263,20 +271,20 @@ export const LoginPage: React.FC = () => {
                     )
                   }
                   disabled={!!loadingRole}
-                  className="p-4 rounded-lg border border-purple-200 bg-purple-50/50 hover:bg-purple-100/60 hover:border-purple-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-purple-500 cursor-pointer"
+                  className="p-4 rounded-lg border border-purple-200 dark:border-purple-900/40 bg-purple-50/50 dark:bg-slate-800/70 hover:bg-purple-100/60 dark:hover:bg-slate-800 hover:border-purple-300 dark:hover:border-purple-700 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-purple-500 cursor-pointer"
                 >
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full inline-block mb-1.5">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-purple-800/40">
                       Comisión Técnica
                     </span>
-                    <h3 className="font-bold text-slate-900 text-sm group-hover:text-purple-900">
+                    <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm group-hover:text-purple-900 dark:group-hover:text-purple-300">
                       Administrador
                     </h3>
-                    <p className="text-xs text-slate-600 mt-1">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                       Gestión total de árbitros, nominaciones y torneos.
                     </p>
                   </div>
-                  <div className="mt-3 flex items-center text-xs font-semibold text-purple-700 group-hover:translate-x-1 transition-transform">
+                  <div className="mt-3 flex items-center text-xs font-semibold text-purple-700 dark:text-purple-400 group-hover:translate-x-1 transition-transform">
                     <span>
                       {loadingRole === 'admin.comision@sgaob.cl' ? 'Ingresando...' : 'Ingresar perfil'}
                     </span>
@@ -295,20 +303,20 @@ export const LoginPage: React.FC = () => {
                     )
                   }
                   disabled={!!loadingRole}
-                  className="p-4 rounded-lg border border-blue-200 bg-blue-50/50 hover:bg-blue-100/60 hover:border-blue-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                  className="p-4 rounded-lg border border-blue-200 dark:border-blue-900/40 bg-blue-50/50 dark:bg-slate-800/70 hover:bg-blue-100/60 dark:hover:bg-slate-800 hover:border-blue-300 dark:hover:border-blue-700 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-blue-500 cursor-pointer"
                 >
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full inline-block mb-1.5">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-blue-800/40">
                       Árbitro de Campo
                     </span>
-                    <h3 className="font-bold text-slate-900 text-sm group-hover:text-blue-900">
+                    <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm group-hover:text-blue-900 dark:group-hover:text-blue-300">
                       Carlos Pérez
                     </h3>
-                    <p className="text-xs text-slate-600 mt-1">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                       Declaración de disponibilidad y aceptación de designaciones.
                     </p>
                   </div>
-                  <div className="mt-3 flex items-center text-xs font-semibold text-blue-700 group-hover:translate-x-1 transition-transform">
+                  <div className="mt-3 flex items-center text-xs font-semibold text-blue-700 dark:text-blue-400 group-hover:translate-x-1 transition-transform">
                     <span>
                       {loadingRole === 'carlos.arbitro@sgaob.cl' ? 'Ingresando...' : 'Ingresar perfil'}
                     </span>
@@ -327,20 +335,20 @@ export const LoginPage: React.FC = () => {
                     )
                   }
                   disabled={!!loadingRole}
-                  className="p-4 rounded-lg border border-amber-200 bg-amber-50/50 hover:bg-amber-100/60 hover:border-amber-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-amber-500 cursor-pointer"
+                  className="p-4 rounded-lg border border-amber-200 dark:border-amber-900/40 bg-amber-50/50 dark:bg-slate-800/70 hover:bg-amber-100/60 dark:hover:bg-slate-800 hover:border-amber-300 dark:hover:border-amber-700 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-amber-500 cursor-pointer"
                 >
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full inline-block mb-1.5">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-amber-800/40">
                       Oficial de Mesa
                     </span>
-                    <h3 className="font-bold text-slate-900 text-sm group-hover:text-amber-900">
+                    <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm group-hover:text-amber-900 dark:group-hover:text-amber-300">
                       Ana Gómez
                     </h3>
-                    <p className="text-xs text-slate-600 mt-1">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                       Planillero, cronometrador y operador de 24 segundos.
                     </p>
                   </div>
-                  <div className="mt-3 flex items-center text-xs font-semibold text-amber-700 group-hover:translate-x-1 transition-transform">
+                  <div className="mt-3 flex items-center text-xs font-semibold text-amber-700 dark:text-amber-400 group-hover:translate-x-1 transition-transform">
                     <span>
                       {loadingRole === 'ana.oficial@sgaob.cl' ? 'Ingresando...' : 'Ingresar perfil'}
                     </span>
@@ -359,20 +367,20 @@ export const LoginPage: React.FC = () => {
                     )
                   }
                   disabled={!!loadingRole}
-                  className="p-4 rounded-lg border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/60 hover:border-emerald-300 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+                  className="p-4 rounded-lg border border-emerald-200 dark:border-emerald-900/40 bg-emerald-50/50 dark:bg-slate-800/70 hover:bg-emerald-100/60 dark:hover:bg-slate-800 hover:border-emerald-300 dark:hover:border-emerald-700 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-emerald-500 cursor-pointer"
                 >
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full inline-block mb-1.5">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-emerald-800/40">
                       Doble Rol
                     </span>
-                    <h3 className="font-bold text-slate-900 text-sm group-hover:text-emerald-900">
+                    <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm group-hover:text-emerald-900 dark:group-hover:text-emerald-300">
                       Mario Silva
                     </h3>
-                    <p className="text-xs text-slate-600 mt-1">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                       Acreditación combinada de Árbitro y Oficial de Mesa.
                     </p>
                   </div>
-                  <div className="mt-3 flex items-center text-xs font-semibold text-emerald-700 group-hover:translate-x-1 transition-transform">
+                  <div className="mt-3 flex items-center text-xs font-semibold text-emerald-700 dark:text-emerald-400 group-hover:translate-x-1 transition-transform">
                     <span>
                       {loadingRole === 'mario.doble@sgaob.cl' ? 'Ingresando...' : 'Ingresar perfil'}
                     </span>
@@ -381,24 +389,24 @@ export const LoginPage: React.FC = () => {
                 </button>
               </div>
 
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-xs text-slate-600">
+              <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-lg flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
                 <span className="font-medium">Sesión activa: Simulación de credencial autorizada</span>
-                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-semibold text-[10px]">
+                <span className="px-2 py-0.5 bg-emerald-100 dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 border dark:border-emerald-800/40 rounded font-semibold text-[10px]">
                   Modo Operativo Rápido
                 </span>
               </div>
             </div>
           )}
 
-          {/* VISTA 1: Modo Oficial (Inicio de Sesión) */}
+          {/* VISTA 2: Modo Oficial (Inicio de Sesión) */}
           {authMode === 'cognito' && (
             <div className="space-y-5">
               <div>
-                <h2 className="text-base font-bold text-slate-900 flex items-center space-x-2">
-                  <Lock className="w-5 h-5 text-blue-600" />
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
+                  <Lock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   <span>Ingreso a la Plataforma</span>
                 </h2>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                   Inicia sesión con tus credenciales de acceso para gestionar partidos y asignaciones.
                 </p>
               </div>
@@ -406,7 +414,7 @@ export const LoginPage: React.FC = () => {
               {/* Formulario de Login Directo */}
               <form onSubmit={handleCognitoLogin} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Correo Electrónico
                   </label>
                   <div className="relative rounded-md shadow-sm">
@@ -419,13 +427,13 @@ export const LoginPage: React.FC = () => {
                       onChange={(e) => setCognitoEmail(e.target.value)}
                       placeholder="arbitro@sgaob.cl"
                       required
-                      className="block w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="block w-full pl-9 pr-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Contraseña
                   </label>
                   <div className="relative rounded-md shadow-sm">
@@ -438,7 +446,7 @@ export const LoginPage: React.FC = () => {
                       onChange={(e) => setCognitoPassword(e.target.value)}
                       placeholder="••••••••"
                       required
-                      className="block w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="block w-full pl-9 pr-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -456,7 +464,7 @@ export const LoginPage: React.FC = () => {
                       setNewPassword('');
                       setConfirmNewPassword('');
                     }}
-                    className="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
+                    className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors cursor-pointer"
                   >
                     ¿Olvidaste tu contraseña?
                   </button>
@@ -490,10 +498,10 @@ export const LoginPage: React.FC = () => {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150"
         >
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 bg-slate-900 text-white">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-md w-full overflow-hidden transition-colors duration-200">
+            <div className="flex items-center justify-between px-6 py-4 bg-slate-900 dark:bg-slate-950 text-white border-b dark:border-slate-800">
               <div className="flex items-center space-x-2.5">
                 <KeyRound className="w-5 h-5 text-blue-400" />
                 <h2 className="text-base font-bold">Recuperación de Contraseña</h2>
@@ -508,15 +516,15 @@ export const LoginPage: React.FC = () => {
 
             <div className="p-6 space-y-4">
               {forgotError && (
-                <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-center space-x-2 text-rose-700 text-xs">
+                <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-lg flex items-center space-x-2 text-rose-700 dark:text-rose-300 text-xs">
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   <span>{forgotError}</span>
                 </div>
               )}
 
               {forgotMsg && (
-                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center space-x-2 text-emerald-800 text-xs">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-lg flex items-center space-x-2 text-emerald-800 dark:text-emerald-300 text-xs">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
                   <span>{forgotMsg}</span>
                 </div>
               )}
@@ -524,12 +532,12 @@ export const LoginPage: React.FC = () => {
               {/* PASO 1: Ingresar correo electrónico */}
               {forgotStep === 'request' && (
                 <form onSubmit={handleRequestRecoveryCode} className="space-y-4">
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
                     Ingresa el correo electrónico asociado a tu cuenta para recibir un código de confirmación de 6 dígitos.
                   </p>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Correo Electrónico
                     </label>
                     <div className="relative rounded-md shadow-sm">
@@ -542,7 +550,7 @@ export const LoginPage: React.FC = () => {
                         value={forgotEmail}
                         onChange={(e) => setForgotEmail(e.target.value)}
                         placeholder="arbitro@sgaob.cl"
-                        className="block w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="block w-full pl-9 pr-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -551,7 +559,7 @@ export const LoginPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsForgotPasswordOpen(false)}
-                      className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg cursor-pointer"
+                      className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer"
                     >
                       Cancelar
                     </button>
@@ -576,12 +584,12 @@ export const LoginPage: React.FC = () => {
               {/* PASO 2: Confirmar código y nueva clave */}
               {forgotStep === 'confirm' && (
                 <form onSubmit={handleConfirmNewPassword} className="space-y-4">
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
                     Ingresa el código de 6 dígitos enviado a <strong>{forgotEmail}</strong> y define tu nueva contraseña.
                   </p>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Código de Confirmación (6 dígitos)
                     </label>
                     <input
@@ -591,12 +599,12 @@ export const LoginPage: React.FC = () => {
                       value={confirmationCode}
                       onChange={(e) => setConfirmationCode(e.target.value)}
                       placeholder="123456"
-                      className="block w-full px-3 py-2 text-center tracking-widest font-mono text-base border border-slate-300 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="block w-full px-3 py-2 text-center tracking-widest font-mono text-base border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Nueva Contraseña (min. 8 caracteres)
                     </label>
                     <input
@@ -606,12 +614,12 @@ export const LoginPage: React.FC = () => {
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="block w-full px-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="block w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Confirmar Nueva Contraseña
                     </label>
                     <input
@@ -621,7 +629,7 @@ export const LoginPage: React.FC = () => {
                       value={confirmNewPassword}
                       onChange={(e) => setConfirmNewPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="block w-full px-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      className="block w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
@@ -629,7 +637,7 @@ export const LoginPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setForgotStep('request')}
-                      className="text-xs text-slate-500 hover:text-slate-800 underline cursor-pointer"
+                      className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 underline cursor-pointer"
                     >
                       Volver a pedir código
                     </button>
@@ -654,13 +662,13 @@ export const LoginPage: React.FC = () => {
               {/* PASO 3: Éxito */}
               {forgotStep === 'success' && (
                 <div className="text-center space-y-4 py-2">
-                  <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+                  <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-7 h-7" />
                   </div>
-                  <h3 className="text-sm font-bold text-slate-900">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                     Contraseña Restablecida Exitosamente
                   </h3>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
                     Tu contraseña ha sido actualizada. Ya puedes iniciar sesión con tu cuenta.
                   </p>
                   <button

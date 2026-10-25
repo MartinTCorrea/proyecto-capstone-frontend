@@ -70,9 +70,9 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
       aria-modal="true"
       aria-labelledby="create-match-title"
     >
-      <div className="bg-white rounded-xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-200">
+      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in duration-200">
         {/* Cabecera */}
-        <div className="bg-gradient-to-r from-blue-700 to-indigo-800 px-6 py-4 flex justify-between items-center text-white">
+        <div className="bg-gradient-to-r from-blue-700 to-indigo-800 dark:from-slate-900 dark:to-slate-800 px-6 py-4 flex justify-between items-center text-white border-b dark:border-slate-800">
           <div className="flex items-center space-x-2.5">
             <div className="p-2 bg-white/10 rounded-lg">
               <Trophy className="w-5 h-5 text-amber-300" />
@@ -81,14 +81,14 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
               <h2 id="create-match-title" className="text-lg font-bold">
                 Nuevo Partido (Gestión Manual)
               </h2>
-              <p className="text-xs text-blue-200">
+              <p className="text-xs text-blue-200 dark:text-slate-400">
                 100% Autónomo: Registra partidos de ligas locales o escolares sin depender de APIs externas
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-1.5 transition-colors"
+            className="text-white/80 hover:text-white hover:bg-white/10 rounded-lg p-1.5 transition-colors cursor-pointer"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />
@@ -98,7 +98,7 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
         {/* Formulario */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-start space-x-2 text-sm text-rose-700">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-lg flex items-start space-x-2 text-sm text-rose-700 dark:text-rose-300">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-rose-500" />
               <span>{error}</span>
             </div>
@@ -106,7 +106,7 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
                 Torneo / Competencia *
               </label>
               <input
@@ -115,18 +115,18 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
                 onChange={(e) => setTournament(e.target.value)}
                 placeholder="Ej. Copa Soprole Básquetbol"
                 required
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
                 Categoría *
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="Adulto Varones">Adulto Varones</option>
                 <option value="Adulto Damas">Adulto Damas</option>
@@ -140,8 +140,8 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1 flex items-center space-x-1">
-                <Shield className="w-3.5 h-3.5 text-blue-600" />
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1 flex items-center space-x-1">
+                <Shield className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                 <span>Equipo Local *</span>
               </label>
               <input
@@ -150,13 +150,13 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
                 onChange={(e) => setHomeTeam(e.target.value)}
                 placeholder="Ej. Universidad Católica"
                 required
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1 flex items-center space-x-1">
-                <Shield className="w-3.5 h-3.5 text-indigo-600" />
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1 flex items-center space-x-1">
+                <Shield className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                 <span>Equipo Visitante *</span>
               </label>
               <input
@@ -165,13 +165,13 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
                 onChange={(e) => setAwayTeam(e.target.value)}
                 placeholder="Ej. Colegio Los Leones"
                 required
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1 flex items-center space-x-1">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1 flex items-center space-x-1">
               <MapPin className="w-3.5 h-3.5 text-rose-500" />
               <span>Gimnasio / Recinto Deportivo *</span>
             </label>
@@ -181,14 +181,14 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
               onChange={(e) => setVenue(e.target.value)}
               placeholder="Ej. Estadio Palestino, Las Condes"
               required
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1 flex items-center space-x-1">
-                <Calendar className="w-3.5 h-3.5 text-blue-600" />
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1 flex items-center space-x-1">
+                <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                 <span>Fecha del Partido *</span>
               </label>
               <input
@@ -196,13 +196,13 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1 flex items-center space-x-1">
-                <Clock className="w-3.5 h-3.5 text-blue-600" />
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1 flex items-center space-x-1">
+                <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                 <span>Hora de Inicio *</span>
               </label>
               <input
@@ -210,32 +210,32 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs text-slate-600 flex items-start space-x-2">
-            <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+          <div className="bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-xs text-slate-600 dark:text-slate-400 flex items-start space-x-2">
+            <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
             <div>
               <strong>Cálculo Automático:</strong> El bloque horario (Horario 1, Horario 2 o Ambos) será determinado por el sistema en función del día y la hora programada para el partido.
             </div>
           </div>
 
           {/* Botones de acción */}
-          <div className="flex justify-end space-x-3 pt-3 border-t border-slate-200">
+          <div className="flex justify-end space-x-3 pt-3 border-t border-slate-200 dark:border-slate-800">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors disabled:opacity-50"
+              className="inline-flex items-center px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <>

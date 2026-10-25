@@ -103,20 +103,20 @@ export const MatchesPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Encabezado y Acciones Principales */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <div className="flex items-center space-x-2">
-            <span className="p-2 rounded-lg bg-blue-50 text-blue-600">
-              <Trophy className="w-5 h-5" />
-            </span>
-            <h1 className="text-2xl font-black tracking-tight text-slate-900">
+      {/* Encabezado Principal */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors duration-200">
+        <div className="flex items-center space-x-3.5">
+          <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-slate-800 border dark:border-amber-900/40 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-inner">
+            <Trophy className="w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Cartelera de Partidos
             </h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Programación oficial, sedes, horarios y sincronización de encuentros.
+            </p>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
-            Programación oficial, sincronización federativa y gestión de encuentros deportivos
-          </p>
         </div>
 
         {/* Acciones exclusivas Comisión Técnica */}
@@ -124,16 +124,16 @@ export const MatchesPage: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={() => setIsSyncModalOpen(true)}
-              className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 transition-colors shadow-sm cursor-pointer"
+              className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 transition-colors shadow-sm cursor-pointer"
               title="Sincronizar cartelera desde plataformas externas (Swish / NBN23)"
             >
-              <RefreshCw className="w-4 h-4 mr-2 text-slate-600" />
+              <RefreshCw className="w-4 h-4 mr-2 text-slate-600 dark:text-slate-400" />
               Configurar Sincronización...
             </button>
 
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-sm"
+              className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-sm cursor-pointer"
               title="Crear partido manual sin depender de APIs externas (100% Autónomo)"
             >
               <Plus className="w-4 h-4 mr-1.5" />
@@ -148,21 +148,21 @@ export const MatchesPage: React.FC = () => {
         <div
           className={`p-4 rounded-xl flex items-center justify-between shadow-sm animate-in fade-in duration-200 ${
             feedback.type === 'success'
-              ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
-              : 'bg-rose-50 border border-rose-200 text-rose-800'
+              ? 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-emerald-800 dark:text-emerald-300'
+              : 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-300'
           }`}
         >
           <div className="flex items-center space-x-2">
             {feedback.type === 'success' ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+              <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />
             )}
             <span className="text-sm font-medium">{feedback.message}</span>
           </div>
           <button
             onClick={() => setFeedback(null)}
-            className="text-xs font-bold uppercase tracking-wider underline hover:opacity-75"
+            className="text-xs font-bold uppercase tracking-wider underline hover:opacity-75 cursor-pointer"
           >
             Cerrar
           </button>
@@ -170,7 +170,7 @@ export const MatchesPage: React.FC = () => {
       )}
 
       {/* Barra de Filtros */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-3 transition-colors duration-200">
         <form onSubmit={handleSearchSubmit} className="flex flex-col md:flex-row gap-3">
           <div className="relative flex-1">
             <input
@@ -178,26 +178,26 @@ export const MatchesPage: React.FC = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar por torneo, equipo o recinto..."
-              className="w-full pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+            <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-3" />
           </div>
 
           <button
             type="submit"
-            className="inline-flex items-center justify-center px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-lg transition-colors"
+            className="inline-flex items-center justify-center px-4 py-2 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white text-sm font-semibold rounded-lg transition-colors cursor-pointer"
           >
             Buscar
           </button>
         </form>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5 pt-2 border-t border-slate-100">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
           <div>
-            <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Estado</label>
+            <label className="block text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Estado</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2.5 py-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Todos los estados</option>
               <option value={MatchStatus.SCHEDULED}>Programados</option>
@@ -209,11 +209,11 @@ export const MatchesPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Origen</label>
+            <label className="block text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Origen</label>
             <select
               value={platformFilter}
               onChange={(e) => setPlatformFilter(e.target.value)}
-              className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2.5 py-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Todas las plataformas</option>
               <option value={MatchPlatform.MANUAL}>Manual (Local)</option>
@@ -223,11 +223,11 @@ export const MatchesPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Bloque Horario</label>
+            <label className="block text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Bloque Horario</label>
             <select
               value={timeBlockFilter}
               onChange={(e) => setTimeBlockFilter(e.target.value)}
-              className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2.5 py-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Todos los bloques</option>
               <option value={MatchTimeBlock.HORARIO_1}>Horario 1</option>
@@ -237,22 +237,22 @@ export const MatchesPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Desde</label>
+            <label className="block text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Desde</label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2.5 py-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Hasta</label>
+            <label className="block text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Hasta</label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2.5 py-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -260,9 +260,9 @@ export const MatchesPage: React.FC = () => {
 
       {/* Contenido / Tabla */}
       {loading ? (
-        <div className="bg-white rounded-xl border border-slate-200 p-12 text-center shadow-sm">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-12 text-center shadow-sm">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent mb-3" />
-          <p className="text-sm font-semibold text-slate-600">Cargando cartelera de partidos...</p>
+          <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">Cargando cartelera de partidos...</p>
         </div>
       ) : (
         <MatchesTable
@@ -275,22 +275,22 @@ export const MatchesPage: React.FC = () => {
 
       {/* Paginación */}
       {!loading && meta.totalPages > 1 && (
-        <div className="bg-white rounded-xl border border-slate-200 px-6 py-3 flex items-center justify-between shadow-sm">
-          <div className="text-xs text-slate-500 font-medium">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 px-6 py-3 flex items-center justify-between shadow-sm transition-colors duration-200">
+          <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
             Mostrando página <strong>{meta.page}</strong> de <strong>{meta.totalPages}</strong> ({meta.total} partidos en total)
           </div>
           <div className="flex space-x-2">
             <button
               onClick={() => fetchMatches(meta.page - 1)}
               disabled={meta.page <= 1}
-              className="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40"
+              className="px-3 py-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 cursor-pointer"
             >
               Anterior
             </button>
             <button
               onClick={() => fetchMatches(meta.page + 1)}
               disabled={meta.page >= meta.totalPages}
-              className="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40"
+              className="px-3 py-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 cursor-pointer"
             >
               Siguiente
             </button>
@@ -326,7 +326,6 @@ export const MatchesPage: React.FC = () => {
         onClose={() => setIsSyncModalOpen(false)}
         onSyncCompleted={() => {
           setFeedback({ type: 'success', message: 'Sincronización de cartelera iniciada exitosamente' });
-          // Esperar brevemente a que el worker procese y recargar
           setTimeout(() => fetchMatches(1), 1500);
         }}
       />
@@ -334,28 +333,28 @@ export const MatchesPage: React.FC = () => {
       {/* Modal de confirmación de eliminación */}
       {matchToDelete && (
         <div
-          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
           role="dialog"
           aria-modal="true"
         >
-          <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6 border border-slate-200">
-            <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-3">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl max-w-sm w-full p-6 border border-slate-200 dark:border-slate-800 transition-colors duration-200">
+            <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border dark:border-rose-900/40 flex items-center justify-center mx-auto mb-3">
               <AlertCircle className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-slate-900 text-center">¿Eliminar este partido?</h3>
-            <p className="text-xs text-slate-500 text-center mt-1">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white text-center">¿Eliminar este partido?</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 text-center mt-1">
               Esta acción no se puede deshacer. Se eliminará el partido {matchToDelete.homeTeam} vs {matchToDelete.awayTeam}.
             </p>
             <div className="flex justify-end space-x-2 mt-5">
               <button
                 onClick={() => setMatchToDelete(null)}
-                className="px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-lg"
+                className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleDeleteConfirm}
-                className="px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm"
+                className="px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm cursor-pointer"
               >
                 Sí, Eliminar
               </button>

@@ -43,8 +43,8 @@ export const DataConsentModal: React.FC<DataConsentModalProps> = ({ isOpen, onCl
       aria-labelledby="consent-modal-title"
       className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
     >
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-        <div className="flex items-center space-x-3 px-6 py-4 bg-slate-900 text-white">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+        <div className="flex items-center space-x-3 px-6 py-4 bg-slate-900 dark:bg-slate-950 text-white border-b dark:border-slate-800">
           <ShieldCheck className="w-6 h-6 text-emerald-400 flex-shrink-0" />
           <div>
             <h2 id="consent-modal-title" className="text-base font-bold">
@@ -57,8 +57,8 @@ export const DataConsentModal: React.FC<DataConsentModalProps> = ({ isOpen, onCl
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div className="text-xs text-slate-600 space-y-2 bg-slate-50 border border-slate-200 p-4 rounded-xl leading-relaxed max-h-48 overflow-y-auto">
-            <p className="font-semibold text-slate-800">
+          <div className="text-xs text-slate-600 dark:text-slate-400 space-y-2 bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 p-4 rounded-xl leading-relaxed max-h-48 overflow-y-auto">
+            <p className="font-semibold text-slate-800 dark:text-slate-200">
               Términos de Privacidad y Tratamiento de Información en SGAOB:
             </p>
             <p>
@@ -71,47 +71,47 @@ export const DataConsentModal: React.FC<DataConsentModalProps> = ({ isOpen, onCl
               <li>Envío de notificaciones operativas vía correo electrónico.</li>
               <li>Auditoría y trazabilidad de designaciones técnicas.</li>
             </ul>
-            <p className="text-slate-500 italic">
+            <p className="text-slate-500 dark:text-slate-500 italic">
               Al confirmar este formulario, se registrará la fecha y tu dirección IP de conexión como constancia de aceptación informada.
             </p>
           </div>
 
           {errorMsg && (
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-center space-x-2 text-rose-700 text-xs">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-lg flex items-center space-x-2 text-rose-700 dark:text-rose-300 text-xs">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
 
-          <label className="flex items-start space-x-3 p-3 rounded-xl border border-slate-200 bg-emerald-50/40 cursor-pointer hover:bg-emerald-50/70 transition-colors">
+          <label className="flex items-start space-x-3 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-emerald-50/40 dark:bg-emerald-950/30 cursor-pointer hover:bg-emerald-50/70 dark:hover:bg-emerald-950/50 transition-colors">
             <input
               type="checkbox"
               required
               checked={agreed}
               onChange={(e) => setAgreed(e.target.checked)}
-              className="mt-0.5 rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4"
+              className="mt-0.5 rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4 border-slate-300 dark:border-slate-700"
             />
-            <span className="text-xs font-semibold text-slate-800 leading-tight">
+            <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-tight">
               He leído y acepto el tratamiento de mis datos personales para la gestión operativa en el sistema SGAOB.
             </span>
           </label>
 
-          <div className="pt-2 flex justify-end space-x-3 border-t border-slate-100">
+          <div className="pt-2 flex justify-end space-x-3 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700 rounded-lg transition-colors"
+              className="px-4 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors cursor-pointer"
             >
               Recordar más tarde
             </button>
             <button
               type="submit"
               disabled={!agreed || isSubmitting}
-              className={`px-5 py-2 text-xs font-bold text-white rounded-lg shadow-sm transition-all flex items-center space-x-1.5 ${
+              className={`px-5 py-2 text-xs font-bold text-white rounded-lg shadow-sm transition-all flex items-center space-x-1.5 cursor-pointer ${
                 agreed && !isSubmitting
                   ? 'bg-emerald-600 hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-500'
-                  : 'bg-slate-300 cursor-not-allowed'
+                  : 'bg-slate-300 dark:bg-slate-800 text-slate-500 dark:text-slate-500 cursor-not-allowed'
               }`}
             >
               {isSubmitting ? (

@@ -97,9 +97,9 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
       aria-modal="true"
       aria-labelledby="edit-match-title"
     >
-      <div className="bg-white rounded-xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-200">
+      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in duration-200">
         {/* Cabecera */}
-        <div className="bg-slate-800 px-6 py-4 flex justify-between items-center text-white">
+        <div className="bg-slate-800 dark:bg-slate-950 px-6 py-4 flex justify-between items-center text-white border-b dark:border-slate-800">
           <div className="flex items-center space-x-2.5">
             <div className="p-2 bg-white/10 rounded-lg">
               <Edit3 className="w-5 h-5 text-blue-400" />
@@ -108,7 +108,7 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
               <h2 id="edit-match-title" className="text-lg font-bold">
                 Modificar Partido / Actualizar Estado
               </h2>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-slate-300 dark:text-slate-400">
                 {match.homeTeam} vs {match.awayTeam}
               </p>
             </div>
@@ -125,14 +125,14 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
         {/* Formulario */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-sm text-rose-700">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-lg text-sm text-rose-700 dark:text-rose-300">
               {error}
             </div>
           )}
 
           {isStatusCritical && (
-            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start space-x-2.5 text-xs text-amber-800">
-              <AlertTriangle className="w-4 h-4 mt-0.5 text-amber-600 shrink-0" />
+            <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg flex items-start space-x-2.5 text-xs text-amber-800 dark:text-amber-300">
+              <AlertTriangle className="w-4 h-4 mt-0.5 text-amber-600 dark:text-amber-400 shrink-0" />
               <div>
                 <strong>Aviso de Notificación Automática:</strong> Al guardar este partido como <em>{status}</em> o cambiar su horario, el sistema despachará automáticamente alertas por correo a todos los árbitros u oficiales que ya estén nominados.
               </div>
@@ -141,13 +141,13 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
                 Estado del Partido *
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as MatchStatus)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value={MatchStatus.SCHEDULED}>Programado (Normal)</option>
                 <option value={MatchStatus.RESCHEDULED}>Reprogramado (Cambio horario)</option>
@@ -158,7 +158,7 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
                 Recinto / Gimnasio *
               </label>
               <div className="relative">
@@ -167,7 +167,7 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
                   value={venue}
                   onChange={(e) => setVenue(e.target.value)}
                   required
-                  className="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-8 pr-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
                 />
                 <MapPin className="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" />
               </div>
@@ -176,8 +176,8 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1 flex items-center space-x-1">
-                <Calendar className="w-3.5 h-3.5 text-blue-600" />
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1 flex items-center space-x-1">
+                <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                 <span>Fecha Programada *</span>
               </label>
               <input
@@ -185,13 +185,13 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1 flex items-center space-x-1">
-                <Clock className="w-3.5 h-3.5 text-blue-600" />
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1 flex items-center space-x-1">
+                <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                 <span>Hora de Inicio *</span>
               </label>
               <input
@@ -199,14 +199,14 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
                 Equipo Local
               </label>
               <input
@@ -214,12 +214,12 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
                 value={homeTeam}
                 onChange={(e) => setHomeTeam(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
                 Equipo Visitante
               </label>
               <input
@@ -227,25 +227,25 @@ export const EditMatchModal: React.FC<EditMatchModalProps> = ({
                 value={awayTeam}
                 onChange={(e) => setAwayTeam(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
           {/* Botones de acción */}
-          <div className="flex justify-end space-x-3 pt-4 border-t border-slate-200">
+          <div className="flex justify-end space-x-3 pt-4 border-t border-slate-200 dark:border-slate-800">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors disabled:opacity-50"
+              className="inline-flex items-center px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors disabled:opacity-50 cursor-pointer"
             >
               {loading ? 'Guardando Cambios...' : 'Guardar Cambios'}
             </button>

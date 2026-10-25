@@ -77,14 +77,14 @@ export const ResourcesPage: React.FC = () => {
       {/* Encabezado Principal */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-brand-50 border border-brand-200/60 flex items-center justify-center text-brand-700">
+          <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200/60 dark:border-brand-800/60 flex items-center justify-center text-brand-700 dark:text-brand-300">
             <FolderArchive className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
               Centro de Documentación y Recursos
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
               Bases reglamentarias, comunicados oficiales y exportación de planillas
             </p>
           </div>
@@ -97,10 +97,10 @@ export const ResourcesPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setExportModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl border border-emerald-200 transition-colors shadow-2xs cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 rounded-xl border border-emerald-200 dark:border-emerald-800 transition-colors shadow-2xs cursor-pointer"
                 title="Exportar Grilla de Asignaciones a Excel"
               >
-                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>Exportar Asignaciones a Excel...</span>
               </button>
 
@@ -119,7 +119,7 @@ export const ResourcesPage: React.FC = () => {
             type="button"
             onClick={() => loadResources()}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Recargar Recursos</span>
@@ -128,18 +128,18 @@ export const ResourcesPage: React.FC = () => {
       </div>
 
       {/* Pestañas de Categoría */}
-      <div className="border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
+      <div className="border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4">
         <div className="flex space-x-1">
           <button
             type="button"
             onClick={() => setActiveTab(ResourceType.COMUNICADO)}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
               activeTab === ResourceType.COMUNICADO
-                ? 'border-purple-600 text-purple-700 bg-purple-50/50'
-                : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                ? 'border-purple-600 text-purple-700 dark:text-purple-400 bg-purple-50/50 dark:bg-purple-950/30'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
             }`}
           >
-            <Megaphone className="w-4 h-4 text-purple-600" />
+            <Megaphone className="w-4 h-4 text-purple-600 dark:text-purple-400" />
             <span>Tablón de Comunicados</span>
           </button>
 
@@ -148,11 +148,11 @@ export const ResourcesPage: React.FC = () => {
             onClick={() => setActiveTab(ResourceType.DOCUMENTO)}
             className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
               activeTab === ResourceType.DOCUMENTO
-                ? 'border-blue-600 text-blue-700 bg-blue-50/50'
-                : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                ? 'border-blue-600 text-blue-700 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
             }`}
           >
-            <FileText className="w-4 h-4 text-blue-600" />
+            <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span>Documentos y Protocolos</span>
           </button>
 
@@ -162,11 +162,11 @@ export const ResourcesPage: React.FC = () => {
               onClick={() => setActiveTab(ResourceType.CREDENCIAL)}
               className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
                 activeTab === ResourceType.CREDENCIAL
-                  ? 'border-rose-600 text-rose-700 bg-rose-50/50'
-                  : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                  ? 'border-rose-600 text-rose-700 dark:text-rose-400 bg-rose-50/50 dark:bg-rose-950/30'
+                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
               }`}
             >
-              <Key className="w-4 h-4 text-rose-600" />
+              <Key className="w-4 h-4 text-rose-600 dark:text-rose-400" />
               <span>Bóveda de Credenciales de Planillaje</span>
             </button>
           )}
@@ -180,7 +180,7 @@ export const ResourcesPage: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Buscar por título o texto..."
-              className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 bg-white"
+              className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-brand-500 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
             />
             <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
           </div>
@@ -189,26 +189,26 @@ export const ResourcesPage: React.FC = () => {
 
       {/* Alerta de Error */}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs">
+        <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 text-xs">
           {error}
         </div>
       )}
 
       {/* Grid de Recursos */}
       {loading ? (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+        <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-12 text-center">
           <div className="w-8 h-8 border-3 border-brand-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-sm font-medium text-slate-500">Cargando publicaciones y recursos...</p>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Cargando publicaciones y recursos...</p>
         </div>
       ) : resources.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
-          <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 mx-auto mb-3">
+        <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-12 text-center">
+          <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500 mx-auto mb-3">
             <AlertCircle className="w-6 h-6" />
           </div>
-          <h3 className="text-sm font-bold text-slate-800">
+          <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">
             No se encontraron {activeTab.toLowerCase()}s
           </h3>
-          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
             {searchTerm
               ? 'No hay resultados que coincidan con el término de búsqueda.'
               : 'Aún no se han registrado publicaciones en esta categoría.'}

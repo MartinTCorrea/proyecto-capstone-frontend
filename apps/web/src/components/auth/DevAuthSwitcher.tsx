@@ -21,7 +21,7 @@ const DEV_PROFILES: MockProfile[] = [
     firstName: 'Martín',
     lastName: 'Correa',
     roles: [RoleName.ADMIN_COMISION_TECNICA],
-    badgeColor: 'bg-purple-100 text-purple-800 border-purple-200',
+    badgeColor: 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-slate-800 dark:text-purple-300 dark:border-purple-800/40',
   },
   {
     label: 'Árbitro de Campo',
@@ -30,7 +30,7 @@ const DEV_PROFILES: MockProfile[] = [
     firstName: 'Carlos',
     lastName: 'Pérez',
     roles: [RoleName.ARBITRO],
-    badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+    badgeColor: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-slate-800 dark:text-blue-300 dark:border-blue-800/40',
   },
   {
     label: 'Oficial de Mesa',
@@ -39,7 +39,7 @@ const DEV_PROFILES: MockProfile[] = [
     firstName: 'Ana',
     lastName: 'Gómez',
     roles: [RoleName.OFICIAL_MESA],
-    badgeColor: 'bg-amber-100 text-amber-800 border-amber-200',
+    badgeColor: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-slate-800 dark:text-amber-300 dark:border-amber-800/40',
   },
   {
     label: 'Doble Rol (Árbitro + Mesa)',
@@ -48,7 +48,7 @@ const DEV_PROFILES: MockProfile[] = [
     firstName: 'Mario',
     lastName: 'Silva',
     roles: [RoleName.ARBITRO, RoleName.OFICIAL_MESA],
-    badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-slate-800 dark:text-emerald-300 dark:border-emerald-800/40',
   },
   {
     label: 'Usuario sin Rol (Pendiente)',
@@ -57,7 +57,7 @@ const DEV_PROFILES: MockProfile[] = [
     firstName: 'Lucas',
     lastName: 'Valenzuela',
     roles: [],
-    badgeColor: 'bg-slate-100 text-slate-700 border-slate-200',
+    badgeColor: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700',
   },
 ];
 
@@ -88,11 +88,11 @@ export const DevAuthSwitcher: React.FC = () => {
       aria-label="Panel de cambio rápido de perfil de usuario"
       className="fixed bottom-4 right-4 z-50 max-w-sm w-full font-sans"
     >
-      <div className="bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden transition-all">
+      <div className="bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-all duration-200">
         {/* Barra superior de control */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-between px-4 py-2.5 bg-slate-900 text-white hover:bg-slate-800 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+          className="w-full flex items-center justify-between px-4 py-2.5 bg-slate-900 dark:bg-slate-950 text-white hover:bg-slate-800 dark:hover:bg-slate-900 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           aria-expanded={isOpen}
         >
           <div className="flex items-center space-x-2">
@@ -104,8 +104,8 @@ export const DevAuthSwitcher: React.FC = () => {
 
         {/* Contenido desplegable */}
         {isOpen && (
-          <div className="p-4 bg-slate-50 border-t border-slate-200 max-h-96 overflow-y-auto space-y-3">
-            <p className="text-xs text-slate-500 font-medium leading-relaxed">
+          <div className="p-4 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 max-h-96 overflow-y-auto space-y-3">
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
               Selecciona un perfil operativo para validar en tiempo real los permisos RBAC y la experiencia del usuario:
             </p>
 
@@ -121,32 +121,32 @@ export const DevAuthSwitcher: React.FC = () => {
                     disabled={isBusy || isCurrent}
                     className={`w-full text-left p-2.5 rounded-md border text-xs transition-all flex flex-col space-y-1 ${
                       isCurrent
-                        ? 'bg-blue-50 border-blue-400 shadow-sm'
-                        : 'bg-white hover:bg-slate-100 border-slate-200'
+                        ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-400 dark:border-blue-700 shadow-sm'
+                        : 'bg-white dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700/80 border-slate-200 dark:border-slate-700'
                     }`}
                   >
                     <div className="flex items-center justify-between w-full">
-                      <span className="font-bold text-slate-800 flex items-center space-x-1.5">
+                      <span className="font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         {profile.roles.includes(RoleName.ADMIN_COMISION_TECNICA) ? (
-                          <Shield className="w-3.5 h-3.5 text-purple-600" />
+                          <Shield className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                         ) : profile.roles.length > 1 ? (
-                          <Users className="w-3.5 h-3.5 text-emerald-600" />
+                          <Users className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         ) : (
-                          <UserCheck className="w-3.5 h-3.5 text-blue-600" />
+                          <UserCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                         )}
                         <span>{profile.label}</span>
                       </span>
                       {isCurrent && (
-                        <span className="text-[10px] uppercase font-bold text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded">
+                        <span className="text-[10px] uppercase font-bold text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950/60 px-1.5 py-0.5 rounded">
                           Activo
                         </span>
                       )}
                       {switching === profile.email && (
-                        <RefreshCw className="w-3.5 h-3.5 animate-spin text-blue-600" />
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin text-blue-600 dark:text-blue-400" />
                       )}
                     </div>
-                    <span className="text-slate-500 text-[11px]">{profile.description}</span>
-                    <span className="text-slate-400 text-[10px] font-mono">{profile.email}</span>
+                    <span className="text-slate-500 dark:text-slate-400 text-[11px]">{profile.description}</span>
+                    <span className="text-slate-400 dark:text-slate-500 text-[10px] font-mono">{profile.email}</span>
                   </button>
                 );
               })}

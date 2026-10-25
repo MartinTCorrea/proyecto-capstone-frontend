@@ -12,9 +12,9 @@ export const MatchStatusBadge: React.FC<MatchStatusBadgeProps> = ({ status, clas
     case MatchStatus.SCHEDULED:
       return (
         <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 ${className}`}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-slate-800/80 dark:text-blue-300 dark:border-blue-900/40 ${className}`}
         >
-          <Clock className="w-3.5 h-3.5 text-blue-500" />
+          <Clock className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
           <span>Programado</span>
         </span>
       );
@@ -22,10 +22,10 @@ export const MatchStatusBadge: React.FC<MatchStatusBadgeProps> = ({ status, clas
     case MatchStatus.RESCHEDULED:
       return (
         <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300 animate-pulse ${className}`}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300 dark:bg-slate-800/80 dark:text-amber-300 dark:border-amber-900/40 animate-pulse ${className}`}
           title="El horario o fecha de este partido fue modificado"
         >
-          <CalendarDays className="w-3.5 h-3.5 text-amber-600" />
+          <CalendarDays className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
           <span>Reprogramado</span>
         </span>
       );
@@ -33,10 +33,10 @@ export const MatchStatusBadge: React.FC<MatchStatusBadgeProps> = ({ status, clas
     case MatchStatus.SUSPENDED:
       return (
         <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300 ${className}`}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300 dark:bg-slate-800/80 dark:text-rose-300 dark:border-rose-900/40 ${className}`}
           title="Partido suspendido por decisión técnica"
         >
-          <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+          <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
           <span>Suspendido</span>
         </span>
       );
@@ -44,10 +44,10 @@ export const MatchStatusBadge: React.FC<MatchStatusBadgeProps> = ({ status, clas
     case MatchStatus.CANCELLED:
       return (
         <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-700 border border-slate-300 line-through ${className}`}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800/50 dark:text-slate-400 dark:border-slate-700 line-through ${className}`}
           title="Partido cancelado definitivamente"
         >
-          <XCircle className="w-3.5 h-3.5 text-slate-500" />
+          <XCircle className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
           <span>Cancelado</span>
         </span>
       );
@@ -55,16 +55,16 @@ export const MatchStatusBadge: React.FC<MatchStatusBadgeProps> = ({ status, clas
     case MatchStatus.COMPLETED:
       return (
         <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 ${className}`}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-slate-800/80 dark:text-emerald-300 dark:border-emerald-900/40 ${className}`}
         >
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
           <span>Finalizado</span>
         </span>
       );
 
     default:
       return (
-        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-600 ${className}`}>
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 ${className}`}>
           {status}
         </span>
       );
