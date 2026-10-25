@@ -13,7 +13,7 @@ En este hito se ejecutaron los últimos ajustes de limpieza y ergonomía visual 
 
 1. **Depuración de Cabeceras en Grilla Semanal (`WeeklyCalendarGrid.tsx`):** Se eliminó la sobrecarga descriptiva y los iconos discordantes en las cabeceras de las tarjetas maestras. Ahora cada sección se titula limpiamente **`Lunes - Viernes`** y **`Sábado - Domingo`** con subtítulos concisos, eliminando los badges duplicados (`DÍA HÁBIL` / `FIN DE SEMANA`) y manteniendo en el extremo derecho los rangos horarios de referencia (`H1`, `H2` y `Jornada Completa`).
 2. **Eliminación de Reglas Redundantes y Merma Cero (`AvailabilityPage.tsx`):** Se retiró el bloque inferior de *"Reglas de Declaración de Bloques Horarios"* que duplicaba la información y presentaba horas obsoletas desincronizadas de la base de datos (18:30 a 22:30). La vista concluye de manera limpia con la barra de acción atómica y el botón de guardado. Se depuró el import huérfano de `Layers`.
-3. **Favicon Vectorial Oficial SGAOB (`apps/web/public/favicon.svg`):** Se incorporó el favicon institucional en formato SVG vectorial, mostrando el balón de baloncesto sobre fondo azul redondeado (`#2563eb`), resolviendo el icono en blanco en las pestañas del navegador.
+3. **Arquitectura Dual de Favicons Oficiales (`favicon.svg` + `favicon.ico`):** Se adoptó el estándar de producción W3C/WHATWG integrando un favicon SVG con dimensiones intrínsecas explícitas (`width="32" height="32"`) para pantallas de alta resolución Retina/4K, junto con un archivo binario nativo `favicon.ico` en `public/` como fallback universal. Ambos quedan referenciados en `index.html` mediante `rel="icon"` y `rel="alternate icon"`.
 4. **Análisis de Marca Blanca (*White-Label*):** Se documentó la arquitectura modular de [`BasketballLogo.tsx`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/apps/web/src/components/common/BasketballLogo.tsx) y su viabilidad para ser reemplazado fácilmente mediante variables de entorno (`VITE_APP_LOGO_URL`) o sobrescritura de activos para cesión a terceros.
 
 ---
@@ -24,7 +24,9 @@ En este hito se ejecutaron los últimos ajustes de limpieza y ergonomía visual 
 |---|---|---|
 | [`apps/web/src/components/availability/WeeklyCalendarGrid.tsx`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/apps/web/src/components/availability/WeeklyCalendarGrid.tsx) | Modificación | Simplificación de cabeceras de tarjetas maestras a `Lunes - Viernes` y `Sábado - Domingo`, sin badges ni iconos redundantes. |
 | [`apps/web/src/pages/AvailabilityPage.tsx`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/apps/web/src/pages/AvailabilityPage.tsx) | Modificación | Eliminación de la tarjeta inferior de reglas desincronizadas y depuración del import huérfano `Layers`. |
-| [`apps/web/public/favicon.svg`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/apps/web/public/favicon.svg) | Nuevo | Favicon SVG con el logo oficial para la barra de pestañas del navegador. |
+| [`apps/web/public/favicon.svg`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/apps/web/public/favicon.svg) | Nuevo | Favicon SVG con dimensiones explícitas `width="32" height="32"` para navegadores modernos. |
+| [`apps/web/public/favicon.ico`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/apps/web/public/favicon.ico) | Nuevo | Favicon binario ICO de 32×32 píxeles como fallback universal nativo para Chrome/Edge/Windows. |
+| [`apps/web/index.html`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/apps/web/index.html) | Modificación | Declaración dual W3C (`rel="icon"` y `rel="alternate icon"`). |
 | [`docs/avance-pr28.md`](file:///c:/Users/mella/OneDrive/Documentos/Proyectos/CapstoneMain/docs/avance-pr28.md) | Nuevo | Informe formal de avance conforme al protocolo de `AGENTS.md`. |
 
 ---
@@ -35,7 +37,8 @@ En este hito se ejecutaron los últimos ajustes de limpieza y ergonomía visual 
 
 ```mermaid
 graph TD
-    A[index.html] -->|link rel=icon| B["/favicon.svg (Icono de Pestaña)"]
+    A[index.html] -->|link rel=icon SVG| B["/favicon.svg (Pantallas Retina / Modernas)"]
+    A -->|link rel=alternate icon ICO| G["/favicon.ico (Fallback Universal 32x32)"]
     C[Navbar.tsx] -->|Importación única| D["BasketballLogo.tsx"]
     E[LoginPage.tsx] -->|Importación única| D
     D -->|Fácil reemplazo o ENV| F[Marca Blanca / Asociación Externa]
@@ -112,3 +115,4 @@ Time:        12.250 s
 Ran all test suites.
 Resultado: 100% pasando (0 fallos).
 ```
+
