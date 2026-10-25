@@ -53,7 +53,7 @@ sequenceDiagram
     Backend-->>Frontend: 401 "La cuenta de usuario no ha sido confirmada todavía"
     Frontend->>Usuario: Muestra banner rojo con botón "¿Recibiste un código de 6 dígitos? Activar cuenta aquí"
     Usuario->>Frontend: Clic en el botón y se abre Modal con email pre-cargado
-    Usuario->>Frontend: Digita código de 6 dígitos recibido en correo (ej. 947249)
+    Usuario->>Frontend: Digita código de 6 dígitos recibido en correo (placeholder XXXXXX)
     Frontend->>Backend: POST /api/auth/confirm-sign-up { email, confirmationCode }
     Backend->>Cognito: AWSCognitoIdentityProviderService.ConfirmSignUp
     Cognito-->>Backend: HTTP 200 Confirmación Exitosa (Estado CONFIRMED)

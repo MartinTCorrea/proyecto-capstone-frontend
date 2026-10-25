@@ -13,7 +13,7 @@ export class ConfirmSignUpDto {
   email!: string;
 
   @ApiProperty({
-    example: '947249',
+    example: '123456',
     description: 'Código de confirmación de 6 dígitos recibido por correo electrónico',
   })
   @IsString({ message: 'El código de confirmación debe ser una cadena de texto' })

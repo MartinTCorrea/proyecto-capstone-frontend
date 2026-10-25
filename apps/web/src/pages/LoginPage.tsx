@@ -698,8 +698,8 @@ export const LoginPage: React.FC = () => {
                       maxLength={6}
                       value={confirmationCode}
                       onChange={(e) => setConfirmationCode(e.target.value)}
-                      placeholder="123456"
-                      className="block w-full px-3 py-2 text-center tracking-widest font-mono text-base border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      placeholder="XXXXXX"
+                      className="block w-full px-3 py-2 text-center tracking-widest font-mono text-base uppercase border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
 
@@ -883,8 +883,8 @@ export const LoginPage: React.FC = () => {
                         maxLength={6}
                         value={confirmCode}
                         onChange={(e) => setConfirmCode(e.target.value)}
-                        placeholder="947249"
-                        className="block w-full pl-9 pr-3 py-2 text-center tracking-widest font-mono text-base border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        placeholder="XXXXXX"
+                        className="block w-full pl-9 pr-3 py-2 text-center tracking-widest font-mono text-base uppercase border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                       />
                     </div>
                   </div>

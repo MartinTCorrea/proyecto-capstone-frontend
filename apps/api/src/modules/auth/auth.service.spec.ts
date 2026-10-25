@@ -279,7 +279,7 @@ describe('AuthService', () => {
 
       const result = await service.confirmSignUp({
         email: 'arbitro@sgaob.cl',
-        confirmationCode: '947249',
+        confirmationCode: '123456',
       });
 
       expect(result.success).toBe(true);

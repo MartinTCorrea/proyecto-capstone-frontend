@@ -136,7 +136,7 @@ describe('AuthController', () => {
     it('should call authService.confirmSignUp', async () => {
       const dto = {
         email: 'arbitro@sgaob.cl',
-        confirmationCode: '947249',
+        confirmationCode: '123456',
       };
       const result = await controller.confirmSignUp(dto);
 
