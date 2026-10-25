@@ -68,7 +68,7 @@ export const SyncControlModal: React.FC<SyncControlModalProps> = ({
     >
       <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in duration-200">
         {/* Cabecera */}
-        <div className="bg-gradient-to-r from-blue-700 to-indigo-800 dark:from-slate-900 dark:to-slate-800 px-6 py-4 flex justify-between items-center text-white border-b dark:border-slate-800">
+        <div className="bg-gradient-to-r from-brand-600 to-brand-800 dark:from-slate-900 dark:to-slate-800 px-6 py-4 flex justify-between items-center text-white border-b dark:border-slate-800">
           <div className="flex items-center space-x-2.5">
             <div className="p-2 bg-white/10 rounded-lg">
               <RefreshCw className="w-5 h-5 text-blue-200" />
@@ -136,10 +136,10 @@ export const SyncControlModal: React.FC<SyncControlModalProps> = ({
           {/* Modo Sandbox / Mock Toggle */}
           <div className="bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 rounded-lg p-3.5 flex items-center justify-between">
             <div className="flex items-center space-x-2.5">
-              <ShieldCheck className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+              <ShieldCheck className="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0" />
               <div>
                 <div className="text-xs font-bold text-slate-800 dark:text-slate-200">Modo Sandbox / Fixture Simulado</div>
-                <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                <div className="text-caption text-slate-500 dark:text-slate-400">
                   Genera partidos con soporte de reprogramaciones automáticas
                 </div>
               </div>
@@ -199,7 +199,7 @@ export const SyncControlModal: React.FC<SyncControlModalProps> = ({
                 <span>{syncResult.message}</span>
               </div>
               {syncResult.jobId && (
-                <div className="mt-1 text-[11px] text-blue-700 dark:text-blue-400">
+                <div className="mt-1 text-caption text-blue-700 dark:text-blue-400">
                   ID de Tarea: <code>{syncResult.jobId}</code>
                 </div>
               )}

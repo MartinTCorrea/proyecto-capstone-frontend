@@ -45,7 +45,7 @@ export const MainLayout: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
           <p>© 2026 SGAOB — Sistema de Gestión de Árbitros y Oficiales de Básquetbol.</p>
           <div className="flex items-center space-x-4">
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border dark:border-emerald-800/40">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-caption font-medium bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border dark:border-emerald-800/40">
               Sistema Operativo
             </span>
             <span className="text-slate-400 dark:text-slate-600">|</span>

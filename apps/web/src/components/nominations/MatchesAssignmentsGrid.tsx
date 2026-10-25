@@ -186,7 +186,7 @@ export const MatchesAssignmentsGrid: React.FC<MatchesAssignmentsGridProps> = ({
                               <button
                                 type="button"
                                 onClick={() => onOpenAssignModal(match, slot.role)}
-                                className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold text-blue-700 dark:text-blue-300 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 rounded border border-blue-200 dark:border-blue-900/40 transition-colors shadow-2xs cursor-pointer"
+                                className="inline-flex items-center gap-1 px-2 py-0.5 text-caption font-semibold text-blue-700 dark:text-blue-300 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 rounded border border-blue-200 dark:border-blue-900/40 transition-colors shadow-2xs cursor-pointer"
                               >
                                 <UserPlus className="w-3 h-3" />
                                 <span>Asignar</span>
@@ -261,7 +261,7 @@ export const MatchesAssignmentsGrid: React.FC<MatchesAssignmentsGridProps> = ({
                               <button
                                 type="button"
                                 onClick={() => onOpenAssignModal(match, slot.role)}
-                                className="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold text-purple-700 dark:text-purple-300 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 rounded border border-purple-200 dark:border-purple-900/40 transition-colors shadow-2xs cursor-pointer"
+                                className="inline-flex items-center gap-1 px-2 py-0.5 text-caption font-semibold text-purple-700 dark:text-purple-300 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-slate-700 rounded border border-purple-200 dark:border-purple-900/40 transition-colors shadow-2xs cursor-pointer"
                               >
                                 <UserPlus className="w-3 h-3" />
                                 <span>Asignar</span>

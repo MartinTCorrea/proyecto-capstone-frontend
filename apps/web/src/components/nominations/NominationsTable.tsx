@@ -56,7 +56,7 @@ export const NominationsTable: React.FC<NominationsTableProps> = ({
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+            <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-caption">
               <th className="py-3 px-4">Fecha y Partido</th>
               <th className="py-3 px-4">Torneo & Recinto</th>
               <th className="py-3 px-4">Rol Asignado</th>
@@ -83,7 +83,7 @@ export const NominationsTable: React.FC<NominationsTableProps> = ({
                 <tr key={nom.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
                   {/* Fecha y Partido */}
                   <td className="py-3.5 px-4">
-                    <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-[11px] mb-0.5">
+                    <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-caption mb-0.5">
                       <Calendar className="w-3 h-3 text-slate-400" />
                       <span>{formattedDate}</span>
                     </div>
@@ -105,7 +105,7 @@ export const NominationsTable: React.FC<NominationsTableProps> = ({
                         <span className="font-semibold text-slate-700 dark:text-slate-300 block">
                           {match.tournament} • {match.category}
                         </span>
-                        <div className="flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                        <div className="flex items-center gap-1 text-caption text-slate-500 dark:text-slate-400 mt-0.5">
                           <MapPin className="w-3 h-3 text-slate-400" />
                           <span className="truncate max-w-[180px]">{match.venue}</span>
                         </div>
@@ -127,7 +127,7 @@ export const NominationsTable: React.FC<NominationsTableProps> = ({
                         <span className="font-bold text-slate-900 dark:text-white block">
                           {nom.user.firstName} {nom.user.lastName}
                         </span>
-                        <span className="text-slate-400 dark:text-slate-500 font-mono text-[10px]">
+                        <span className="text-slate-400 dark:text-slate-500 font-mono text-2xs">
                           {nom.user.email}
                         </span>
                       </div>
@@ -142,7 +142,7 @@ export const NominationsTable: React.FC<NominationsTableProps> = ({
                       <NominationStatusBadge status={nom.status} />
                       {nom.rejectionReason && (
                         <div
-                          className="mt-1 flex items-center gap-1 text-[10px] text-rose-600 dark:text-rose-400 max-w-[140px] truncate"
+                          className="mt-1 flex items-center gap-1 text-2xs text-rose-600 dark:text-rose-400 max-w-[140px] truncate"
                           title={`Motivo de rechazo: ${nom.rejectionReason}`}
                         >
                           <MessageSquareQuote className="w-3 h-3 flex-shrink-0" />

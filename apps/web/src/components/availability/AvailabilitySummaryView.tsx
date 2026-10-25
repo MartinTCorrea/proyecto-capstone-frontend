@@ -156,7 +156,7 @@ export const AvailabilitySummaryView: React.FC = () => {
       ) : summaryData && summaryData.personnel.length > 0 ? (
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-200">
           <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-xs">
-            <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider text-[11px] border-b border-slate-200 dark:border-slate-800">
+            <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider text-caption border-b border-slate-200 dark:border-slate-800">
               <tr>
                 <th className="px-6 py-3.5">Árbitro / Oficial de Mesa</th>
                 <th className="px-6 py-3.5">Acreditaciones</th>
@@ -175,7 +175,7 @@ export const AvailabilitySummaryView: React.FC = () => {
                       {person.roles.map((r) => (
                         <span
                           key={r}
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                          className={`text-2xs font-bold px-2 py-0.5 rounded-full border ${
                             r === RoleName.ARBITRO
                               ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-slate-800 dark:text-blue-300 dark:border-blue-900/40'
                               : r === RoleName.OFICIAL_MESA
@@ -190,7 +190,7 @@ export const AvailabilitySummaryView: React.FC = () => {
                   </td>
                   <td className="px-6 py-3.5">
                     <span
-                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-2xs font-bold ${
                         person.block === AvailabilityBlock.HORARIO_1
                           ? 'bg-blue-100 dark:bg-slate-800 text-blue-800 dark:text-blue-300 border dark:border-blue-900/40'
                           : person.block === AvailabilityBlock.HORARIO_2
@@ -206,7 +206,7 @@ export const AvailabilitySummaryView: React.FC = () => {
                       {person.block === AvailabilityBlock.NO && 'No Disponible'}
                     </span>
                   </td>
-                  <td className="px-6 py-3.5 text-slate-500 dark:text-slate-400 font-mono text-[11px]">
+                  <td className="px-6 py-3.5 text-slate-500 dark:text-slate-400 font-mono text-caption">
                     <div className="flex flex-col space-y-0.5">
                       <span className="flex items-center">
                         <Mail className="w-3 h-3 mr-1 text-slate-400" />

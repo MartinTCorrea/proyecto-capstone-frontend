@@ -72,7 +72,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
             <div className="flex items-center gap-2">
               <ResourceTypeBadge type={resource.type} />
               {resource.visibility === ResourceVisibility.ADMIN && (
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 rounded-full border border-rose-200 dark:border-rose-800">
+                <span className="inline-flex items-center gap-1 text-caption font-semibold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 rounded-full border border-rose-200 dark:border-rose-800">
                   <Lock className="w-3 h-3" />
                   <span>Solo CT</span>
                 </span>
@@ -129,7 +129,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
         {/* Bloque Seguro de Cuenta / Credencial (Solo Comisión Técnica) */}
         {isCredential && (
           <div className="p-3.5 bg-slate-900 dark:bg-slate-950 rounded-xl border border-slate-800 dark:border-slate-800 text-white space-y-3">
-            <div className="flex items-center justify-between text-[11px] pb-1 border-b border-slate-800">
+            <div className="flex items-center justify-between text-caption pb-1 border-b border-slate-800">
               <span className="flex items-center gap-1.5 font-semibold text-rose-400">
                 <Lock className="w-3.5 h-3.5" />
                 <span>Cuenta de Planillaje Cifrada</span>
@@ -138,7 +138,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
 
             {/* Componente 1: Correo / Usuario */}
             <div className="space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-2xs font-bold uppercase tracking-wider text-slate-400">
                 Correo / Usuario
               </span>
               <div className="flex items-center justify-between bg-slate-950 dark:bg-slate-900 px-3 py-2 rounded-lg border border-slate-800 gap-2">
@@ -152,7 +152,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
                   <button
                     type="button"
                     onClick={handleCopyEmail}
-                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-brand-400 hover:text-brand-300 transition-colors flex-shrink-0 cursor-pointer"
+                    className="inline-flex items-center gap-1 text-caption font-semibold text-brand-400 hover:text-brand-300 transition-colors flex-shrink-0 cursor-pointer"
                     title="Copiar correo"
                   >
                     {copiedEmail ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
@@ -165,22 +165,22 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
             {/* Componente 2: Contraseña */}
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <span className="text-2xs font-bold uppercase tracking-wider text-slate-400">
                   Contraseña
                 </span>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => setShowSecret(!showSecret)}
-                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-300 hover:text-white transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 text-caption font-semibold text-slate-300 hover:text-white transition-colors cursor-pointer"
                   >
-                    {showSecret ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                    {showSecret ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     <span>{showSecret ? 'Ocultar' : 'Mostrar'}</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleCopyPassword}
-                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-brand-400 hover:text-brand-300 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 text-caption font-semibold text-brand-400 hover:text-brand-300 transition-colors cursor-pointer"
                     title="Copiar contraseña"
                   >
                     {copiedPassword ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
@@ -216,7 +216,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({
       </div>
 
       {/* Pie de Tarjeta: Metadatos */}
-      <div className="px-5 py-3 bg-slate-50/70 dark:bg-slate-950/40 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
+      <div className="px-5 py-3 bg-slate-50/70 dark:bg-slate-950/40 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-caption text-slate-400 dark:text-slate-500">
         <div className="flex items-center gap-1">
           <Calendar className="w-3 h-3 text-slate-400" />
           <span>{formattedDate}</span>

@@ -258,7 +258,7 @@ export const NominationsPage: React.FC = () => {
       <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 transition-colors duration-200">
         {/* Filtro Torneo */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-caption font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             Torneo
           </label>
           <div className="relative">
@@ -275,7 +275,7 @@ export const NominationsPage: React.FC = () => {
 
         {/* Filtro Recinto */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-caption font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             Recinto / Gimnasio
           </label>
           <div className="relative">
@@ -292,7 +292,7 @@ export const NominationsPage: React.FC = () => {
 
         {/* Filtro Estado */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-caption font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             Estado Designación
           </label>
           <select
@@ -309,7 +309,7 @@ export const NominationsPage: React.FC = () => {
 
         {/* Filtro Fecha Desde */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-caption font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             Desde
           </label>
           <input
@@ -322,7 +322,7 @@ export const NominationsPage: React.FC = () => {
 
         {/* Filtro Fecha Hasta */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+          <label className="block text-caption font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
             Hasta
           </label>
           <input

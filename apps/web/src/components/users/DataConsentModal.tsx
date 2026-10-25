@@ -50,7 +50,7 @@ export const DataConsentModal: React.FC<DataConsentModalProps> = ({ isOpen, onCl
             <h2 id="consent-modal-title" className="text-base font-bold">
               Consentimiento de Tratamiento de Datos Personales
             </h2>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-caption text-slate-400">
               Cumplimiento normativo de privacidad de datos personales
             </p>
           </div>

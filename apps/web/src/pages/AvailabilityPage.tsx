@@ -231,10 +231,10 @@ export const AvailabilityPage: React.FC = () => {
               <div className="px-3 py-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold text-slate-800 dark:text-slate-200">
                 Semana: {weekDays[0]?.formattedDate} - {weekDays[6]?.formattedDate}
                 {weekOffset === 0 && (
-                  <span className="ml-2 text-[10px] text-blue-600 dark:text-blue-400 font-semibold">(Actual)</span>
+                  <span className="ml-2 text-2xs text-brand-600 dark:text-brand-400 font-semibold">(Actual)</span>
                 )}
                 {weekOffset === 1 && (
-                  <span className="ml-2 text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">(Próxima)</span>
+                  <span className="ml-2 text-2xs text-emerald-600 dark:text-emerald-400 font-semibold">(Próxima)</span>
                 )}
               </div>
 

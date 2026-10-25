@@ -128,7 +128,7 @@ export const UsersManagementPage: React.FC = () => {
             placeholder="Buscar por nombre, apellido o correo electrónico..."
             value={searchTerm}
             onChange={handleSearchChange}
-            className="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            className="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-brand-500 focus:outline-none"
           />
         </div>
 
@@ -143,7 +143,7 @@ export const UsersManagementPage: React.FC = () => {
           <select
             value={selectedRole}
             onChange={handleRoleChange}
-            className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none"
           >
             <option value="">Todos los Roles</option>
             <option value={RoleName.ARBITRO}>Árbitros</option>
@@ -155,7 +155,7 @@ export const UsersManagementPage: React.FC = () => {
           <select
             value={selectedStatus}
             onChange={handleStatusChange}
-            className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none"
           >
             <option value="">Todos los Estados</option>
             <option value={UserStatus.ACTIVE}>Activos</option>

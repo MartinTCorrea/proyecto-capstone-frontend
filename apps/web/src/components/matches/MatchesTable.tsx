@@ -39,19 +39,19 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
     switch (block) {
       case 'HORARIO_1':
         return (
-          <span className="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-sky-50 dark:bg-slate-800 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-900/40">
+          <span className="inline-block px-2 py-0.5 rounded text-caption font-semibold bg-sky-50 dark:bg-slate-800 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-900/40">
             Horario 1
           </span>
         );
       case 'HORARIO_2':
         return (
-          <span className="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-50 dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900/40">
+          <span className="inline-block px-2 py-0.5 rounded text-caption font-semibold bg-indigo-50 dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900/40">
             Horario 2
           </span>
         );
       case 'AMBOS':
         return (
-          <span className="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-50 dark:bg-slate-800 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900/40">
+          <span className="inline-block px-2 py-0.5 rounded text-caption font-semibold bg-purple-50 dark:bg-slate-800 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900/40">
             Ambos Bloques
           </span>
         );
@@ -78,7 +78,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-200">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-bold uppercase text-[11px] tracking-wider border-b border-slate-200 dark:border-slate-800">
+          <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-bold uppercase text-caption tracking-wider border-b border-slate-200 dark:border-slate-800">
             <tr>
               <th scope="col" className="px-6 py-3.5">
                 Fecha / Horario
@@ -138,7 +138,7 @@ export const MatchesTable: React.FC<MatchesTableProps> = ({
                       <span>{match.awayTeam}</span>
                     </div>
                     {isCT && (
-                      <div className="mt-1 flex items-center text-[11px] text-slate-500 dark:text-slate-400">
+                      <div className="mt-1 flex items-center text-caption text-slate-500 dark:text-slate-400">
                         <Users className="w-3.5 h-3.5 mr-1 text-slate-400" />
                         <span>{nominationsCount} asignado(s)</span>
                       </div>

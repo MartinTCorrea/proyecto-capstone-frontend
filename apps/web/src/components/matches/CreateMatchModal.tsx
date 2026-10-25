@@ -72,7 +72,7 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
     >
       <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl max-w-xl w-full overflow-hidden border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in duration-200">
         {/* Cabecera */}
-        <div className="bg-gradient-to-r from-blue-700 to-indigo-800 dark:from-slate-900 dark:to-slate-800 px-6 py-4 flex justify-between items-center text-white border-b dark:border-slate-800">
+        <div className="bg-gradient-to-r from-brand-600 to-brand-800 dark:from-slate-900 dark:to-slate-800 px-6 py-4 flex justify-between items-center text-white border-b dark:border-slate-800">
           <div className="flex items-center space-x-2.5">
             <div className="p-2 bg-white/10 rounded-lg">
               <Trophy className="w-5 h-5 text-amber-300" />
@@ -156,7 +156,7 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
 
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1 flex items-center space-x-1">
-                <Shield className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                <Shield className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
                 <span>Equipo Visitante *</span>
               </label>
               <input

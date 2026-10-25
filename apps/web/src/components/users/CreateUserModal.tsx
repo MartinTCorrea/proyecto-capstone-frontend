@@ -159,7 +159,7 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
               </button>
             </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-caption text-slate-500 dark:text-slate-400 mt-1">
               Clave inicial generada para el usuario. Podrá iniciar sesión inmediatamente con sus credenciales.
             </p>
           </div>
@@ -213,7 +213,7 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 <span className="font-semibold text-slate-800 dark:text-slate-200">Comisión</span>
               </label>
             </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">
+            <p className="text-caption text-slate-500 dark:text-slate-400 mt-1.5">
               Si no se seleccionan roles, el usuario quedará en estado <code>PENDING_ROLE</code> hasta su acreditación.
             </p>
           </div>

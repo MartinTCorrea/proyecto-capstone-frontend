@@ -40,7 +40,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({
     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-200">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-xs font-sans">
-          <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider text-[11px] border-b border-slate-200 dark:border-slate-800">
+          <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider text-caption border-b border-slate-200 dark:border-slate-800">
             <tr>
               <th scope="col" className="px-6 py-3.5">
                 Usuario / Contacto
@@ -73,7 +73,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                       <div className="font-bold text-slate-900 dark:text-white text-sm">
                         {user.firstName} {user.lastName}
                       </div>
-                      <div className="flex items-center space-x-2 text-slate-500 dark:text-slate-400 text-[11px] mt-0.5">
+                      <div className="flex items-center space-x-2 text-slate-500 dark:text-slate-400 text-caption mt-0.5">
                         <span className="flex items-center">
                           <Mail className="w-3 h-3 mr-1 text-slate-400" />
                           {user.email}
@@ -96,7 +96,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                       user.roles.map((role) => (
                         <span
                           key={role}
-                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-2xs font-bold border ${
                             role === RoleName.ARBITRO
                               ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-slate-800 dark:text-blue-300 dark:border-blue-900/40'
                               : role === RoleName.OFICIAL_MESA
@@ -115,7 +115,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                         </span>
                       ))
                     ) : (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-2xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                         Sin roles
                       </span>
                     )}
@@ -125,7 +125,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                 {/* Estado */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
-                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-2xs font-bold uppercase tracking-wider ${
                       user.status === UserStatus.ACTIVE
                         ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-slate-800 dark:text-emerald-300 dark:border-emerald-900/40'
                         : user.status === UserStatus.INACTIVE
@@ -144,12 +144,12 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                 {/* Consentimiento */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   {user.dataConsent ? (
-                    <span className="inline-flex items-center text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold">
+                    <span className="inline-flex items-center text-emerald-700 dark:text-emerald-400 text-caption font-semibold">
                       <CheckCircle2 className="w-4 h-4 mr-1 text-emerald-500" />
                       Aceptado
                     </span>
                   ) : (
-                    <span className="inline-flex items-center text-amber-700 dark:text-amber-400 text-[11px] font-semibold">
+                    <span className="inline-flex items-center text-amber-700 dark:text-amber-400 text-caption font-semibold">
                       <AlertTriangle className="w-4 h-4 mr-1 text-amber-500" />
                       Pendiente
                     </span>
@@ -160,7 +160,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-right space-x-2">
                   <button
                     onClick={() => onAssignRoles(user)}
-                    className="inline-flex items-center px-2.5 py-1.5 rounded-lg border border-purple-200 dark:border-purple-900/40 bg-purple-50 dark:bg-slate-800 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-slate-700 font-semibold text-[11px] transition-colors focus:ring-2 focus:ring-purple-400 cursor-pointer"
+                    className="inline-flex items-center px-2.5 py-1.5 rounded-lg border border-purple-200 dark:border-purple-900/40 bg-purple-50 dark:bg-slate-800 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-slate-700 font-semibold text-caption transition-colors focus:ring-2 focus:ring-purple-400 cursor-pointer"
                     title="Asignar o revocar roles técnicos"
                   >
                     <Settings className="w-3.5 h-3.5 mr-1" />
@@ -169,7 +169,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({
 
                   <button
                     onClick={() => onChangeStatus(user)}
-                    className="inline-flex items-center px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 font-semibold text-[11px] transition-colors focus:ring-2 focus:ring-slate-400 cursor-pointer"
+                    className="inline-flex items-center px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 font-semibold text-caption transition-colors focus:ring-2 focus:ring-slate-400 cursor-pointer"
                     title="Modificar estado del usuario"
                   >
                     <RefreshCw className="w-3.5 h-3.5 mr-1" />

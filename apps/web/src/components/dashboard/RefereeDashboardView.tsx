@@ -150,7 +150,7 @@ export const RefereeDashboardView: React.FC = () => {
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">
+                  <span className="text-caption font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">
                     Disponibilidad Registrada
                   </span>
                   <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
@@ -199,10 +199,10 @@ export const RefereeDashboardView: React.FC = () => {
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center space-x-2">
-                    <span className="text-[11px] font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider">
+                    <span className="text-caption font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider">
                       Atención Requerida
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border dark:border-amber-800/40">
+                    <span className="text-2xs font-bold px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border dark:border-amber-800/40">
                       Pendiente
                     </span>
                   </div>
@@ -230,10 +230,10 @@ export const RefereeDashboardView: React.FC = () => {
 
       {/* 2. Designaciones Pendientes de Respuesta (Alerta de Alta Prioridad) */}
       {pendingNominations.length > 0 && (
-        <section className="bg-white dark:bg-slate-900 rounded-2xl border-2 border-indigo-200 dark:border-indigo-900/40 p-6 sm:p-8 shadow-sm space-y-5 transition-colors duration-200">
+        <section className="bg-white dark:bg-slate-900 rounded-2xl border-2 border-amber-300 dark:border-amber-800/60 p-6 sm:p-8 shadow-sm space-y-5 transition-colors duration-200">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2.5">
-              <div className="w-3 h-3 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-pulse" />
+              <div className="w-3 h-3 rounded-full bg-amber-500 dark:bg-amber-400 animate-pulse" />
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                 Designaciones Pendientes de Respuesta ({pendingNominations.length})
               </h3>
@@ -372,7 +372,7 @@ export const RefereeDashboardView: React.FC = () => {
                 >
                   <div className="flex justify-between items-start gap-2">
                     <div>
-                      <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full inline-block">
+                      <span className="text-caption font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full inline-block">
                         {match.tournament} • {match.category}
                       </span>
                       <h4 className="font-bold text-slate-900 dark:text-white text-sm mt-1.5">

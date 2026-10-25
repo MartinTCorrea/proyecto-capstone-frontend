@@ -161,19 +161,19 @@ export const AdminDashboardView: React.FC = () => {
             {/* Mini Desglose por Bloques */}
             <div className="grid grid-cols-4 gap-1 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
               <div>
-                <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase block">Full</span>
+                <span className="text-2xs font-bold text-emerald-700 dark:text-emerald-400 uppercase block">Full</span>
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-200">{counts.FULL}</span>
               </div>
               <div>
-                <span className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase block">Hor. 1</span>
+                <span className="text-2xs font-bold text-blue-700 dark:text-blue-400 uppercase block">Hor. 1</span>
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-200">{counts.HORARIO_1}</span>
               </div>
               <div>
-                <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase block">Hor. 2</span>
+                <span className="text-2xs font-bold text-amber-700 dark:text-amber-400 uppercase block">Hor. 2</span>
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-200">{counts.HORARIO_2}</span>
               </div>
               <div>
-                <span className="text-[10px] font-bold text-rose-700 dark:text-rose-400 uppercase block">No Disp</span>
+                <span className="text-2xs font-bold text-rose-700 dark:text-rose-400 uppercase block">No Disp</span>
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-200">{counts.NO}</span>
               </div>
             </div>
@@ -356,7 +356,7 @@ export const AdminDashboardView: React.FC = () => {
                 >
                   <div className="flex justify-between items-start gap-2">
                     <div>
-                      <span className="text-[11px] font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-slate-700 px-2 py-0.5 rounded-full inline-block">
+                      <span className="text-caption font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-slate-700 px-2 py-0.5 rounded-full inline-block">
                         {match.tournament} • {match.category}
                       </span>
                       <h4 className="font-bold text-slate-900 dark:text-white text-sm mt-1.5">
@@ -375,21 +375,21 @@ export const AdminDashboardView: React.FC = () => {
 
                   {/* Vacantes detectadas */}
                   <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-700/60">
-                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+                    <span className="text-caption font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                       Estado de Terna:
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {coverage.missingRoles.map((role) => (
                         <span
                           key={role}
-                          className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-50 dark:bg-slate-800 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900/40"
+                          className="inline-flex items-center px-2 py-0.5 rounded-md text-caption font-semibold bg-amber-50 dark:bg-slate-800 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900/40"
                         >
                           Falta {role === MatchRole.ARBITRO_PRINCIPAL ? 'Árbitro Principal' : role === MatchRole.ARBITRO_1 ? 'Árbitro 1' : 'Oficial de Mesa'}
                         </span>
                       ))}
 
                       {coverage.hasRejection && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-rose-50 dark:bg-slate-800 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900/40">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-caption font-semibold bg-rose-50 dark:bg-slate-800 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900/40">
                           Rechazo registrado
                         </span>
                       )}

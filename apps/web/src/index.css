@@ -3,12 +3,22 @@
 @tailwind utilities;
 
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --color-bg-app: #f8fafc;
+  --color-bg-surface: #ffffff;
+  --color-bg-surface-elevated: #f1f5f9;
+  --color-bg-surface-subtle: #f8fafc;
+  --color-border-subtle: #e2e8f0;
+  --color-text-main: #0f172a;
+  --color-text-muted: #64748b;
+  --color-brand-primary: #2563eb;
+  --color-brand-hover: #1d4ed8;
+
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light;
-  color: #1e293b;
-  background-color: #f8fafc;
+  color: var(--color-text-main);
+  background-color: var(--color-bg-app);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,7 +29,8 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f8fafc;
+  background-color: var(--color-bg-app);
+  color: var(--color-text-main);
 }
 
 #root {
@@ -31,23 +42,50 @@ body {
 
 /* Modo Oscuro Sobrio: Slate & Acero Muted */
 html.dark {
+  --color-bg-app: #0b0f19;
+  --color-bg-surface: #0f172a;
+  --color-bg-surface-elevated: #1e293b;
+  --color-bg-surface-subtle: #141c2e;
+  --color-border-subtle: #1e293b;
+  --color-text-main: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-brand-primary: #3b82f6;
+  --color-brand-hover: #60a5fa;
+
   color-scheme: dark;
-  color: #f8fafc;
-  background-color: #0b0f19;
+  color: var(--color-text-main);
+  background-color: var(--color-bg-app);
 }
 
 html.dark body {
-  background-color: #0b0f19;
-  color: #f8fafc;
+  background-color: var(--color-bg-app);
+  color: var(--color-text-main);
 }
 
 /* Accessibility: focus ring indicator for keyboard navigation (Tab - WCAG 2.1 AA) */
 *:focus-visible {
-  outline: 2px solid #2563eb;
+  outline: 2px solid var(--color-brand-primary);
   outline-offset: 2px;
 }
 
 html.dark *:focus-visible {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--color-brand-primary);
   outline-offset: 2px;
+}
+
+@layer components {
+  /* Tarjetas base unificadas */
+  .sgaob-card {
+    @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm transition-colors duration-200;
+  }
+  
+  /* Inputs y selects de formulario estandarizados */
+  .sgaob-input {
+    @apply w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-brand-500 focus:outline-none transition-colors;
+  }
+
+  /* Cabeceras de tabla estándar */
+  .sgaob-th {
+    @apply px-4 py-3 text-left text-caption font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800;
+  }
 }

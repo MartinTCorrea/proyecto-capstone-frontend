@@ -137,16 +137,16 @@ export const DevAuthSwitcher: React.FC = () => {
                         <span>{profile.label}</span>
                       </span>
                       {isCurrent && (
-                        <span className="text-[10px] uppercase font-bold text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950/60 px-1.5 py-0.5 rounded">
+                        <span className="text-2xs uppercase font-bold text-brand-700 dark:text-brand-300 bg-brand-100 dark:bg-brand-950/60 px-1.5 py-0.5 rounded">
                           Activo
                         </span>
                       )}
                       {switching === profile.email && (
-                        <RefreshCw className="w-3.5 h-3.5 animate-spin text-blue-600 dark:text-blue-400" />
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin text-brand-600 dark:text-brand-400" />
                       )}
                     </div>
-                    <span className="text-slate-500 dark:text-slate-400 text-[11px]">{profile.description}</span>
-                    <span className="text-slate-400 dark:text-slate-500 text-[10px] font-mono">{profile.email}</span>
+                    <span className="text-slate-500 dark:text-slate-400 text-caption">{profile.description}</span>
+                    <span className="text-slate-400 dark:text-slate-500 text-2xs font-mono">{profile.email}</span>
                   </button>
                 );
               })}

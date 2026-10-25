@@ -257,7 +257,7 @@ export const AssignNominationModal: React.FC<AssignNominationModalProps> = ({
                     }`}
                   >
                     <MatchRoleBadge role={r.role} showIcon={false} />
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                    <span className="text-caption text-slate-500 dark:text-slate-400 mt-1">
                       Requiere rol: <strong className="text-slate-700 dark:text-slate-300">{r.systemRole}</strong>
                     </span>
                   </button>
@@ -323,11 +323,11 @@ export const AssignNominationModal: React.FC<AssignNominationModalProps> = ({
                               <p className="text-xs font-bold text-slate-900 dark:text-slate-100">
                                 {c.firstName} {c.lastName}
                               </p>
-                              <p className="text-[11px] text-slate-500 dark:text-slate-400">{c.email}</p>
+                              <p className="text-caption text-slate-500 dark:text-slate-400">{c.email}</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-caption font-semibold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
                               <UserCheck className="w-3 h-3" />
                               Disponible ({c.declaredBlock})
                             </span>
@@ -392,12 +392,12 @@ export const AssignNominationModal: React.FC<AssignNominationModalProps> = ({
                                   <p className="text-xs font-bold text-slate-900 dark:text-slate-100">
                                     {c.firstName} {c.lastName}
                                   </p>
-                                  <p className="text-[10px] text-rose-700 dark:text-rose-400 font-medium">
+                                  <p className="text-2xs text-rose-700 dark:text-rose-400 font-medium">
                                     {c.unavailableReason}
                                   </p>
                                 </div>
                               </div>
-                              <span className="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
+                              <span className="text-2xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
                                 Bloque: {c.declaredBlock}
                               </span>
                             </label>
@@ -426,12 +426,12 @@ export const AssignNominationModal: React.FC<AssignNominationModalProps> = ({
                   Forzar designación excepcional (Habilitar asignación directa por necesidad operativa)
                 </label>
               </div>
-              <p className="text-[11px] text-amber-800 dark:text-amber-300 leading-relaxed">
+              <p className="text-caption text-amber-800 dark:text-amber-300 leading-relaxed">
                 El candidato no declaró disponibilidad para este bloque horario o presenta conflicto de solapamiento. Como Administrador de Comisión Técnica puedes autorizar la designación asumiendo la coordinación operativa. Esta acción quedará registrada formalmente en el registro de auditoría.
               </p>
               {isOverride && (
                 <div>
-                  <label className="block text-[11px] font-bold text-amber-900 dark:text-amber-200 uppercase tracking-wider mb-1">
+                  <label className="block text-caption font-bold text-amber-900 dark:text-amber-200 uppercase tracking-wider mb-1">
                     Motivo o Justificación de la Designación Directa *
                   </label>
                   <textarea

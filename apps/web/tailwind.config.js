@@ -7,6 +7,32 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: [
+          'Inter',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          'Helvetica',
+          'Arial',
+          'sans-serif',
+        ],
+        mono: [
+          '"JetBrains Mono"',
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'Monaco',
+          'Consolas',
+          'monospace',
+        ],
+      },
+      fontSize: {
+        '3xs': ['0.5625rem', { lineHeight: '0.75rem' }],   // 9px - micro leyendas y sub-etiquetas
+        '2xs': ['0.625rem', { lineHeight: '0.875rem' }],   // 10px - micro badges, chips y tags de estado
+        'caption': ['0.6875rem', { lineHeight: '1rem' }],  // 11px - cabeceras de tabla, labels uppercase, timestamps
+      },
       colors: {
         brand: {
           50: '#eff6ff',
@@ -20,6 +46,11 @@ export default {
           800: '#1e40af',
           900: '#1e3a8a',
           950: '#172554',
+        },
+        surface: {
+          DEFAULT: 'var(--color-bg-surface)',
+          elevated: 'var(--color-bg-surface-elevated)',
+          subtle: 'var(--color-bg-surface-subtle)',
         },
       },
     },

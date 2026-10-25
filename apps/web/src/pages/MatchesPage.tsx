@@ -193,7 +193,7 @@ export const MatchesPage: React.FC = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
           <div>
-            <label className="block text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Estado</label>
+            <label className="block text-caption font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Estado</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -209,7 +209,7 @@ export const MatchesPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Origen</label>
+            <label className="block text-caption font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Origen</label>
             <select
               value={platformFilter}
               onChange={(e) => setPlatformFilter(e.target.value)}
@@ -223,7 +223,7 @@ export const MatchesPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Bloque Horario</label>
+            <label className="block text-caption font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Bloque Horario</label>
             <select
               value={timeBlockFilter}
               onChange={(e) => setTimeBlockFilter(e.target.value)}
@@ -237,7 +237,7 @@ export const MatchesPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Desde</label>
+            <label className="block text-caption font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Desde</label>
             <input
               type="date"
               value={startDate}
@@ -247,7 +247,7 @@ export const MatchesPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Hasta</label>
+            <label className="block text-caption font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Hasta</label>
             <input
               type="date"
               value={endDate}

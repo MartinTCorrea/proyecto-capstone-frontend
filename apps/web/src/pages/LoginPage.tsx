@@ -359,7 +359,7 @@ export const LoginPage: React.FC = () => {
                   className="p-4 rounded-lg border border-purple-200 dark:border-purple-900/40 bg-purple-50/50 dark:bg-slate-800/70 hover:bg-purple-100/60 dark:hover:bg-slate-800 hover:border-purple-300 dark:hover:border-purple-700 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-purple-500 cursor-pointer"
                 >
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-purple-800/40">
+                    <span className="text-2xs uppercase font-bold tracking-wider text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-purple-800/40">
                       Comisión Técnica
                     </span>
                     <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm group-hover:text-purple-900 dark:group-hover:text-purple-300">
@@ -391,7 +391,7 @@ export const LoginPage: React.FC = () => {
                   className="p-4 rounded-lg border border-blue-200 dark:border-blue-900/40 bg-blue-50/50 dark:bg-slate-800/70 hover:bg-blue-100/60 dark:hover:bg-slate-800 hover:border-blue-300 dark:hover:border-blue-700 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-blue-500 cursor-pointer"
                 >
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-blue-800/40">
+                    <span className="text-2xs uppercase font-bold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-blue-800/40">
                       Árbitro de Campo
                     </span>
                     <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm group-hover:text-blue-900 dark:group-hover:text-blue-300">
@@ -423,7 +423,7 @@ export const LoginPage: React.FC = () => {
                   className="p-4 rounded-lg border border-amber-200 dark:border-amber-900/40 bg-amber-50/50 dark:bg-slate-800/70 hover:bg-amber-100/60 dark:hover:bg-slate-800 hover:border-amber-300 dark:hover:border-amber-700 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-amber-500 cursor-pointer"
                 >
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-amber-800/40">
+                    <span className="text-2xs uppercase font-bold tracking-wider text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-amber-800/40">
                       Oficial de Mesa
                     </span>
                     <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm group-hover:text-amber-900 dark:group-hover:text-amber-300">
@@ -455,7 +455,7 @@ export const LoginPage: React.FC = () => {
                   className="p-4 rounded-lg border border-emerald-200 dark:border-emerald-900/40 bg-emerald-50/50 dark:bg-slate-800/70 hover:bg-emerald-100/60 dark:hover:bg-slate-800 hover:border-emerald-300 dark:hover:border-emerald-700 text-left transition-all flex flex-col justify-between group focus:ring-2 focus:ring-emerald-500 cursor-pointer"
                 >
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-emerald-800/40">
+                    <span className="text-2xs uppercase font-bold tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-slate-800 px-2 py-0.5 rounded-full inline-block mb-1.5 border dark:border-emerald-800/40">
                       Doble Rol
                     </span>
                     <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm group-hover:text-emerald-900 dark:group-hover:text-emerald-300">
@@ -476,7 +476,7 @@ export const LoginPage: React.FC = () => {
 
               <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-lg flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
                 <span className="font-medium">Sesión activa: Simulación de credencial autorizada</span>
-                <span className="px-2 py-0.5 bg-emerald-100 dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 border dark:border-emerald-800/40 rounded font-semibold text-[10px]">
+                <span className="px-2 py-0.5 bg-emerald-100 dark:bg-slate-800 text-emerald-800 dark:text-emerald-300 border dark:border-emerald-800/40 rounded font-semibold text-2xs">
                   Modo Operativo Rápido
                 </span>
               </div>

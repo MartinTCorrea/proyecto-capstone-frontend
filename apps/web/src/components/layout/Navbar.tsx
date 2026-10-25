@@ -42,7 +42,7 @@ export const Navbar: React.FC = () => {
                 <span className="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white leading-tight">
                   SGAOB
                 </span>
-                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 hidden sm:inline">
+                <span className="text-caption font-medium text-slate-500 dark:text-slate-400 hidden sm:inline">
                   Gestión Arbitral de Básquetbol
                 </span>
               </div>
@@ -165,7 +165,7 @@ export const Navbar: React.FC = () => {
                     </div>
 
                     <div className="space-y-1.5">
-                      <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
+                      <span className="text-2xs uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
                         Roles asignados
                       </span>
                       <div className="flex flex-wrap gap-1">
@@ -175,14 +175,14 @@ export const Navbar: React.FC = () => {
                             return (
                               <span
                                 key={r}
-                                className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${badge?.color}`}
+                                className={`text-2xs uppercase font-bold px-2 py-0.5 rounded-full border ${badge?.color}`}
                               >
                                 {badge?.label || r}
                               </span>
                             );
                           })
                         ) : (
-                          <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-full">
+                          <span className="text-2xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-full">
                             Sin roles asignados
                           </span>
                         )}

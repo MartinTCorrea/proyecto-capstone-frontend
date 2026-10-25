@@ -222,7 +222,7 @@ export const RespondNominationModal: React.FC<RespondNominationModalProps> = ({
                 className="w-full px-3 py-2 text-xs border border-rose-300 dark:border-rose-700 rounded-xl focus:ring-2 focus:ring-rose-500 focus:border-rose-500 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
                 required
               />
-              <p className="text-[11px] text-rose-700 dark:text-rose-400">
+              <p className="text-caption text-rose-700 dark:text-rose-400">
                 Este motivo quedará visible para la Comisión Técnica para gestionar el reemplazo.
               </p>
             </div>

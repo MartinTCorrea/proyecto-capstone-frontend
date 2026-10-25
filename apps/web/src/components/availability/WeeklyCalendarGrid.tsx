@@ -97,8 +97,8 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
             <div className="flex items-center space-x-2 truncate">
               <Sun className="w-3.5 h-3.5 flex-shrink-0" />
               <div className="truncate text-left">
-                <div className="text-[11px] leading-tight">Horario 1</div>
-                <div className="text-[9px] opacity-80 font-mono flex items-center mt-0.5">
+                <div className="text-caption leading-tight">Horario 1</div>
+                <div className="text-3xs opacity-80 font-mono flex items-center mt-0.5">
                   <Clock className="w-2.5 h-2.5 mr-0.5 flex-shrink-0" />
                   <span>{h1Time}</span>
                 </div>
@@ -123,8 +123,8 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
             <div className="flex items-center space-x-2 truncate">
               <Moon className="w-3.5 h-3.5 flex-shrink-0" />
               <div className="truncate text-left">
-                <div className="text-[11px] leading-tight">Horario 2</div>
-                <div className="text-[9px] opacity-80 font-mono flex items-center mt-0.5">
+                <div className="text-caption leading-tight">Horario 2</div>
+                <div className="text-3xs opacity-80 font-mono flex items-center mt-0.5">
                   <Clock className="w-2.5 h-2.5 mr-0.5 flex-shrink-0" />
                   <span>{h2Time}</span>
                 </div>
@@ -149,8 +149,8 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
             <div className="flex items-center space-x-2 truncate">
               <Check className="w-3.5 h-3.5 flex-shrink-0" />
               <div className="truncate text-left">
-                <div className="text-[11px] leading-tight font-semibold">Jornada Completa</div>
-                <div className="text-[9px] opacity-80 font-mono flex items-center mt-0.5">
+                <div className="text-caption leading-tight font-semibold">Jornada Completa</div>
+                <div className="text-3xs opacity-80 font-mono flex items-center mt-0.5">
                   <Clock className="w-2.5 h-2.5 mr-0.5 flex-shrink-0" />
                   <span>{fullTime}</span>
                 </div>
@@ -175,8 +175,8 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
             <div className="flex items-center space-x-2 truncate">
               <X className="w-3.5 h-3.5 flex-shrink-0" />
               <div className="truncate text-left">
-                <div className="text-[11px] leading-tight font-semibold">No Disponible</div>
-                <div className="text-[9px] opacity-80 mt-0.5">Sin disponibilidad</div>
+                <div className="text-caption leading-tight font-semibold">No Disponible</div>
+                <div className="text-3xs opacity-80 mt-0.5">Sin disponibilidad</div>
               </div>
             </div>
             {day.selectedBlock === AvailabilityBlock.NO && (
@@ -204,7 +204,7 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
           </div>
 
           {/* Horarios de Referencia */}
-          <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-slate-600 dark:text-slate-300">
+          <div className="flex flex-wrap items-center gap-2 text-caption font-mono text-slate-600 dark:text-slate-300">
             <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
               <Sun className="w-3 h-3 mr-1 text-blue-500" />
               H1: {weekdayH1}
@@ -240,7 +240,7 @@ export const WeeklyCalendarGrid: React.FC<WeeklyCalendarGridProps> = ({
           </div>
 
           {/* Horarios de Referencia */}
-          <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-slate-600 dark:text-slate-300">
+          <div className="flex flex-wrap items-center gap-2 text-caption font-mono text-slate-600 dark:text-slate-300">
             <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
               <Sun className="w-3 h-3 mr-1 text-blue-500" />
               H1: {weekendH1}

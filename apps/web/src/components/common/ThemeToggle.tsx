@@ -21,7 +21,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
       onClick={toggleTheme}
       title={label}
       aria-label={label}
-      className={`p-2 rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/80 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer flex items-center space-x-2 ${className}`}
+      className={`p-2 rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/80 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer flex items-center space-x-2 ${className}`}
     >
       <div className="relative w-5 h-5 flex items-center justify-center">
         {isDark ? (
